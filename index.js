@@ -24,6 +24,7 @@ app.get('/card', async function(req, res) {
     }
     let avatarBase64 = await api.getImageBase64(userData.avatar_url);
     let userCoverImage = await api.getImage(userData.cover_url);
+
     let blur = 0;
     if (req.query.blur != undefined && req.query.blur == '') {
         blur = 6;
@@ -31,9 +32,14 @@ app.get('/card', async function(req, res) {
         blur = parseFloat(req.query.blur);
     }
     let userCoverImageBase64 = await libs.getResizdCoverBase64(userCoverImage, 550, 120, blur);
+
     
     userData.options = {
-        radius: req.query.animation ?? true, // TODO: Animation
+        animation: (req.query.animation != undefined && req.query.animation != 'false'),
+        size: {
+            width: parseFloat(req.query.w ?? 550),
+            height: parseFloat(req.query.h ?? 320)
+        }
     }
 
     res.send(render.getRenderedSVG(userData, avatarBase64, userCoverImageBase64));

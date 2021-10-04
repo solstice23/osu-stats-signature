@@ -17,7 +17,7 @@ osu-stats-signature 可以生成实时更新的 osu! 个人资料卡片/签名�
 - [x] 获取 osu! 账号信息并生成卡片
 - [x] 获取并显示头像和用户背景图片
 - [x] 支持背景图片高斯模糊
-- [ ] 过渡动画
+- [x] 过渡动画
 - [ ] 缓存机制
 - [ ] 显示 Supporter 等 Tag
 - [ ] 英文版卡片
@@ -26,6 +26,6 @@ osu-stats-signature 可以生成实时更新的 osu! 个人资料卡片/签名�
 
 # 预览
 
-<a href="https://osu.ppy.sh/users/7562902/"><img src="https://osu-stats-signature.vercel.app/card?user=mrekk&mode=std" width="550" /></a>
+<a href="https://osu.ppy.sh/users/7562902/"><img src="https://osu-stats-signature.vercel.app/card?user=mrekk&mode=std&animation=true" width="550" /></a>
 
 <a href="https://osu.ppy.sh/users/21226378/"><img src="https://osu-stats-signature.vercel.app/card?user=solstice23&mode=std&animation=true" width="550" /></a>

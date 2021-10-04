@@ -51,6 +51,13 @@ export const getTextSVGPath = (TextToSVGObj, text, x, y, size, anchor = 'left ba
 export const getRenderedSVG = (data, avatarBase64, userCoverImageBase64) => {
 	let templete = getSVGTemplete();
 
+	//尺寸
+	templete = templete.replace('{{width}}', data.options.size.width);
+	templete = templete.replace('{{height}}', data.options.size.height);
+
+	//动画
+	templete = templete.replace('{{fg-extra-class}}', data.options.animation ? "animation-enabled" : "");
+
 
 	//名字
 	templete = templete.replace('{{name}}', getTextSVGPath(textToSVGBold, data.username, 130, 45, 28));
