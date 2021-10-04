@@ -36,4 +36,4 @@ app.get('/card', async function(req, res) {
     res.send(render.getRenderedSVG(userData, avatarBase64, userCoverImageBase64));
 });
 
-app.listen(3000);
+app.listen(80);
