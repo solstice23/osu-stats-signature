@@ -55,9 +55,9 @@
 					</div>
 					<div class="option">
 						<label style="margin-right: 10px;">尺寸</label>
-						<input class="textfield small" v-model="size.w" placeholder="6" style="width: 80px;" type="number" min="20" max="9999" maxlength="4" @input="size.w = clamp(size.w, 20, 9999), size.h = Math.round(size.w / 550 * 320)"/>
+						<input class="textfield small" v-model="size.w" placeholder="6" style="width: 80px;" type="number" min="20" max="9999" maxlength="4" @input="size.h = Math.round(size.w / 550 * 320)" @change="size.w = clamp(size.w, 20, 9999), size.h = Math.round(size.w / 550 * 320)"/>
 						<label style="margin-left: 10px;margin-right: 10px;">px × </label>
-						<input class="textfield small" v-model="size.h" placeholder="6" style="width: 80px;" type="number" min="12" max="5817" maxlength="4" @input="size.h = clamp(size.h, 12, 5817), size.w = Math.round(size.h / 320 * 550)"/>
+						<input class="textfield small" v-model="size.h" placeholder="6" style="width: 80px;" type="number" min="12" max="5817" maxlength="4" @input="size.w = Math.round(size.h / 320 * 550)" @change="size.h = clamp(size.h, 12, 5817), size.w = Math.round(size.h / 320 * 550)"/>
 						<label style="margin-left: 10px;">px</label>
 					</div>
 				</div>
