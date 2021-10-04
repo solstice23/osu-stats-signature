@@ -1,0 +1,68 @@
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<link rel="stylesheet" href="style.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap"
+		rel="stylesheet">
+	<link rel="stylesheet"
+		href="//fonts.googleapis.com/css?family=Open+Sans%3A300%2C400%2C600%2C700%7CNoto+Sans+SC%3A300%2C600&#038;display=swap&#038;ver=5.8.1"
+		type="text/css" media="all" />
+	<script src="vue.global.prod.js"></script>
+	<title>osu! Stats Signature</title>
+</head>
+
+<body>
+	<div class="container">
+		<div class="title">osu! Stats Signature</div>
+		<div class="subtitle">生成 osu! 签名档卡片</div>
+		<div id="main">
+			<div class="card">
+				<input class="textfield" v-model="username" placeholder="用户名 / UID" />
+				<div id="playmode">
+					<div :class="{ active: playmode == 'std' }" class="mode-btn" @click="playmode = 'std'">
+						<svg width="40px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 500 500" enable-background="new 0 0 500 500" xml:space="preserve"><g><circle fill="#FFFFFF" cx="250" cy="250" r="130"/><path fill="#FFFFFF" d="M250,140c29.4,0,57,11.4,77.8,32.2C348.6,193,360,220.6,360,250c0,29.4-11.4,57-32.2,77.8C307,348.6,279.4,360,250,360c-29.4,0-57-11.4-77.8-32.2C151.4,307,140,279.4,140,250c0-29.4,11.4-57,32.2-77.8C193,151.4,220.6,140,250,140 M250,100c-82.8,0-150,67.2-150,150s67.2,150,150,150s150-67.2,150-150S332.8,100,250,100L250,100z"/></g><g><path fill="#FFFFFF" d="M250,55c107.7,0,195,87.3,195,195s-87.3,195-195,195c-107.7,0-195-87.3-195-195S142.3,55,250,55 M250,15c-31.7,0-62.5,6.2-91.5,18.5c-28,11.8-53.1,28.8-74.7,50.3c-21.6,21.6-38.5,46.7-50.3,74.7C21.2,187.5,15,218.3,15,250s6.2,62.5,18.5,91.5c11.8,28,28.8,53.1,50.3,74.7c21.6,21.6,46.7,38.5,74.7,50.3c29,12.3,59.8,18.5,91.5,18.5s62.5-6.2,91.5-18.5c28-11.8,53.1-28.8,74.7-50.3c21.6-21.6,38.5-46.7,50.3-74.7c12.3-29,18.5-59.8,18.5-91.5s-6.2-62.5-18.5-91.5c-11.8-28-28.8-53.1-50.3-74.7c-21.6-21.6-46.7-38.5-74.7-50.3C312.5,21.2,281.7,15,250,15L250,15z"/></g></svg>
+						<div>std</div>
+					</div>
+					<div :class="{ active: playmode == 'taiko' }" class="mode-btn" @click="playmode = 'taiko'">
+						<svg width="40px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 500 500" enable-background="new 0 0 500 500" xml:space="preserve"><g><path fill="none" d="M225,153.2c-43.1,11.1-75,50.3-75,96.8c0,46.5,31.9,85.7,75,96.8V153.2z"/><path fill="none" d="M275,153.2v193.7c43.1-11.1,75-50.3,75-96.8C350,203.5,318.1,164.3,275,153.2z"/><path fill="#FFFFFF" d="M250,100c-82.8,0-150,67.2-150,150s67.2,150,150,150s150-67.2,150-150S332.8,100,250,100z M150,250c0-46.5,31.9-85.7,75-96.8v193.7C181.9,335.7,150,296.5,150,250z M275,346.8V153.2c43.1,11.1,75,50.3,75,96.8C350,296.5,318.1,335.7,275,346.8z"/></g><g><path fill="#FFFFFF" d="M250,55c107.7,0,195,87.3,195,195s-87.3,195-195,195c-107.7,0-195-87.3-195-195S142.3,55,250,55 M250,15c-31.7,0-62.5,6.2-91.5,18.5c-28,11.8-53.1,28.8-74.7,50.3c-21.6,21.6-38.5,46.7-50.3,74.7C21.2,187.5,15,218.3,15,250s6.2,62.5,18.5,91.5c11.8,28,28.8,53.1,50.3,74.7c21.6,21.6,46.7,38.5,74.7,50.3c29,12.3,59.8,18.5,91.5,18.5s62.5-6.2,91.5-18.5c28-11.8,53.1-28.8,74.7-50.3c21.6-21.6,38.5-46.7,50.3-74.7c12.3-29,18.5-59.8,18.5-91.5s-6.2-62.5-18.5-91.5c-11.8-28-28.8-53.1-50.3-74.7c-21.6-21.6-46.7-38.5-74.7-50.3C312.5,21.2,281.7,15,250,15L250,15z"/></g></svg>
+						<div>taiko</div>
+					</div>
+					<div :class="{ active: playmode == 'catch' }" class="mode-btn" @click="playmode = 'catch'">
+						<svg width="40px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 500 500" enable-background="new 0 0 500 500" xml:space="preserve"><g><path fill="#FFFFFF" d="M250,55c107.7,0,195,87.3,195,195s-87.3,195-195,195c-107.7,0-195-87.3-195-195S142.3,55,250,55 M250,15c-31.7,0-62.5,6.2-91.5,18.5c-28,11.8-53.1,28.8-74.7,50.3c-21.6,21.6-38.5,46.7-50.3,74.7C21.2,187.5,15,218.3,15,250s6.2,62.5,18.5,91.5c11.8,28,28.8,53.1,50.3,74.7c21.6,21.6,46.7,38.5,74.7,50.3c29,12.3,59.8,18.5,91.5,18.5s62.5-6.2,91.5-18.5c28-11.8,53.1-28.8,74.7-50.3c21.6-21.6,38.5-46.7,50.3-74.7c12.3-29,18.5-59.8,18.5-91.5s-6.2-62.5-18.5-91.5c-11.8-28-28.8-53.1-50.3-74.7c-21.6-21.6-46.7-38.5-74.7-50.3C312.5,21.2,281.7,15,250,15L250,15z"/></g><g><circle fill="#FFFFFF" cx="308.8" cy="250" r="37.5"/><circle fill="#FFFFFF" cx="221.2" cy="173.8" r="37.5"/><circle fill="#FFFFFF" cx="221.2" cy="326.2" r="37.5"/></g></svg>
+						<div>catch</div>
+					</div>
+					<div :class="{ active: playmode == 'mania' }" class="mode-btn" @click="playmode = 'mania'">
+						<svg width="40px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 500 500" enable-background="new 0 0 500 500" xml:space="preserve"><g><path fill="#FFFFFF" d="M250,401c-13.8,0-25-11.2-25-25V124c0-13.8,11.2-25,25-25c13.8,0,25,11.2,25,25v252C275,389.8,263.8,401,250,401z"/></g><g><path fill="#FFFFFF" d="M170,330c-13.8,0-25-11.2-25-25V195c0-13.8,11.2-25,25-25s25,11.2,25,25v110C195,318.8,183.8,330,170,330z"/></g><g><path fill="#FFFFFF" d="M330,330c-13.8,0-25-11.2-25-25V195c0-13.8,11.2-25,25-25c13.8,0,25,11.2,25,25v110C355,318.8,343.8,330,330,330z"/></g><g><path fill="#FFFFFF" d="M250,55c107.7,0,195,87.3,195,195s-87.3,195-195,195c-107.7,0-195-87.3-195-195S142.3,55,250,55 M250,15c-31.7,0-62.5,6.2-91.5,18.5c-28,11.8-53.1,28.8-74.7,50.3c-21.6,21.6-38.5,46.7-50.3,74.7C21.2,187.5,15,218.3,15,250s6.2,62.5,18.5,91.5c11.8,28,28.8,53.1,50.3,74.7c21.6,21.6,46.7,38.5,74.7,50.3c29,12.3,59.8,18.5,91.5,18.5s62.5-6.2,91.5-18.5c28-11.8,53.1-28.8,74.7-50.3c21.6-21.6,38.5-46.7,50.3-74.7c12.3-29,18.5-59.8,18.5-91.5s-6.2-62.5-18.5-91.5c-11.8-28-28.8-53.1-50.3-74.7c-21.6-21.6-46.7-38.5-74.7-50.3C312.5,21.2,281.7,15,250,15L250,15z"/></g></svg>
+						<div>mania</div>
+					</div>
+				</div>
+				<div id="options">
+					<div class="option">
+						<input type="checkbox" v-model="blur_checked" id="blur_checkbox"/>
+						<label for="blur_checkbox">背景模糊</label>
+					</div>
+					<div class="option" v-if="blur_checked">
+						<label style="margin-right: 10px;">模糊强度</label>
+						<input class="textfield small" v-model="blur_size" placeholder="6" style="width: 80px;" type="number" min="0" max="100"/>
+						<label style="margin-left: 10px;">px</label>
+					</div>
+					<div class="option">
+						<input type="checkbox" v-model="animation" id="animation"/>
+						<label for="animation">动画 (待完成)</label>
+					</div>
+				</div>
+			</div>
+			<div style="width: 100%;display: flex;">
+				<button @click="generate()" :disabled="username.trim() == ''">生成</button>
+			</div>
+			<a id="link" target="_blank" style="display: none;"></a>
+		</div>
+	</div>
+</body>
+<script src="script.js"></script>
+
+</html>

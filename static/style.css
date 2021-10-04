@@ -1,0 +1,127 @@
+body {
+	background-color: #1c1719;
+	font-family: "Comfortaa", "Noto Sans SC", -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto,
+		"Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimSun, sans-serif;
+	color: #fff;
+	padding: 0 30px;
+	box-sizing: border-box;
+    accent-color: #ff66ab;
+}
+.container{
+	max-width: 1000px;
+	margin: auto;
+}
+.title {
+	font-size: 60px;
+	text-align: center;
+	margin-top: 60px;
+}
+.subtitle {
+	font-size: 30px;
+	text-align: center;
+	margin-top: 15px;
+	margin-bottom: 20px;
+}
+.card {
+	margin: auto;
+	margin-top: 30px;
+	padding: 20px 20px;
+	background-color: #2a2226;
+	box-shadow: 0 1px 3px rgb(0 0 0 / 25%);
+	background-image: url(triangles.png);
+	background-position: bottom;
+	background-size: contain;
+	background-repeat: no-repeat;
+	display: flex;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+input.textfield {
+    width: 300px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #ff66ab;
+    font-size: 26px;
+    text-align: center;
+    color: #fff;
+    outline: none;
+    padding: 10px 20px;
+}
+input.textfield.small {
+	font-size: 18px;
+    padding: 6px 10px;
+}
+input.textfield::placeholder {
+	color: #fff;
+	opacity: .4;
+}
+input[type='checkbox']{
+    width: 20px;
+    height: 20px;
+	margin-right: 10px;
+	cursor: pointer;
+}
+#playmode{
+	margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    align-items: center;
+    justify-content: space-between;
+}
+.mode-btn {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    background: #1c171966;
+    padding: 12px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+	width: 50px;
+	margin-right: 5px;
+    border: solid 1px transparent;
+}
+.mode-btn:last-child {
+	margin-right: 0;
+}
+.mode-btn.active {
+    border: solid 1px #ff66ab;
+}
+.mode-btn > div {
+    margin-top: 8px;
+}
+
+#options{
+	margin-top: 25px;
+}
+.option {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    width: 350px;
+	font-size: 20px;
+	margin-bottom: 10px;
+}
+button{
+	font-size: 26px;
+    padding: 10px 20px;
+    background: #cc3378;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    margin: auto;
+    cursor: pointer;
+    box-shadow: rgb(163, 41, 96) 0px 3px 0px 0px, rgba(0, 0, 0, 0.25) 0px 4px 3px 0px;
+}
+button[disabled]{
+    opacity: .2;
+    pointer-events: none;
+}

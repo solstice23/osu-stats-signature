@@ -5,14 +5,7 @@ import * as api from './api.js';
 
 var app = express();
 
-app.get('/', async function(req, res) {
-    res.send("Todo");
-});
-
-app.get('/json', async function(req, res) {
-    let userData = await api.getUser(21226378);
-    res.send(userData);
-});
+app.use('/', express.static('static'));
 
 app.get('/card', async function(req, res) {
     res.set({
