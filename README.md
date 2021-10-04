@@ -4,13 +4,13 @@
 
 ## 简介
 
-osu-stats-signature 可以生成实时更新的 osu! 个人资料卡片/签名档。生成的卡片为 SVG，可用于个人主页等。
+osu-stats-signature 可以生成实时更新的 osu! 个人资料卡片/签名档。生成的卡片为 SVG，可用于个人主页。
 
 ## 使用
 
 该项目部署在 Vercel 上，前往 [osu-stats-signature.vercel.app](https://osu-stats-signature.vercel.app) 生成卡片。
 
-将得到的卡片 SVG 地址通过 Markdown 等形式作为图片插入到个人主页中即可。
+将得到的卡片 SVG 地址作为图片插入到个人主页中即可。
 
 ## 功能 & TODO
 
