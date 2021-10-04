@@ -82,9 +82,11 @@
 			}
 			@keyframes levelBar{
 				0%{
+					opacity: 0;
 					transform: scaleX(0) translate(0, 2px);
 				}
 				100%{
+					opacity: 1;
 					transform: scaleX(1) translate(0, 2px);
 				}
 			}
@@ -94,6 +96,7 @@
 				animation: fadeDown .3s ease-in-out forwards;
 			}
 			#fg.animation-enabled #barfg > path{
+				opacity: 0;
 				transform-origin: 20px 0px;
 				transform: scaleX(0);
 				animation-delay: 380ms !important;
