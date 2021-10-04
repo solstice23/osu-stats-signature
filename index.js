@@ -3,9 +3,11 @@ import * as libs from './libs.js';
 import * as render from './render.js';
 import * as api from './api.js';
 
+const __dirname = path.resolve();
+
 var app = express();
 
-app.use('/', express.static(__dirname + '/static'));
+app.use('/', express.static(path.join(__dirname, '/static')));
 
 app.get('/card', async function(req, res) {
     res.set({
