@@ -5,7 +5,7 @@ import * as api from './api.js';
 
 var app = express();
 
-app.use('/', express.static('static'));
+app.use('/', express.static(__dirname + '/static'));
 
 app.get('/card', async function(req, res) {
     res.set({
