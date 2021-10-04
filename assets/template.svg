@@ -96,7 +96,7 @@
 			#fg.animation-enabled #barfg > path{
 				transform-origin: 20px 0px;
 				transform: scaleX(0);
-				animation-delay: 500ms;
+				animation-delay: 380ms !important;
 				animation: levelBar 1s ease-out forwards;
 			}
 
