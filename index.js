@@ -13,7 +13,7 @@ app.use('/', express.static(path.join(__dirname, '/static')));
 app.get('/card', async function(req, res) {
     res.set({
         'Content-Type': 'image/svg+xml',
-        'Cache-Control': 'private, max-age=3600'
+        'Cache-Control': 'public, max-age=3600'
     });
     let username = req.query.user ?? "";
     let playmode = req.query.mode ?? "std";
