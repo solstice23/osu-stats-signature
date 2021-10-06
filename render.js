@@ -19,7 +19,7 @@ const getTransformedX = (x, w) => {
 
 export const getFlagSVG = (countryCode, x, y, h) => {
 	let svg = libs.getFlagSVGByCountryCode(countryCode);
-	var $ = cheerio.load(svg);
+	let $ = cheerio.load(svg);
 	$('svg').attr('x', getTransformedX(x, h * 0.72));
 	$('svg').attr('y', y);
 	$('svg').attr('height', h);
@@ -27,7 +27,7 @@ export const getFlagSVG = (countryCode, x, y, h) => {
 }
 export const getPlaymodeSVG = (playmode, x, y, h) => {
 	let svg = libs.getPlaymodeSVG(playmode);
-	var $ = cheerio.load(svg);
+	let $ = cheerio.load(svg);
 	$('svg').attr('x', getTransformedX(x, h));
 	$('svg').attr('y', y);
 	$('svg').attr('height', h);
@@ -116,7 +116,7 @@ export const getRenderedSVG = (data, avatarBase64, userCoverImageBase64) => {
 	//bp
 	templete = templete.replace('{{bp}}', getTextSVGPath(textToSVGRegular, libs.formatNumber(Math.round(data.extra_data?.scoresBest[0]?.pp ?? 0)) + "pp", 424, 260, 13));
 	//第一名
-	templete = templete.replace('{{first-place}}', getTextSVGPath(textToSVGRegular, libs.formatNumber(data.extra_data.scoresFirsts.length), 483, 260, 13));
+	templete = templete.replace('{{first-place}}', getTextSVGPath(textToSVGRegular, libs.formatNumber(data.scores_first_count), 483, 260, 13));
 
 	return templete;
 }
