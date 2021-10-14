@@ -12,6 +12,9 @@ const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 export const getSVGTemplete = () => {
 	return fs.readFileSync(path.join(__dirname, '/assets/template.svg'), 'utf8');
 }
+export const getSVGContent = (path) => {
+	return fs.readFileSync(path.join(__dirname, path), 'utf8');
+}
 
 const getTransformedX = (x, w) => {
 	return x + w / 2 - 550 / 2;
@@ -33,6 +36,15 @@ export const getPlaymodeSVG = (playmode, x, y, h) => {
 	$('svg').attr('height', h);
 	return $.html('svg');
 }
+export const getSupporterSVG = (x, y, h) => {
+	let svg = getSVGContent('/assets/icons/supporter.svg');
+	let $ = cheerio.load(svg);
+	$('svg').attr('x', getTransformedX(x, h * 0.8));
+	$('svg').attr('y', y);
+	$('svg').attr('height', h);
+	return $.html('svg');
+}
+
 export const getTextSVGPath = (TextToSVGObj, text, x, y, size, anchor = 'left top') => {
 	let path = TextToSVGObj.getPath(text, {
 		x: x,
@@ -45,6 +57,19 @@ export const getTextSVGPath = (TextToSVGObj, text, x, y, size, anchor = 'left to
 		}
 	});
 	return path;
+}
+export const getTextSVGMetrics = (TextToSVGObj, text, x, y, size, anchor = 'left top') => {
+	let metrics = TextToSVGObj.getMetrics(text, {
+		x: x,
+		y: y,
+		fontSize: size,
+		anchor: anchor,
+		fontFamily: 'Comfortaa',
+		attributes: {
+			fill: '#fff'
+		}
+	});
+	return metrics;
 }
 
 
@@ -61,6 +86,14 @@ export const getRenderedSVG = (data, avatarBase64, userCoverImageBase64) => {
 
 	//名字
 	templete = templete.replace('{{name}}', getTextSVGPath(textToSVGBold, data.username, 130, 20, 28));
+	let nameWidth = getTextSVGMetrics(textToSVGBold, data.username, 130, 20, 28).width;
+	//Support Tag
+	if (data.is_supporter){
+		templete = templete.replace('{{supporter-tag}}', getSupporterSVG(130 + nameWidth + 10, 26, 22));
+	}else{
+		templete = templete.replace('{{supporter-tag}}', '');
+	}
+	// TODO: add support svg file to assets
 
 	//头像和封面
 	templete = templete.replace('{{avatar-base64}}', avatarBase64);
