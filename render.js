@@ -12,8 +12,8 @@ const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 export const getSVGTemplete = () => {
 	return fs.readFileSync(path.join(__dirname, '/assets/template.svg'), 'utf8');
 }
-export const getSVGContent = (path) => {
-	return fs.readFileSync(path.join(__dirname, path), 'utf8');
+export const getSVGContent = (x) => {
+	return fs.readFileSync(path.join(__dirname, x), 'utf8');
 }
 
 const getTransformedX = (x, w) => {
@@ -89,11 +89,10 @@ export const getRenderedSVG = (data, avatarBase64, userCoverImageBase64) => {
 	let nameWidth = getTextSVGMetrics(textToSVGBold, data.username, 130, 20, 28).width;
 	//Support Tag
 	if (data.is_supporter){
-		templete = templete.replace('{{supporter-tag}}', getSupporterSVG(130 + nameWidth + 10, 26, 22));
+		templete = templete.replace('{{supporter-tag}}', getSupporterSVG(130 + nameWidth + 15, 24, 22));
 	}else{
 		templete = templete.replace('{{supporter-tag}}', '');
 	}
-	// TODO: add support svg file to assets
 
 	//头像和封面
 	templete = templete.replace('{{avatar-base64}}', avatarBase64);
