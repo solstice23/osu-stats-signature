@@ -37,7 +37,7 @@ export const getPlaymodeSVG = (playmode, x, y, h) => {
 	return $.html('svg');
 }
 export const getSupporterSVG = (x, y, h) => {
-	let svg = getSVGContent('/assets/icons/supporter.svg');
+	let svg = fs.readFileSync(path.join(__dirname, '/assets/icons/supporter.svg'), 'utf8');
 	let $ = cheerio.load(svg);
 	$('svg').attr('x', getTransformedX(x, h * 0.8));
 	$('svg').attr('y', y);
