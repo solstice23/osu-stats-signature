@@ -49,6 +49,8 @@ input.textfield {
     color: #fff;
     outline: none;
     padding: 10px 20px;
+	font-family: "Comfortaa", "Noto Sans SC", -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto,
+		"Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimSun, sans-serif;
 }
 input.textfield.small {
 	font-size: 18px;
