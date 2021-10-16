@@ -39,7 +39,8 @@ app.get('/card', async function(req, res) {
         size: {
             width: parseFloat(req.query.w ?? 550),
             height: parseFloat(req.query.h ?? 320)
-        }
+        },
+        color_hue: parseInt(req.query.hue ?? 333),
     }
 
     res.send(render.getRenderedSVG(userData, avatarBase64, userCoverImageBase64));

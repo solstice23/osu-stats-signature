@@ -20,6 +20,7 @@
   "homepage": "https://github.com/solstice23/osu-stats-signature#readme",
   "dependencies": {
     "cheerio": "^1.0.0-rc.10",
+    "colorjs.io": "0.0.3",
     "express": "^4.17.1",
     "got": "^11.8.2",
     "js-base64": "^3.7.2",

@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import cheerio from 'cheerio';
 import TextToSVG from 'text-to-svg';
+import Color from 'color';
 import * as libs from './libs.js';
 const __dirname = path.resolve();
 const textToSVGRegular = TextToSVG.loadSync(path.join(__dirname, '/assets/fonts/Comfortaa/Comfortaa-Regular.ttf'));
@@ -72,6 +73,15 @@ export const getTextSVGMetrics = (TextToSVGObj, text, x, y, size, anchor = 'left
 	return metrics;
 }
 
+const replaceCalcedColors = (data, svg) => {
+	let baseHue = data.options.color_hue;
+
+	svg = svg.replace('{{hsl-b5}}', new Color(`hsl(${baseHue}, 10%, 15%)`).hex());
+	svg = svg.replace('{{hsl-b4}}', new Color(`hsl(${baseHue}, 10%, 20%)`).hex());
+	svg = svg.replace('{{hsl-h1}}', new Color(`hsl(${baseHue}, 100%, 70%)`).hex());
+
+	return svg;
+}
 
 export const getRenderedSVG = (data, avatarBase64, userCoverImageBase64) => {
 	let templete = getSVGTemplete();
@@ -82,6 +92,9 @@ export const getRenderedSVG = (data, avatarBase64, userCoverImageBase64) => {
 
 	//动画
 	templete = templete.replace('{{fg-extra-class}}', data.options.animation ? "animation-enabled" : "");
+
+	//颜色
+	templete = replaceCalcedColors(data, templete);
 
 
 	//名字
