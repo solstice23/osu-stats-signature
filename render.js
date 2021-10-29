@@ -10,8 +10,12 @@ const textToSVGBold = TextToSVG.loadSync(path.join(__dirname, '/assets/fonts/Com
 
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
-export const getSVGTemplete = () => {
-	return fs.readFileSync(path.join(__dirname, '/assets/template.svg'), 'utf8');
+export const getSVGTemplete = (type, language) => {
+	const supportedLanguages = ['en', 'cn'];
+	if (!supportedLanguages.includes(language)) {
+		language = 'cn';
+	}
+	return fs.readFileSync(path.join(__dirname, `/assets/svg_template/${type}/template_${language}.svg`), 'utf8');
 }
 export const getSVGContent = (x) => {
 	return fs.readFileSync(path.join(__dirname, x), 'utf8');
@@ -84,7 +88,7 @@ const replaceCalcedColors = (data, svg) => {
 }
 
 export const getRenderedSVG = (data, avatarBase64, userCoverImageBase64) => {
-	let templete = getSVGTemplete();
+	let templete = getSVGTemplete('full', data.options.language);
 
 	//尺寸
 	templete = templete.replace('{{width}}', data.options.size.width);

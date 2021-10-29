@@ -35,6 +35,7 @@ app.get('/card', async function(req, res) {
 
     
     userData.options = {
+        language: req.query.lang ?? "cn",
         animation: (req.query.animation != undefined && req.query.animation != 'false'),
         size: {
             width: parseFloat(req.query.w ?? 550),

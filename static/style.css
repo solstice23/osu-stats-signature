@@ -100,7 +100,7 @@ input[type='range']{
     outline: none;
     background:none;
 }
-#playmode{
+#playmode, #language{
 	margin-top: 20px;
     display: flex;
     flex-direction: row;
@@ -109,12 +109,12 @@ input[type='range']{
     align-items: center;
     justify-content: space-between;
 }
-.mode-btn {
+.mode-btn, .language-btn {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     align-items: center;
-    background: #1c171966;
+    background: hsl(var(--hsl-b4));
     padding: 12px 15px;
     border-radius: 4px;
     cursor: pointer;
@@ -122,14 +122,19 @@ input[type='range']{
 	margin-right: 5px;
     border: solid 1px transparent;
 }
-.mode-btn:last-child {
+.mode-btn:last-child, .language-btn:last-child {
 	margin-right: 0;
 }
-.mode-btn.active {
+.mode-btn.active, .language-btn.active {
     border: solid 1px hsl(var(--hsl-h1));
 }
 .mode-btn > div {
     margin-top: 8px;
+}
+.language-btn {
+    line-height: 24px;
+    height: 24px;
+    background: hsl(var(--hsl-b5));
 }
 
 #options{

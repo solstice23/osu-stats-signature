@@ -16,11 +16,21 @@
 </head>
 <body style="--base-hue: 333;">
 	<div class="container">
-		<div class="title">osu! Stats Signature</div>
-		<div class="subtitle">生成 osu! 签名档卡片</div>
 		<div id="main">
+			<div class="title">osu! Stats Signature</div>
+			<div class="subtitle">{{$n('生成 osu! 签名档卡片')}}</div>
+			<div class="card" style="background: none; box-shadow: none; padding-top: 0px; padding-bottom: 10px; margin-top: 0px; ">
+				<div id="language">
+					<div :class="{ active: language == 'cn' }" class="language-btn" @click="language = 'cn'">
+						<div>中文</div>
+					</div>
+					<div :class="{ active: language == 'en' }" class="language-btn" @click="language = 'en'">
+						<div>English</div>
+					</div>
+				</div>
+			</div>
 			<div class="card">
-				<input class="textfield" v-model="username" placeholder="用户名 / UID" />
+				<input class="textfield" v-model="username" :placeholder="$n('用户名 / UID')" />
 				<div id="playmode">
 					<div :class="{ active: playmode == 'std' }" class="mode-btn" @click="playmode = 'std'">
 						<svg width="40px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 500 500" enable-background="new 0 0 500 500" xml:space="preserve"><g><circle fill="#FFFFFF" cx="250" cy="250" r="130"/><path fill="#FFFFFF" d="M250,140c29.4,0,57,11.4,77.8,32.2C348.6,193,360,220.6,360,250c0,29.4-11.4,57-32.2,77.8C307,348.6,279.4,360,250,360c-29.4,0-57-11.4-77.8-32.2C151.4,307,140,279.4,140,250c0-29.4,11.4-57,32.2-77.8C193,151.4,220.6,140,250,140 M250,100c-82.8,0-150,67.2-150,150s67.2,150,150,150s150-67.2,150-150S332.8,100,250,100L250,100z"/></g><g><path fill="#FFFFFF" d="M250,55c107.7,0,195,87.3,195,195s-87.3,195-195,195c-107.7,0-195-87.3-195-195S142.3,55,250,55 M250,15c-31.7,0-62.5,6.2-91.5,18.5c-28,11.8-53.1,28.8-74.7,50.3c-21.6,21.6-38.5,46.7-50.3,74.7C21.2,187.5,15,218.3,15,250s6.2,62.5,18.5,91.5c11.8,28,28.8,53.1,50.3,74.7c21.6,21.6,46.7,38.5,74.7,50.3c29,12.3,59.8,18.5,91.5,18.5s62.5-6.2,91.5-18.5c28-11.8,53.1-28.8,74.7-50.3c21.6-21.6,38.5-46.7,50.3-74.7c12.3-29,18.5-59.8,18.5-91.5s-6.2-62.5-18.5-91.5c-11.8-28-28.8-53.1-50.3-74.7c-21.6-21.6-46.7-38.5-74.7-50.3C312.5,21.2,281.7,15,250,15L250,15z"/></g></svg>
@@ -42,33 +52,33 @@
 				<div id="options">
 					<div class="option">
 						<input type="checkbox" v-model="blur_checked" id="blur_checkbox"/>
-						<label for="blur_checkbox">背景模糊</label>
+						<label for="blur_checkbox">{{$n('背景模糊')}}</label>
 					</div>
 					<div class="option" v-if="blur_checked">
-						<label style="margin-right: 10px;">模糊强度</label>
+						<label style="margin-right: 10px;">{{$n('模糊强度')}}</label>
 						<input class="textfield small" v-model="blur_size" placeholder="6" style="width: 80px;" type="number" min="0" max="100"/>
 						<label style="margin-left: 10px;">px</label>
 					</div>
 					<div class="option">
 						<input type="checkbox" v-model="animation" id="animation"/>
-						<label for="animation">动画</label>
+						<label for="animation">{{$n('动画')}}</label>
 					</div>
 					<div class="option">
-						<label style="margin-right: 10px;">颜色</label>
+						<label style="margin-right: 10px;">{{$n('颜色')}}</label>
 						<input type="range" min="0" max="360" value="333" v-model="color_hue" width="300"/>
 					</div>
 					<div class="option" style="width: unset;">
-						<div class="preset-color" style="--base-hue: 333" @click="color_hue = 333">粉色</div>
-						<div class="preset-color" style="--base-hue: 255" @click="color_hue = 255">紫色</div>
-						<div class="preset-color" style="--base-hue: 200" @click="color_hue = 200">蓝色</div>
-						<div class="preset-color" style="--base-hue: 125" @click="color_hue = 125">绿色</div>
-						<div class="preset-color" style="--base-hue: 90" @click="color_hue = 90">酸橙</div>
-						<div class="preset-color" style="--base-hue: 45" @click="color_hue = 45">橙色</div>
-						<div class="preset-color" style="--base-hue: 20" @click="color_hue = 20">深橙</div>
-						<div class="preset-color" style="--base-hue: 360" @click="color_hue = 360">红色</div>
+						<div class="preset-color" style="--base-hue: 333" @click="color_hue = 333">{{$n('粉色')}}</div>
+						<div class="preset-color" style="--base-hue: 255" @click="color_hue = 255">{{$n('紫色')}}</div>
+						<div class="preset-color" style="--base-hue: 200" @click="color_hue = 200">{{$n('蓝色')}}</div>
+						<div class="preset-color" style="--base-hue: 125" @click="color_hue = 125">{{$n('绿色')}}</div>
+						<div class="preset-color" style="--base-hue: 90" @click="color_hue = 90">{{$n('酸橙')}}</div>
+						<div class="preset-color" style="--base-hue: 45" @click="color_hue = 45">{{$n('橙色')}}</div>
+						<div class="preset-color" style="--base-hue: 20" @click="color_hue = 20">{{$n('深橙')}}</div>
+						<div class="preset-color" style="--base-hue: 360" @click="color_hue = 360">{{$n('红色')}}</div>
 					</div>
 					<div class="option">
-						<label style="margin-right: 10px;">尺寸</label>
+						<label style="margin-right: 10px;">{{$n('尺寸')}}</label>
 						<input class="textfield small" v-model="size.w" placeholder="6" style="width: 80px;" type="number" min="20" max="9999" maxlength="4" @input="size.h = Math.round(size.w / 550 * 320)" @change="size.w = clamp(size.w, 20, 9999), size.h = Math.round(size.w / 550 * 320)"/>
 						<label style="margin-left: 10px;margin-right: 10px;">px × </label>
 						<input class="textfield small" v-model="size.h" placeholder="6" style="width: 80px;" type="number" min="12" max="5817" maxlength="4" @input="size.w = Math.round(size.h / 320 * 550)" @change="size.h = clamp(size.h, 12, 5817), size.w = Math.round(size.h / 320 * 550)"/>
@@ -77,7 +87,7 @@
 				</div>
 			</div>
 			<div style="width: 100%;display: flex;">
-				<button @click="generate()" :disabled="username.trim() == ''">生成</button>
+				<button @click="generate()" :disabled="username.trim() == ''">{{$n('生成')}}</button>
 			</div>
 			<a id="link" target="_blank" style="display: none;"></a>
 		</div>
