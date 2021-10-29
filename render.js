@@ -11,11 +11,12 @@ const textToSVGBold = TextToSVG.loadSync(path.join(__dirname, '/assets/fonts/Com
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
 export const getSVGTemplete = (type, language) => {
-	const supportedLanguages = ['en', 'cn'];
-	if (!supportedLanguages.includes(language)) {
-		language = 'cn';
+	try{
+		return fs.readFileSync(path.join(__dirname, `/assets/svg_template/${type}/template_${language}.svg`), 'utf8');
+	}catch(e){
+		return fs.readFileSync(path.join(__dirname, `/assets/svg_template/${type}/template_cn.svg`), 'utf8');
 	}
-	return fs.readFileSync(path.join(__dirname, `/assets/svg_template/${type}/template_${language}.svg`), 'utf8');
+	
 }
 export const getSVGContent = (x) => {
 	return fs.readFileSync(path.join(__dirname, x), 'utf8');
