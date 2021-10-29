@@ -102,7 +102,6 @@
 				animation-delay: 380ms !important;
 				animation: levelBar 1s ease-out forwards;
 			}
-
 		</style>
 	</defs>
 	<g id="bg">

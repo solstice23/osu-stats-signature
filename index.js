@@ -31,7 +31,13 @@ app.get('/card', async function(req, res) {
     } else if (req.query.blur != undefined) {
         blur = parseFloat(req.query.blur);
     }
-    let userCoverImageBase64 = await libs.getResizdCoverBase64(userCoverImage, 550, 120, blur);
+    let isMini = req.query.mini != undefined && req.query.mini == 'true';
+    let userCoverImageBase64;
+    if (isMini) {
+        userCoverImageBase64 = await libs.getResizdCoverBase64(userCoverImage, 400, 120, blur);
+    } else {
+        userCoverImageBase64 = await libs.getResizdCoverBase64(userCoverImage, 550, 120, blur);
+    }
 
     
     userData.options = {
@@ -44,7 +50,11 @@ app.get('/card', async function(req, res) {
         color_hue: parseInt(req.query.hue ?? 333),
     }
 
-    res.send(render.getRenderedSVG(userData, avatarBase64, userCoverImageBase64));
+    if (isMini) {
+        res.send(render.getRenderedSVGMini(userData, avatarBase64, userCoverImageBase64));
+    }else{
+        res.send(render.getRenderedSVGFull(userData, avatarBase64, userCoverImageBase64));
+    }
 });
 
 app.listen(process.env.PORT || 3000);

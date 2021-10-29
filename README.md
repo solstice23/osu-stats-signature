@@ -20,13 +20,19 @@ osu-stats-signature 可以生成实时更新的 osu! 个人资料卡片/签名�
 - [x] 过渡动画
 - [x] 显示 Supporter Tag
 - [x] 英文版卡片
-- [ ] Mini 卡片
+- [x] Mini 卡片
 - [ ] 缓存机制
 - [ ] 生成个人 bp (最佳成绩) 卡片
 - [ ] 生成单个成绩详情卡片
 
 # 预览
 
+## Full
+
 <a href="https://osu.ppy.sh/users/7562902/"><img src="https://osu-stats-signature.vercel.app/card?user=mrekk&mode=std&lang=en&animation=true" width="550" /></a>
 
 <a href="https://osu.ppy.sh/users/21226378/"><img src="https://osu-stats-signature.vercel.app/card?user=solstice23&mode=std&animation=true" width="550" /></a>
+
+## Mini
+
+<a href="https://osu.ppy.sh/users/21226378/"><img src="https://osu-stats-signature.vercel.app/card?user=solstice23&mode=std&blur=6&animation=true&mini=true" width="400" /></a>

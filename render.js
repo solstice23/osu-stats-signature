@@ -25,6 +25,9 @@ export const getSVGContent = (x) => {
 const getTransformedX = (x, w) => {
 	return x + w / 2 - 550 / 2;
 }
+const getTransformedXMini = (x, w) => {
+	return x + w / 2 - 400 / 2;
+}
 
 export const getFlagSVG = (countryCode, x, y, h) => {
 	let svg = libs.getFlagSVGByCountryCode(countryCode);
@@ -34,10 +37,26 @@ export const getFlagSVG = (countryCode, x, y, h) => {
 	$('svg').attr('height', h);
 	return $.html('svg');
 }
+export const getFlagSVGMini = (countryCode, x, y, h) => {
+	let svg = libs.getFlagSVGByCountryCode(countryCode);
+	let $ = cheerio.load(svg);
+	$('svg').attr('x', getTransformedXMini(x, h * 0.72));
+	$('svg').attr('y', y);
+	$('svg').attr('height', h);
+	return $.html('svg');
+}
 export const getPlaymodeSVG = (playmode, x, y, h) => {
 	let svg = libs.getPlaymodeSVG(playmode);
 	let $ = cheerio.load(svg);
 	$('svg').attr('x', getTransformedX(x, h));
+	$('svg').attr('y', y);
+	$('svg').attr('height', h);
+	return $.html('svg');
+}
+export const getPlaymodeSVGMini = (playmode, x, y, h) => {
+	let svg = libs.getPlaymodeSVG(playmode);
+	let $ = cheerio.load(svg);
+	$('svg').attr('x', getTransformedXMini(x, h));
 	$('svg').attr('y', y);
 	$('svg').attr('height', h);
 	return $.html('svg');
@@ -88,7 +107,7 @@ const replaceCalcedColors = (data, svg) => {
 	return svg;
 }
 
-export const getRenderedSVG = (data, avatarBase64, userCoverImageBase64) => {
+export const getRenderedSVGFull = (data, avatarBase64, userCoverImageBase64) => {
 	let templete = getSVGTemplete('full', data.options.language);
 
 	//尺寸
@@ -168,6 +187,53 @@ export const getRenderedSVG = (data, avatarBase64, userCoverImageBase64) => {
 	//第一名
 	templete = templete.replace('{{first-place}}', getTextSVGPath(textToSVGRegular, libs.formatNumber(data.scores_first_count), 483, 249, 13));
 
+	return templete;
+}
+
+export const getRenderedSVGMini = (data, avatarBase64, userCoverImageBase64) => {
+	let templete = getSVGTemplete('mini', data.options.language);
+
+	//尺寸
+	templete = templete.replace('{{width}}', data.options.size.width);
+	templete = templete.replace('{{height}}', data.options.size.height);
+
+	//动画
+	templete = templete.replace('{{fg-extra-class}}', data.options.animation ? "animation-enabled" : "");
+
+	//颜色
+	templete = replaceCalcedColors(data, templete);
+
+
+	//名字
+	templete = templete.replace('{{name}}', getTextSVGPath(textToSVGBold, data.username, 118, 14, 25));
+
+	//头像和封面
+	templete = templete.replace('{{avatar-base64}}', avatarBase64);
+	templete = templete.replace('{{user-cover-base64}}', userCoverImageBase64);
+
+	//国旗
+	templete = templete.replace('{{flag}}', getFlagSVGMini(data.country_code, 368, 8, 18));
+	
+	//区内排名
+	templete = templete.replace('{{country-ranking}}', getTextSVGPath(textToSVGRegular, libs.formatNumber(data.statistics.country_rank, '#'), 360, 12, 10, 'right top'));
+
+	//模式
+	templete = templete.replace('{{playmode-icon}}', getPlaymodeSVGMini(data.current_mode, 372, 30, 12));
+
+	//等级
+	templete = templete.replace('{{level}}', getTextSVGPath(textToSVGRegular, 'lv.' + data.statistics.level.current.toString(), 369, 31, 10, 'right top'));
+
+	//全球排名
+	let globalRanking = libs.formatNumber(data.statistics.global_rank, '#');
+	templete = templete.replace('{{global-ranking}}', getTextSVGPath(textToSVGRegular, globalRanking, 120, 86, globalRanking.length < 10 ? 18 : 17));
+
+	//pp
+	templete = templete.replace('{{pp}}', getTextSVGPath(textToSVGRegular, libs.formatNumber(Math.round(data.statistics.pp)), 226, 81.5, 13));
+	//acc
+	templete = templete.replace('{{acc}}', getTextSVGPath(textToSVGRegular, data.statistics.hit_accuracy.toFixed(2).toString() + "%", 281, 81.5, 13));
+	//游戏次数
+	templete = templete.replace('{{play-count}}', getTextSVGPath(textToSVGRegular, libs.formatNumber(data.statistics.play_count), 336, 81.5, 13));
+	
 	return templete;
 }
 

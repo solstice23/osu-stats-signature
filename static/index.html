@@ -77,11 +77,26 @@
 						<div class="preset-color" style="--base-hue: 20" @click="color_hue = 20">{{$n('深橙')}}</div>
 						<div class="preset-color" style="--base-hue: 360" @click="color_hue = 360">{{$n('红色')}}</div>
 					</div>
-					<div class="option">
+					<div id="cardmode" style="margin-bottom: 10px;">
+						<div :class="{ active: cardmode == 'full' }" class="mode-btn" @click="cardmode = 'full'">
+							{{$n('完整')}}
+						</div>
+						<div :class="{ active: cardmode == 'mini' }" class="mode-btn" @click="cardmode = 'mini'">
+							{{$n('迷你')}}
+						</div>
+					</div>
+					<div class="option" v-if="cardmode == 'full'">
 						<label style="margin-right: 10px;">{{$n('尺寸')}}</label>
 						<input class="textfield small" v-model="size.w" placeholder="6" style="width: 80px;" type="number" min="20" max="9999" maxlength="4" @input="size.h = Math.round(size.w / 550 * 320)" @change="size.w = clamp(size.w, 20, 9999), size.h = Math.round(size.w / 550 * 320)"/>
 						<label style="margin-left: 10px;margin-right: 10px;">px × </label>
 						<input class="textfield small" v-model="size.h" placeholder="6" style="width: 80px;" type="number" min="12" max="5817" maxlength="4" @input="size.w = Math.round(size.h / 320 * 550)" @change="size.h = clamp(size.h, 12, 5817), size.w = Math.round(size.h / 320 * 550)"/>
+						<label style="margin-left: 10px;">px</label>
+					</div>
+					<div class="option" v-if="cardmode == 'mini'">
+						<label style="margin-right: 10px;">{{$n('尺寸')}}</label>
+						<input class="textfield small" v-model="size_mini.w" placeholder="6" style="width: 80px;" type="number" min="20" max="9999" maxlength="4" @input="size_mini.h = Math.round(size_mini.w / 400 * 120)" @change="size_mini.w = clamp(size_mini.w, 20, 9999), size_mini.h = Math.round(size_mini.w / 400 * 120)"/>
+						<label style="margin-left: 10px;margin-right: 10px;">px × </label>
+						<input class="textfield small" v-model="size_mini.h" placeholder="6" style="width: 80px;" type="number" min="6" max="2999" maxlength="4" @input="size_mini.w = Math.round(size_mini.h / 120 * 400)" @change="size_mini.h = clamp(size_mini.h, 6, 2999), size_mini.w = Math.round(size_mini.h / 120 * 400)"/>
 						<label style="margin-left: 10px;">px</label>
 					</div>
 				</div>

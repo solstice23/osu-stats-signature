@@ -15,6 +15,8 @@ const i18n = {
 		'深橙': 'Dark orange',
 		'红色': 'Red',
 		'尺寸': 'Size',
+		'完整': 'Full',
+		'迷你': 'Mini',
 		'生成': 'Generate',
 	}
 }
@@ -24,6 +26,7 @@ const app = {
 			username: "",
 			playmode: "std",
 			language: "cn",
+			cardmode: "full",
 			blur_checked: false,
 			blur_size: 6,
 			animation: true,
@@ -31,6 +34,10 @@ const app = {
 			size: {
 				w: 550,
 				h: 320
+			},
+			size_mini: {
+				w: 400,
+				h: 120
 			},
 		}
 	},
@@ -57,8 +64,15 @@ const app = {
 			if (this.color_hue != 333){
 				url += "&hue=" + this.color_hue;
 			}
-			if (this.size.w != 550 || this.size.h != 320){
-				url += "&w=" + this.size.w + "&h=" + this.size.h;
+			if (this.cardmode == "mini"){
+				url += "&mini=true";
+				if (this.size_mini.w != 400 || this.size_mini.h != 120){
+					url += "&w=" + this.size_mini.w + "&h=" + this.size_mini.h;
+				}
+			}else{
+				if (this.size.w != 550 || this.size.h != 320){
+					url += "&w=" + this.size.w + "&h=" + this.size.h;
+				}
 			}
 			document.getElementById("link").setAttribute("href", url);
 			document.getElementById("link").click();

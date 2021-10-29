@@ -103,6 +103,7 @@ input[type="range"] {
     background: none;
 }
 #playmode,
+#cardmode,
 #language {
     margin-top: 20px;
     display: flex;
@@ -110,7 +111,7 @@ input[type="range"] {
     flex-wrap: nowrap;
     align-content: center;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
 }
 .mode-btn,
 .language-btn {
