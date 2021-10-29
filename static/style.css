@@ -1,64 +1,66 @@
-:root, body , .preset-color {
-    --hsl-p: var(--base-hue),100%,50%;
-    --hsl-h1: var(--base-hue),100%,70%;
-    --hsl-h2: var(--base-hue),50%,45%;
-    --hsl-c1: var(--base-hue),40%,100%;
-    --hsl-c2: var(--base-hue),40%,90%;
-    --hsl-l1: var(--base-hue),40%,80%;
-    --hsl-l2: var(--base-hue),40%,75%;
-    --hsl-l3: var(--base-hue),40%,70%;
-    --hsl-l4: var(--base-hue),40%,50%;
-    --hsl-d1: var(--base-hue),20%,35%;
-    --hsl-d2: var(--base-hue),20%,30%;
-    --hsl-d3: var(--base-hue),20%,25%;
-    --hsl-d4: var(--base-hue),20%,20%;
-    --hsl-d5: var(--base-hue),20%,15%;
-    --hsl-d6: var(--base-hue),20%,10%;
-    --hsl-f1: var(--base-hue),10%,60%;
-    --hsl-b1: var(--base-hue),10%,40%;
-    --hsl-b2: var(--base-hue),10%,30%;
-    --hsl-b3: var(--base-hue),10%,25%;
-    --hsl-b4: var(--base-hue),10%,20%;
-    --hsl-b5: var(--base-hue),10%,15%;
-    --hsl-b6: var(--base-hue),10%,10%;
-    --hsl-btn: var(--base-hue),60%,50%;
-    --hsl-btn2: var(--base-hue),60%,40%;
+:root,
+body,
+.preset-color {
+    --hsl-p: var(--base-hue), 100%, 50%;
+    --hsl-h1: var(--base-hue), 100%, 70%;
+    --hsl-h2: var(--base-hue), 50%, 45%;
+    --hsl-c1: var(--base-hue), 40%, 100%;
+    --hsl-c2: var(--base-hue), 40%, 90%;
+    --hsl-l1: var(--base-hue), 40%, 80%;
+    --hsl-l2: var(--base-hue), 40%, 75%;
+    --hsl-l3: var(--base-hue), 40%, 70%;
+    --hsl-l4: var(--base-hue), 40%, 50%;
+    --hsl-d1: var(--base-hue), 20%, 35%;
+    --hsl-d2: var(--base-hue), 20%, 30%;
+    --hsl-d3: var(--base-hue), 20%, 25%;
+    --hsl-d4: var(--base-hue), 20%, 20%;
+    --hsl-d5: var(--base-hue), 20%, 15%;
+    --hsl-d6: var(--base-hue), 20%, 10%;
+    --hsl-f1: var(--base-hue), 10%, 60%;
+    --hsl-b1: var(--base-hue), 10%, 40%;
+    --hsl-b2: var(--base-hue), 10%, 30%;
+    --hsl-b3: var(--base-hue), 10%, 25%;
+    --hsl-b4: var(--base-hue), 10%, 20%;
+    --hsl-b5: var(--base-hue), 10%, 15%;
+    --hsl-b6: var(--base-hue), 10%, 10%;
+    --hsl-btn: var(--base-hue), 60%, 50%;
+    --hsl-btn2: var(--base-hue), 60%, 40%;
 }
 body {
-	background-color: hsl(var(--hsl-b6));
-	font-family: "Comfortaa", "Noto Sans SC", -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto,
-		"Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimSun, sans-serif;
-	color: #fff;
-	padding: 0 30px;
-	box-sizing: border-box;
+    background-color: hsl(var(--hsl-b6));
+    font-family: "Comfortaa", "Noto Sans SC", -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimSun, sans-serif;
+    color: #fff;
+    padding: 0 30px;
+    box-sizing: border-box;
     accent-color: hsl(var(--hsl-h1));
 }
-.container{
-	max-width: 1000px;
-	margin: auto;
+.container {
+    max-width: 1000px;
+    margin: auto;
 }
 .title {
-	font-size: 60px;
-	text-align: center;
-	margin-top: 60px;
+    font-size: 60px;
+    text-align: center;
+    margin-top: 60px;
 }
 .subtitle {
-	font-size: 30px;
-	text-align: center;
-	margin-top: 15px;
-	margin-bottom: 20px;
+    font-size: 30px;
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 20px;
 }
 .card {
-	margin: auto;
-	margin-top: 30px;
-	padding: 20px 20px;
-	background-color: hsl(var(--hsl-b5));
-	box-shadow: 0 1px 3px rgb(0 0 0 / 25%);
-	background-image: url(triangles.png);
-	background-position: bottom;
-	background-size: contain;
-	background-repeat: no-repeat;
-	display: flex;
+    margin: auto;
+    margin-top: 30px;
+    padding: 20px 20px;
+    background-color: hsl(var(--hsl-b5));
+    box-shadow: 0 1px 3px rgb(0 0 0 / 25%);
+    background-image: url(triangles.png);
+    background-position: bottom;
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: flex;
     align-items: center;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -75,33 +77,34 @@ input.textfield {
     color: #fff;
     outline: none;
     padding: 10px 20px;
-	font-family: "Comfortaa", "Noto Sans SC", -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto,
-		"Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimSun, sans-serif;
+    font-family: "Comfortaa", "Noto Sans SC", -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimSun, sans-serif;
 }
 input.textfield.small {
-	font-size: 18px;
+    font-size: 18px;
     padding: 6px 10px;
 }
 input.textfield::placeholder {
-	color: #fff;
-	opacity: .4;
+    color: #fff;
+    opacity: 0.4;
 }
-input[type='checkbox']{
+input[type="checkbox"] {
     width: 20px;
     height: 20px;
-	margin-right: 10px;
-	cursor: pointer;
+    margin-right: 10px;
+    cursor: pointer;
 }
-input[type='range']{
+input[type="range"] {
     width: 250px;
     -webkit-appearance: none;
     background-color: hsl(var(--hsl-b4)) !important;
     border-radius: 100px;
     outline: none;
-    background:none;
+    background: none;
 }
-#playmode, #language{
-	margin-top: 20px;
+#playmode,
+#language {
+    margin-top: 20px;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -109,7 +112,8 @@ input[type='range']{
     align-items: center;
     justify-content: space-between;
 }
-.mode-btn, .language-btn {
+.mode-btn,
+.language-btn {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -118,14 +122,16 @@ input[type='range']{
     padding: 12px 15px;
     border-radius: 4px;
     cursor: pointer;
-	width: 50px;
-	margin-right: 5px;
+    width: 50px;
+    margin-right: 5px;
     border: solid 1px transparent;
 }
-.mode-btn:last-child, .language-btn:last-child {
-	margin-right: 0;
+.mode-btn:last-child,
+.language-btn:last-child {
+    margin-right: 0;
 }
-.mode-btn.active, .language-btn.active {
+.mode-btn.active,
+.language-btn.active {
     border: solid 1px hsl(var(--hsl-h1));
 }
 .mode-btn > div {
@@ -137,8 +143,8 @@ input[type='range']{
     background: hsl(var(--hsl-b5));
 }
 
-#options{
-	margin-top: 25px;
+#options {
+    margin-top: 25px;
 }
 .option {
     display: flex;
@@ -148,13 +154,13 @@ input[type='range']{
     justify-content: center;
     align-items: center;
     width: 350px;
-	font-size: 20px;
-	margin-bottom: 10px;
+    font-size: 20px;
+    margin-bottom: 10px;
     margin-left: auto;
     margin-right: auto;
 }
-button{
-	font-size: 26px;
+button {
+    font-size: 26px;
     padding: 10px 20px;
     background: hsl(var(--hsl-btn));
     color: #fff;
@@ -166,15 +172,15 @@ button{
     background-image: url(triangles.svg);
     background-size: 300%;
     background-position: 50%;
-    transition: all .12s ease-in-out;
+    transition: all 0.12s ease-in-out;
 }
-button[disabled]{
-    opacity: .2;
+button[disabled] {
+    opacity: 0.2;
     pointer-events: none;
 }
 button:hover {
     background-position: 55% 50%;
-    filter: brightness(.9);
+    filter: brightness(0.9);
 }
 button:active {
     transform: translateY(2px);
@@ -192,7 +198,7 @@ button:active {
     text-align: center;
     display: inline-block;
     cursor: pointer;
-    opacity: .8;
+    opacity: 0.8;
     user-select: none;
     padding: 0px 10px;
     margin-right: 5px;
