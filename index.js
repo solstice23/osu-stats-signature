@@ -32,20 +32,21 @@ app.get('/card', async function(req, res) {
         blur = parseFloat(req.query.blur);
     }
     let isMini = req.query.mini != undefined && req.query.mini == 'true';
-    let userCoverImageBase64;
+    let userCoverImageBase64, width, height;
     if (isMini) {
         userCoverImageBase64 = await libs.getResizdCoverBase64(userCoverImage, 400, 120, blur);
+        [width, height] = [400, 120];
     } else {
         userCoverImageBase64 = await libs.getResizdCoverBase64(userCoverImage, 550, 120, blur);
+        [width, height] = [550, 320];
     }
-
     
     userData.options = {
         language: req.query.lang ?? "cn",
         animation: (req.query.animation != undefined && req.query.animation != 'false'),
         size: {
-            width: parseFloat(req.query.w ?? 550),
-            height: parseFloat(req.query.h ?? 320)
+            width: parseFloat(req.query.w ?? width),
+            height: parseFloat(req.query.h ?? height)
         },
         color_hue: parseInt(req.query.hue ?? 333),
     }
