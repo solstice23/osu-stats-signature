@@ -25,7 +25,7 @@ const app = {
 		return {
 			username: "",
 			playmode: "std",
-			language: "cn",
+			language: navigator.language.includes("zh") ? "cn" : "en",
 			cardmode: "full",
 			blur_checked: false,
 			blur_size: 6,
