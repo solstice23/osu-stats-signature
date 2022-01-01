@@ -29,10 +29,10 @@ osu-stats-signature 可以生成实时更新的 osu! 个人资料卡片/签名�
 
 ## Full
 
-<a href="https://osu.ppy.sh/users/7562902/"><img src="https://osu-stats-signature.vercel.app/card?user=mrekk&mode=std&lang=en&animation=true" width="550" /></a>
+<a href="https://osu.ppy.sh/users/7562902/"><img src="https://osu-sig.vercel.app/card?user=mrekk&mode=std&lang=en&animation=true" width="550" /></a>
 
-<a href="https://osu.ppy.sh/users/21226378/"><img src="https://osu-stats-signature.vercel.app/card?user=solstice23&mode=std&animation=true" width="550" /></a>
+<a href="https://osu.ppy.sh/users/21226378/"><img src="https://osu-sig.vercel.app/card?user=solstice23&mode=std&animation=true" width="550" /></a>
 
 ## Mini
 
-<a href="https://osu.ppy.sh/users/21226378/"><img src="https://osu-stats-signature.vercel.app/card?user=solstice23&mode=std&blur=6&animation=true&mini=true" width="400" /></a>
+<a href="https://osu.ppy.sh/users/21226378/"><img src="https://osu-sig.vercel.app/card?user=solstice23&mode=std&blur=6&animation=true&mini=true" width="400" /></a>
