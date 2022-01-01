@@ -4,6 +4,7 @@ const i18n = {
 		'用户名 / UID': 'Username / UID',
 		'背景模糊': 'Background blur',
 		'模糊强度': 'Blur size',
+		'圆头像': 'Round avatar',
 		'动画': 'Animation',
 		'颜色': 'Color',
 		'粉色': 'Pink',
@@ -29,6 +30,7 @@ const app = {
 			cardmode: "full",
 			blur_checked: false,
 			blur_size: 6,
+			round_avatar: false,
 			animation: true,
 			color_hue: 333,
 			size: {
@@ -57,6 +59,9 @@ const app = {
 			}
 			if (this.blur_checked){
 				url += `&blur=${this.blur_size}`;
+			}
+			if (this.round_avatar){
+				url += `&round_avatar=true`;
 			}
 			if (this.animation){
 				url += "&animation=true";

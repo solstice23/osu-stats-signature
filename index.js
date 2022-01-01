@@ -48,6 +48,7 @@ app.get('/card', async function(req, res) {
             width: parseFloat(req.query.w ?? width),
             height: parseFloat(req.query.h ?? height)
         },
+        round_avatar: (req.query.round_avatar != undefined && req.query.round_avatar != 'false'),
         color_hue: parseInt(req.query.hue ?? 333),
     }
 

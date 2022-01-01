@@ -106,6 +106,17 @@ const replaceCalcedColors = (data, svg) => {
 
 	return svg;
 }
+const replaceRoundAvatarClipPath = (data, ismini, svg) => {
+	if (!data.options.round_avatar) {
+		return svg;
+	}
+	if (ismini) {
+		svg = svg.replace(/<path id="avatar_clip"(.*?)\/>/, '<circle id="avatar_clip" class="cls-1" cx="61" cy="6" r="45"/>');
+	}else{
+		svg = svg.replace(/<path id="avatar_clip"(.*?)\/>/, '<circle id="avatar_clip" class="cls-4" cx="62.5" cy="60.5" r="42.2"/>');
+	}
+	return svg;
+}
 
 export const getRenderedSVGFull = (data, avatarBase64, userCoverImageBase64) => {
 	let templete = getSVGTemplete('full', data.options.language);
@@ -119,6 +130,9 @@ export const getRenderedSVGFull = (data, avatarBase64, userCoverImageBase64) => 
 
 	//颜色
 	templete = replaceCalcedColors(data, templete);
+
+	//圆头像
+	templete = replaceRoundAvatarClipPath(data, false, templete);
 
 
 	//名字
@@ -202,6 +216,9 @@ export const getRenderedSVGMini = (data, avatarBase64, userCoverImageBase64) => 
 
 	//颜色
 	templete = replaceCalcedColors(data, templete);
+
+	//圆头像
+	templete = replaceRoundAvatarClipPath(data, false, templete);
 
 
 	//名字
