@@ -1,4 +1,5 @@
 import got from 'got';
+import cheerio from 'cheerio';
 
 export const getUser = async (username, playmode = 'std') => {
 	const playmodes = {
@@ -30,8 +31,9 @@ export const getUser = async (username, playmode = 'std') => {
 	}
 	
     const body = response.body;
-    const data = JSON.parse(body.match(/<script id=\"json-user\" type=\"application\/json\">([\s\S]*?)<\/script>/m)[1].trim());
-	data.extra_data = JSON.parse(body.match(/<script id=\"json-extras\" type=\"application\/json\">([\s\S]*?)<\/script>/m)[1].trim());
+	let $ = cheerio.load(body);
+    const data = JSON.parse($('.js-react--profile-page.osu-layout').attr('data-initial-data'));
+	//data.extra_data = JSON.parse(body.match(/<script id=\"json-extras\" type=\"application\/json\">([\s\S]*?)<\/script>/m)[1].trim());
 	data.current_mode = playmode;
 	return data;
 }

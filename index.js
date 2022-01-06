@@ -22,8 +22,8 @@ app.get('/card', async function(req, res) {
         res.send(render.getErrorSVG("Error: " + userData.error));
         return;
     }
-    let avatarBase64 = await api.getImageBase64(userData.avatar_url);
-    let userCoverImage = await api.getImage(userData.cover_url);
+    let avatarBase64 = await api.getImageBase64(userData.user.avatar_url);
+    let userCoverImage = await api.getImage(userData.user.cover_url);
 
     let blur = 0;
     if (req.query.blur != undefined && req.query.blur == '') {
