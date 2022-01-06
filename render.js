@@ -22,17 +22,31 @@ export const getSVGContent = (x) => {
 	return fs.readFileSync(path.join(__dirname, x), 'utf8');
 }
 
-const getTransformedX = (x, w) => {
-	return x + w / 2 - 550 / 2;
+const getTransformedX = (x, w, anchor = 'center') => {
+	switch (anchor) {
+		case 'left':
+			return x - 550 / 2 + w / 2;
+		case 'right':
+			return x - 550 / 2 + w;
+		default:
+			return x - 550 / 2;
+	}
 }
-const getTransformedXMini = (x, w) => {
-	return x + w / 2 - 400 / 2;
+const getTransformedXMini = (x, w, anchor = 'center') => {
+	switch (anchor) {
+		case 'left':
+			return x - 400 / 2 + w / 2;
+		case 'right':
+			return x - 400 / 2 + w;
+		default:
+			return x - 400 / 2;
+	}
 }
 
 export const getFlagSVG = (countryCode, x, y, h) => {
 	let svg = libs.getFlagSVGByCountryCode(countryCode);
 	let $ = cheerio.load(svg);
-	$('svg').attr('x', getTransformedX(x, h * 0.72));
+	$('svg').attr('x', getTransformedX(x, h * 0.72, 'left'));
 	$('svg').attr('y', y);
 	$('svg').attr('height', h);
 	return $.html('svg');
@@ -40,7 +54,7 @@ export const getFlagSVG = (countryCode, x, y, h) => {
 export const getFlagSVGMini = (countryCode, x, y, h) => {
 	let svg = libs.getFlagSVGByCountryCode(countryCode);
 	let $ = cheerio.load(svg);
-	$('svg').attr('x', getTransformedXMini(x, h * 0.72));
+	$('svg').attr('x', getTransformedXMini(x, h * 0.72, 'left'));
 	$('svg').attr('y', y);
 	$('svg').attr('height', h);
 	return $.html('svg');
@@ -48,7 +62,7 @@ export const getFlagSVGMini = (countryCode, x, y, h) => {
 export const getPlaymodeSVG = (playmode, x, y, h) => {
 	let svg = libs.getPlaymodeSVG(playmode);
 	let $ = cheerio.load(svg);
-	$('svg').attr('x', getTransformedX(x, h));
+	$('svg').attr('x', getTransformedX(x, h, 'left'));
 	$('svg').attr('y', y);
 	$('svg').attr('height', h);
 	return $.html('svg');
@@ -56,15 +70,20 @@ export const getPlaymodeSVG = (playmode, x, y, h) => {
 export const getPlaymodeSVGMini = (playmode, x, y, h) => {
 	let svg = libs.getPlaymodeSVG(playmode);
 	let $ = cheerio.load(svg);
-	$('svg').attr('x', getTransformedXMini(x, h));
+	$('svg').attr('x', getTransformedXMini(x, h, 'left'));
 	$('svg').attr('y', y);
 	$('svg').attr('height', h);
 	return $.html('svg');
 }
-export const getSupporterSVG = (x, y, h) => {
-	let svg = fs.readFileSync(path.join(__dirname, '/assets/icons/supporter.svg'), 'utf8');
+export const getSupporterSVG = (x, y, h, level = 1) => {
+	let svg = fs.readFileSync(path.join(__dirname, `/assets/icons/supporter_${level}.svg`), 'utf8');
 	let $ = cheerio.load(svg);
-	$('svg').attr('x', getTransformedX(x, h * 0.8));
+	console.log($(svg).attr('viewBox').split(' ')[2]);
+	let viewBoxW = parseFloat($(svg).attr('viewBox').split(' ')[2]);
+	let viewBoxH = parseFloat($(svg).attr('viewBox').split(' ')[3]);
+	let scale = h / viewBoxH;
+	console.log(viewBoxW * scale);
+	$('svg').attr('x', getTransformedX(x, viewBoxW * scale, 'left'));
 	$('svg').attr('y', y);
 	$('svg').attr('height', h);
 	return $.html('svg');
@@ -150,7 +169,7 @@ export const getRenderedSVGFull = (data, avatarBase64, userCoverImageBase64) => 
 	let nameWidth = getTextSVGMetrics(textToSVGBold, user.username, 130, 20, 28).width;
 	//Support Tag
 	if (user.is_supporter){
-		templete = templete.replace('{{supporter-tag}}', getSupporterSVG(130 + nameWidth + 15, 24, 22));
+		templete = templete.replace('{{supporter-tag}}', getSupporterSVG(130 + nameWidth + 10, 24, 22, user.support_level));
 	}else{
 		templete = templete.replace('{{supporter-tag}}', '');
 	}
