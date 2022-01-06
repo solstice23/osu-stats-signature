@@ -32,8 +32,7 @@ export const getUser = async (username, playmode = 'std') => {
 	
     const body = response.body;
 	let $ = cheerio.load(body);
-    const data = JSON.parse($('.js-react--profile-page.osu-layout').attr('data-initial-data'));
-	//data.extra_data = JSON.parse(body.match(/<script id=\"json-extras\" type=\"application\/json\">([\s\S]*?)<\/script>/m)[1].trim());
+	const data = JSON.parse($('.js-react--profile-page.osu-layout').attr('data-initial-data'));
 	data.current_mode = playmode;
 	return data;
 }
