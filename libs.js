@@ -50,6 +50,7 @@ export const formatPlaytime = (playtime) => {
 }
 
 export const getResizdCoverBase64 = async (img, w, h, blur = 0) => {
+	blur = Math.min(blur, 100);
 	if (blur >= 0.5 && blur <= 100) {
 		return await sharp(img)
 			.resize(w * 1.5, h * 1.5)

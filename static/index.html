@@ -57,7 +57,7 @@
 					</div>
 					<div class="option" v-if="blur_checked">
 						<label style="margin-right: 10px;">{{$n('模糊强度')}}</label>
-						<input class="textfield small" v-model="blur_size" placeholder="6" style="width: 80px;" type="number" min="0" max="100"/>
+						<input class="textfield small" v-model="blur_size" placeholder="6" style="width: 80px;" type="number" min="0" max="100" @change="blur_size = clamp(blur_size, 0, 100)"/>
 						<label style="margin-left: 10px;">px</label>
 					</div>
 					<div class="option">
