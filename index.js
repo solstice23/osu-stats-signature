@@ -21,7 +21,7 @@ app.get('/card', async function (req, res) {
     let username = req.query.user ?? "";
     let playmode = req.query.mode ?? "std";
 
-    let cacheKey = `{username}|{playmode}`;
+    let cacheKey = `${username}|${playmode}`;
     if (req.headers['cache-control'] != 'no-cache' && cacheControl.has(cacheKey)) {
         res.send(cacheControl.get(cacheKey));
         return;
