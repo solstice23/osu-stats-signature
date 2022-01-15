@@ -21,19 +21,21 @@ app.get('/card', async function (req, res) {
     let username = req.query.user ?? "";
     let playmode = req.query.mode ?? "std";
 
+    let userData, avatarBase64, userCoverImage;
+
     let cacheKey = `${username}|${playmode}`;
     if (req.headers['cache-control'] != 'no-cache' && cacheControl.has(cacheKey)) {
-        res.send(cacheControl.get(cacheKey));
-        return;
+        ({userData, avatarBase64, userCoverImage} = cacheControl.get(cacheKey));
+    }else{
+        userData = await api.getUser(username, playmode);
+        if (userData.error) {
+            res.send(render.getErrorSVG("Error: " + userData.error));
+            return;
+        }
+        avatarBase64 = await api.getImageBase64(userData.user.avatar_url);
+        userCoverImage = await api.getImage(userData.user.cover_url);
+        cacheControl.set(cacheKey, {userData, avatarBase64, userCoverImage});
     }
-
-    let userData = await api.getUser(username, playmode);
-    if (userData.error) {
-        res.send(render.getErrorSVG("Error: " + userData.error));
-        return;
-    }
-    let avatarBase64 = await api.getImageBase64(userData.user.avatar_url);
-    let userCoverImage = await api.getImage(userData.user.cover_url);
 
     let blur = 0;
     if (req.query.blur != undefined && req.query.blur == '') {
@@ -68,7 +70,6 @@ app.get('/card', async function (req, res) {
     } else {
         svg = render.getRenderedSVGFull(userData, avatarBase64, userCoverImageBase64);
     }
-    cacheControl.set(cacheKey, svg);
     res.send(svg);
 });
 
