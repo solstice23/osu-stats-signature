@@ -1,8 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 550 322" width="{{width}}" height="{{height}}">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 550 320" width="{{width}}" height="{{height}}">
 	<defs>
 		<style>.cls-1{fill:#de31ae;}.cls-2{fill:#02b5c3;}.cls-3{fill:#88da20;}.cls-4,.cls-41{fill:none;}.cls-5{fill:{{hsl-b5}};}.cls-6{fill:{{hsl-b4}};}.cls-7{clip-path:url(#clip-path);}.cls-8{opacity:0.2;}.cls-9{fill:#fff;}.cls-10{fill:{{hsl-h1}};}.cls-11{fill:#b3d944;}.cls-12{fill:#ed1221;}.cls-13{clip-path:url(#clip-path-2);}.cls-14{fill:#ce1c9d;}.cls-15,.cls-22{fill:#5e244e;}.cls-15,.cls-26{fill-opacity:0.5;}.cls-16{mask:url(#mask);}.cls-17{fill:#c30b90;}.cls-18{fill:#be0089;}.cls-19{fill:url(#gradient_2);}.cls-20{clip-path:url(#clip-path-3);}.cls-21{mask:url(#mask-2);}.cls-23{fill:url(#gradient_3);}.cls-24{clip-path:url(#clip-path-4);}.cls-25{fill:#00a8b5;}.cls-26{fill:#095056;}.cls-27{mask:url(#mask-3);}.cls-28{fill:#009daa;}.cls-29{fill:#0096a2;}.cls-30{fill:url(#gradient_2-2);}.cls-31{clip-path:url(#clip-path-5);}.cls-32{mask:url(#mask-4);}.cls-33{fill:url(#gradient_3-2);}.cls-34{clip-path:url(#clip-path-6);}.cls-35{fill:#7cce14;}.cls-36{mask:url(#mask-5);}.cls-37{fill:#72c904;}.cls-38{fill:#69bb00;}.cls-39{fill:#275227;}.cls-40{fill:#1c1719;}.cls-41{stroke:#fc2;stroke-miterlimit:10;}.cls-42{fill:#75aadb;}.cls-43{fill:#141414;}.cls-44{fill:#eee;}.cls-45{clip-path:url(#clip-path-7);outline:1px solid transparent;}</style>
-		<clipPath id="clip-path" transform="translate(0 2)">
-			<path class="cls-4" d="M550,8V118.107H0V8A8.024,8.024,0,0,1,8,0H542A8.024,8.024,0,0,1,550,8Z" />
+		<clipPath id="clip-path">
+			<rect xmlns="http://www.w3.org/2000/svg" y="0" width="550" height="50" rx="8"/>
+			<rect xmlns="http://www.w3.org/2000/svg" y="10" width="550" height="110" rx="0"/>
 		</clipPath>
 		<clipPath id="clip-path-2" transform="translate(0 2)">
 			<rect id="SVGID" class="cls-4" x="345" y="126.061" width="32" height="16" />
@@ -104,8 +105,8 @@
 		</style>
 	</defs>
 	<g id="bg">
-		<rect class="cls-5" y="2" width="550" height="320" rx="8" />
-		<rect class="cls-6" y="120.108" width="550" height="43.785" />
+		<rect class="cls-5" y="0" width="550" height="320" rx="8" />
+		<rect class="cls-6" y="120" width="550" height="43.785" />
 		<g id="head">
 			<g class="cls-7">
 				<image class="cls-8" width="550" height="120" xlink:href="{{user-cover-base64}}" />

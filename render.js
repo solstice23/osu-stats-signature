@@ -78,11 +78,9 @@ export const getPlaymodeSVGMini = (playmode, x, y, h) => {
 export const getSupporterSVG = (x, y, h, level = 1) => {
 	let svg = fs.readFileSync(path.join(__dirname, `/assets/icons/supporter_${level}.svg`), 'utf8');
 	let $ = cheerio.load(svg);
-	console.log($(svg).attr('viewBox').split(' ')[2]);
 	let viewBoxW = parseFloat($(svg).attr('viewBox').split(' ')[2]);
 	let viewBoxH = parseFloat($(svg).attr('viewBox').split(' ')[3]);
 	let scale = h / viewBoxH;
-	console.log(viewBoxW * scale);
 	$('svg').attr('x', getTransformedX(x, viewBoxW * scale, 'left'));
 	$('svg').attr('y', y);
 	$('svg').attr('height', h);
