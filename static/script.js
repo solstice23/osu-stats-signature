@@ -19,6 +19,13 @@ const i18n = {
 		'完整': 'Full',
 		'迷你': 'Mini',
 		'生成': 'Generate',
+		'▼ 显示额外选项': '▼ Show extra options',
+		'▲ 隐藏额外选项': '▲ Hide extra options',
+		'外边距': 'Margin',
+		'上': 'top',
+		'下': 'bottom',
+		'左': 'left',
+		'右': 'right',
 	}
 }
 const app = {
@@ -41,6 +48,13 @@ const app = {
 				w: 400,
 				h: 120
 			},
+			margin: {
+				top: 0,
+				right: 0,
+				bottom: 0,
+				left: 0
+			},
+			show_extra_settings: false,
 		}
 	},
 	watch: {
@@ -67,17 +81,20 @@ const app = {
 				url += "&animation=true";
 			}
 			if (this.color_hue != 333){
-				url += "&hue=" + this.color_hue;
+				url += `&hue=${this.color_hue}`;
 			}
 			if (this.cardmode == "mini"){
 				url += "&mini=true";
 				if (this.size_mini.w != 400 || this.size_mini.h != 120){
-					url += "&w=" + this.size_mini.w + "&h=" + this.size_mini.h;
+					url += `&w=${this.size_mini.w}&h=${this.size_mini.h}`;
 				}
 			}else{
 				if (this.size.w != 550 || this.size.h != 320){
-					url += "&w=" + this.size.w + "&h=" + this.size.h;
+					url += `&w=${this.size.w}&h=${this.size.h}`;
 				}
+			}
+			if (this.margin.left != 0 || this.margin.right != 0 || this.margin.top != 0 || this.margin.bottom != 0){
+				url += `&margin=${this.margin.top},${this.margin.right},${this.margin.bottom},${this.margin.left}`;
 			}
 			document.getElementById("link").setAttribute("href", url);
 			document.getElementById("link").click();

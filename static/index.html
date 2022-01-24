@@ -92,18 +92,40 @@
 					</div>
 					<div class="option" v-if="cardmode == 'full'">
 						<label style="margin-right: 10px;">{{$n('尺寸')}}</label>
-						<input class="textfield small" v-model="size.w" placeholder="6" style="width: 80px;" type="number" min="20" max="9999" maxlength="4" @input="size.h = Math.round(size.w / 550 * 320)" @change="size.w = clamp(size.w, 20, 9999), size.h = Math.round(size.w / 550 * 320)"/>
+						<input class="textfield small" v-model="size.w" placeholder="550" style="width: 80px;" type="number" min="20" max="9999" maxlength="4" @input="size.h = Math.round(size.w / 550 * 320)" @change="size.w = clamp(size.w, 20, 9999), size.h = Math.round(size.w / 550 * 320)"/>
 						<label style="margin-left: 10px;margin-right: 10px;">px × </label>
-						<input class="textfield small" v-model="size.h" placeholder="6" style="width: 80px;" type="number" min="12" max="5817" maxlength="4" @input="size.w = Math.round(size.h / 320 * 550)" @change="size.h = clamp(size.h, 12, 5817), size.w = Math.round(size.h / 320 * 550)"/>
+						<input class="textfield small" v-model="size.h" placeholder="320" style="width: 80px;" type="number" min="12" max="5817" maxlength="4" @input="size.w = Math.round(size.h / 320 * 550)" @change="size.h = clamp(size.h, 12, 5817), size.w = Math.round(size.h / 320 * 550)"/>
 						<label style="margin-left: 10px;">px</label>
 					</div>
 					<div class="option" v-if="cardmode == 'mini'">
 						<label style="margin-right: 10px;">{{$n('尺寸')}}</label>
-						<input class="textfield small" v-model="size_mini.w" placeholder="6" style="width: 80px;" type="number" min="20" max="9999" maxlength="4" @input="size_mini.h = Math.round(size_mini.w / 400 * 120)" @change="size_mini.w = clamp(size_mini.w, 20, 9999), size_mini.h = Math.round(size_mini.w / 400 * 120)"/>
+						<input class="textfield small" v-model="size_mini.w" placeholder="400" style="width: 80px;" type="number" min="20" max="9999" maxlength="4" @input="size_mini.h = Math.round(size_mini.w / 400 * 120)" @change="size_mini.w = clamp(size_mini.w, 20, 9999), size_mini.h = Math.round(size_mini.w / 400 * 120)"/>
 						<label style="margin-left: 10px;margin-right: 10px;">px × </label>
-						<input class="textfield small" v-model="size_mini.h" placeholder="6" style="width: 80px;" type="number" min="6" max="2999" maxlength="4" @input="size_mini.w = Math.round(size_mini.h / 120 * 400)" @change="size_mini.h = clamp(size_mini.h, 6, 2999), size_mini.w = Math.round(size_mini.h / 120 * 400)"/>
+						<input class="textfield small" v-model="size_mini.h" placeholder="120" style="width: 80px;" type="number" min="6" max="2999" maxlength="4" @input="size_mini.w = Math.round(size_mini.h / 120 * 400)" @change="size_mini.h = clamp(size_mini.h, 6, 2999), size_mini.w = Math.round(size_mini.h / 120 * 400)"/>
 						<label style="margin-left: 10px;">px</label>
 					</div>
+					<div class="option" v-if="show_extra_settings" style="white-space: nowrap;">
+						<label style="margin-right: 10px;">{{$n('外边距')}}</label>
+						<div>
+							<div>
+								<label style="margin-left: 10px;margin-right: 10px;">{{$n('左')}}</label>
+								<input class="textfield small" v-model="margin.left" placeholder="0" style="width: 70px;" type="number" min="0" max="999" maxlength="3" @change="margin.left = clamp(margin.left, 0, 999)"/>
+								<label style="margin-left: 10px;margin-right: 10px;">px</label>
+								<label style="margin-right: 10px;">{{$n('右')}}</label>
+								<input class="textfield small" v-model="margin.right" placeholder="0" style="width: 70px;" type="number" min="0" max="999" maxlength="3" @change="margin.right = clamp(margin.right, 0, 999)"/>
+								<label style="margin-left: 10px;margin-right: 10px;">px</label>
+							</div>
+							<div>
+								<label style="margin-left: 10px;margin-right: 10px;">{{$n('上')}}</label>
+								<input class="textfield small" v-model="margin.top" placeholder="0" style="width: 70px;" type="number" min="0" max="999" maxlength="3" @change="margin.top = clamp(margin.top, 0, 999)"/>
+								<label style="margin-left: 10px;margin-right: 10px;">px</label>
+								<label style="margin-right: 10px;">{{$n('下')}}</label>
+								<input class="textfield small" v-model="margin.bottom" placeholder="0" style="width: 70px;" type="number" min="0" max="999" maxlength="3" @change="margin.bottom = clamp(margin.bottom, 0, 999)"/>
+								<label style="margin-left: 10px;margin-right: 10px;">px</label>
+							</div>
+						</div>
+					</div>
+					<div class="div-btn" @click="show_extra_settings = !show_extra_settings" v-bind:style="{opacity: show_extra_settings ? 1 : 0.5}">{{ show_extra_settings ? $n('▲ 隐藏额外选项') : $n('▼ 显示额外选项')}}</div>
 				</div>
 			</div>
 			<div style="width: 100%;display: flex;">

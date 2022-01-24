@@ -134,6 +134,22 @@ const replaceRoundAvatarClipPath = (data, ismini, svg) => {
 	}
 	return svg;
 }
+const setMargin = (data, svg) => {
+	let margin = data.options.margin;
+	if (margin.reduce((a, b) => a + b) == 0) {
+		return svg;
+	}
+	if (margin.length > 4) {
+		margin = margin.slice(0, 4);
+	}
+	if (margin.length == 3) {
+		margin.push(0);
+	}
+	let $ = cheerio.load(svg);
+	$('svg').attr('style', `margin: ${margin.join('px ')}px;`);
+	return $.html('svg');
+}
+
 const minifySVG = (svg) => {
 	svg = svg.replace(/\t/g, '');
 	svg = svg.replace(/\n/g, '');
@@ -151,6 +167,8 @@ export const getRenderedSVGFull = (data, avatarBase64, userCoverImageBase64) => 
 	//尺寸
 	templete = templete.replace('{{width}}', data.options.size.width);
 	templete = templete.replace('{{height}}', data.options.size.height);
+	//外边距
+	templete = setMargin(data, templete);
 
 	//动画
 	templete = templete.replace('{{fg-extra-class}}', data.options.animation ? "animation-enabled" : "");
@@ -238,6 +256,8 @@ export const getRenderedSVGMini = (data, avatarBase64, userCoverImageBase64) => 
 	//尺寸
 	templete = templete.replace('{{width}}', data.options.size.width);
 	templete = templete.replace('{{height}}', data.options.size.height);
+	//外边距
+	templete = setMargin(data, templete);
 
 	//动画
 	templete = templete.replace('{{fg-extra-class}}', data.options.animation ? "animation-enabled" : "");

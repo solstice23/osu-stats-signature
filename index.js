@@ -52,6 +52,7 @@ app.get('/card', async function (req, res) {
         userCoverImageBase64 = await libs.getResizdCoverBase64(userCoverImage, 550, 120, blur);
         [width, height] = [550, 320];
     }
+    let margin = (req.query.margin ?? "0,0,0,0").split(',').map(x => parseInt(x));
 
     userData.options = {
         language: req.query.lang ?? "cn",
@@ -62,6 +63,7 @@ app.get('/card', async function (req, res) {
         },
         round_avatar: (req.query.round_avatar != undefined && req.query.round_avatar != 'false'),
         color_hue: parseInt(req.query.hue ?? 333),
+        margin: margin,
     }
 
     let svg = "";
