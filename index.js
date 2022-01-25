@@ -8,7 +8,7 @@ import * as api from './api.js';
 const cacheControl = new NodeCache({ stdTTL: 600, checkperiod: 600, deleteOnExpire: true });
 const app = express();
 
-app.use('/', express.static(path.join(process.cwd, '/static')));
+app.use('/', express.static(path.join(process.cwd(), '/static')));
 
 app.get('/card', async function (req, res) {
 	res.set({
