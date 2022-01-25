@@ -19,16 +19,13 @@ app.get('/card', async function (req, res) {
 	const playmode = req.query.mode ?? 'std';
 
 	let userData, avatarBase64, userCoverImage;
-
 	let cacheKey = `${username}|${playmode}`;
+
 	if (req.headers['cache-control'] != 'no-cache' && cacheControl.has(cacheKey)) {
 		({ userData, avatarBase64, userCoverImage } = cacheControl.get(cacheKey));
 	} else {
 		userData = await api.getUser(username, playmode);
-		if (userData.error) {
-			res.send(render.getErrorSVG('Error: ' + userData.error));
-			return;
-		}
+		if (userData.error) return res.send(render.getErrorSVG('Error: ' + userData.error));
 		avatarBase64 = await api.getImageBase64(userData.user.avatar_url);
 		userCoverImage = await api.getImage(userData.user.cover_url);
 		cacheControl.set(cacheKey, { userData, avatarBase64, userCoverImage });

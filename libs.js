@@ -1,11 +1,12 @@
 import fs from 'fs';
 import path from 'path';
 import sharp from 'sharp';
+
 export const getFlagSVGByCountryCode = (countryCode) => {
 	const chars = countryCode.split('');
 	const hexEmojiChars = chars.map((char) => (char.charCodeAt(0) + 127397).toString(16));
 	const fileName = hexEmojiChars.join('-');
-	let filePath = path.join(process.cwd(), `/assets/flags/${fileName}.svg`);
+	const filePath = path.join(process.cwd(), `/assets/flags/${fileName}.svg`);
 	if (!fs.existsSync(filePath)) {
 		filePath = path.join(process.cwd(), `/assets/flags/1f1fd-1f1fd.svg`);
 	}
@@ -13,11 +14,13 @@ export const getFlagSVGByCountryCode = (countryCode) => {
 	const flagSVG = fs.readFileSync(filePath, 'utf8');
 	return flagSVG;
 };
+
 export const getPlaymodeSVG = (playmode) => {
 	const filePath = path.join(process.cwd(), `/assets/modes/${playmode}.svg`);
 	const playmodeSVG = fs.readFileSync(filePath, 'utf8');
 	return playmodeSVG;
 };
+
 export const getPlaymodeFullName = (playmode) => {
 	const names = {
 		std: 'osu!',
@@ -27,6 +30,7 @@ export const getPlaymodeFullName = (playmode) => {
 	};
 	return names[playmode];
 };
+
 /**
  * @param {number} number
  * @param {string} prefix
@@ -49,16 +53,8 @@ export const formatPlaytime = (playtime) => {
 
 export const getResizdCoverBase64 = async (img, w, h, blur = 0) => {
 	blur = Math.min(blur, 100);
-	if (blur >= 0.5 && blur <= 100) {
-		return await sharp(img)
-			.resize(w * 1.5, h * 1.5)
-			.blur(blur)
-			.toBuffer()
-			.then((data) => 'data:image/png;base64,' + data.toString('base64'));
-	} else {
-		return await sharp(img)
-			.resize(w * 1.5, h * 1.5)
-			.toBuffer()
-			.then((data) => 'data:image/png;base64,' + data.toString('base64'));
-	}
+	const image = sharp(img).resize(w * 1.5, h * 1.5);
+	if (blur >= 0.5 && blur <= 100) image.blur(blur);
+
+	return image.toBuffer().then((data) => 'data:image/png;base64,' + data.toString('base64'));
 };
