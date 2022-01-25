@@ -1,31 +1,38 @@
 {
-  "name": "osu-stats-signature",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "type": "module",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/solstice23/osu-stats-signature.git"
-  },
-  "author": "solstice23",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/solstice23/osu-stats-signature/issues"
-  },
-  "homepage": "https://github.com/solstice23/osu-stats-signature#readme",
-  "dependencies": {
-    "cheerio": "^1.0.0-rc.10",
-    "colorjs.io": "0.0.3",
-    "express": "^4.17.1",
-    "got": "^11.8.2",
-    "js-base64": "^3.7.2",
-    "node-cache": "^5.1.2",
-    "sharp": "^0.29.1",
-    "text-to-svg": "^3.1.5"
-  }
+	"name": "osu-stats-signature",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"type": "module",
+	"scripts": {
+		"start": "node index.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/solstice23/osu-stats-signature.git"
+	},
+	"author": "solstice23",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/solstice23/osu-stats-signature/issues"
+	},
+	"homepage": "https://github.com/solstice23/osu-stats-signature#readme",
+	"dependencies": {
+		"@sapphire/prettier-config": "^1.2.9",
+		"cheerio": "^1.0.0-rc.10",
+		"colorjs.io": "0.0.3",
+		"express": "^4.17.1",
+		"got": "^11.8.2",
+		"js-base64": "^3.7.2",
+		"node-cache": "^5.1.2",
+		"sharp": "^0.29.1",
+		"text-to-svg": "^3.1.5"
+	},
+	"devDependencies": {
+		"@types/color": "^3.0.2",
+		"@types/express": "^4.17.13",
+		"@types/sharp": "^0.29.5",
+		"@types/text-to-svg": "^3.1.1"
+	},
+	"prettier": "@sapphire/prettier-config"
 }
