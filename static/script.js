@@ -26,6 +26,7 @@ const i18n = {
 		'下': 'bottom',
 		'左': 'left',
 		'右': 'right',
+		'左右反转封面图': 'Flop cover image',
 	}
 }
 const app = {
@@ -54,6 +55,7 @@ const app = {
 				bottom: 0,
 				left: 0
 			},
+			flop: false,
 			show_extra_settings: false,
 		}
 	},
@@ -95,6 +97,9 @@ const app = {
 			}
 			if (this.margin.left != 0 || this.margin.right != 0 || this.margin.top != 0 || this.margin.bottom != 0){
 				url += `&margin=${this.margin.top},${this.margin.right},${this.margin.bottom},${this.margin.left}`;
+			}
+			if (this.flop){
+				url += "&flop=true";
 			}
 			document.getElementById("link").setAttribute("href", url);
 			document.getElementById("link").click();

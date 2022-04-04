@@ -37,13 +37,14 @@ app.get('/card', async function (req, res) {
 	} else if (req.query.blur != undefined) {
 		blur = parseFloat(req.query.blur);
 	}
+	const flop = req.query.flop != undefined;
 	const isMini = req.query.mini != undefined && req.query.mini == 'true';
 	let userCoverImageBase64, width, height;
 	if (isMini) {
-		userCoverImageBase64 = await libs.getResizdCoverBase64(userCoverImage, 400, 120, blur);
+		userCoverImageBase64 = await libs.getResizdCoverBase64(userCoverImage, 400, 120, blur, flop);
 		[width, height] = [400, 120];
 	} else {
-		userCoverImageBase64 = await libs.getResizdCoverBase64(userCoverImage, 550, 120, blur);
+		userCoverImageBase64 = await libs.getResizdCoverBase64(userCoverImage, 550, 120, blur, flop);
 		[width, height] = [550, 320];
 	}
 	const margin = (req.query.margin ?? '0,0,0,0').split(',').map((x) => parseInt(x));

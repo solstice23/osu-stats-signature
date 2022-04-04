@@ -125,6 +125,10 @@
 							</div>
 						</div>
 					</div>
+					<div class="option"  v-if="show_extra_settings">
+						<input type="checkbox" v-model="flop" id="flop"/>
+						<label for="flop">{{$n('左右反转封面图')}}</label>
+					</div>
 					<div class="div-btn" @click="show_extra_settings = !show_extra_settings" v-bind:style="{opacity: show_extra_settings ? 1 : 0.5}">{{ show_extra_settings ? $n('▲ 隐藏额外选项') : $n('▼ 显示额外选项')}}</div>
 				</div>
 			</div>

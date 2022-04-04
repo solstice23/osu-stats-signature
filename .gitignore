@@ -102,3 +102,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Original SVG Template Files
+/assets/orig_ai_files/

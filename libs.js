@@ -51,10 +51,11 @@ export const formatPlaytime = (playtime) => {
 	return `${hours}h ${minutes}m`;
 };
 
-export const getResizdCoverBase64 = async (img, w, h, blur = 0) => {
+export const getResizdCoverBase64 = async (img, w, h, blur = 0, flop = false) => {
 	blur = Math.min(blur, 100);
 	const image = sharp(img).resize(w * 1.5, h * 1.5);
 	if (blur >= 0.5 && blur <= 100) image.blur(blur);
+	if (flop) image.flop();
 
 	return image.toBuffer().then((data) => 'data:image/png;base64,' + data.toString('base64'));
 };
