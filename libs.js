@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import sharp from 'sharp';
+import svgRoundCorners from 'svg-round-corners';
+const { roundCommands } = svgRoundCorners;
 
 export const getFlagSVGByCountryCode = (countryCode) => {
 	const chars = countryCode.split('');
@@ -59,3 +61,23 @@ export const getResizdCoverBase64 = async (img, w, h, blur = 0, flop = false) =>
 
 	return image.toBuffer().then((data) => 'data:image/png;base64,' + data.toString('base64'));
 };
+
+export const getHexagonPath = (origX, origY, radius, borderRadius = 2) => {
+	let outerPathCommands = [];
+	for (let i = 0; i <= 6; i++) {
+		const angle = (-120 + i * 60) / 180 * Math.PI;
+		const x = origX + Math.cos(angle) * radius;
+		const y = origY + Math.sin(angle) * radius;
+		outerPathCommands.push({
+			marker: 'L',
+			values: { x, y }
+		});
+	}
+	outerPathCommands[0].marker = 'M';
+	outerPathCommands.push({
+		marker: 'Z',
+		values: { x: outerPathCommands[0].values.x, y: outerPathCommands[0].values.x }
+	});
+	const path = roundCommands(outerPathCommands, borderRadius);
+	return path.path;
+}

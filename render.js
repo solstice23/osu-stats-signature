@@ -3,6 +3,8 @@ import path from 'path';
 import cheerio from 'cheerio';
 import TextToSVG from 'text-to-svg';
 import Color from 'color';
+import svgRoundCorners from 'svg-round-corners';
+const { roundCommands } = svgRoundCorners;
 import * as libs from './libs.js';
 
 const textToSVGRegular = TextToSVG.loadSync(path.join(process.cwd(), '/assets/fonts/Comfortaa/Comfortaa-Regular.ttf'));
@@ -116,9 +118,10 @@ export const getTextSVGMetrics = (TextToSVGObj, text, x, y, size, anchor = 'left
 const replaceCalcedColors = (data, svg) => {
 	let baseHue = data.options.color_hue;
 
-	svg = svg.replace('{{hsl-b5}}', new Color(`hsl(${baseHue}, 10%, 15%)`).hex());
-	svg = svg.replace('{{hsl-b4}}', new Color(`hsl(${baseHue}, 10%, 20%)`).hex());
-	svg = svg.replace('{{hsl-h1}}', new Color(`hsl(${baseHue}, 100%, 70%)`).hex());
+	svg = svg.replace(/\{\{hsl-b5\}\}/g, new Color(`hsl(${baseHue}, 10%, 15%)`).hex());
+	svg = svg.replace(/\{\{hsl-b4\}\}/g, new Color(`hsl(${baseHue}, 10%, 20%)`).hex());
+	svg = svg.replace(/\{\{hsl-h1\}\}/g, new Color(`hsl(${baseHue}, 100%, 70%)`).hex());
+	svg = svg.replace(/\{\{hsl-f1\}\}/g, new Color(`hsl(${baseHue}, 10%, 60%)`).hex());
 
 	return svg;
 };
@@ -267,6 +270,43 @@ export const getRenderedSVGFull = (data, avatarBase64, userCoverImageBase64) => 
 	);
 	//第一名
 	templete = templete.replace('{{first-place}}', getTextSVGPath(textToSVGRegular, libs.formatNumber(user.scores_first_count), 483, 249, 13));
+
+	//osu! skills
+	if (data.options.includeSkills) {
+		templete = templete.replace('id="count"', 'id="count" style="display: none;"');
+		const origin = [118, 268];
+		const names = ["stamina", "tenacity", "agility", "accuracy", "precision", "reaction", "memory"];
+		let pathCommands = [];
+		for (let i = 0; i <= 7; i++) {
+			const angle = (-120 + i * 60) / 180 * Math.PI;
+			const x = origin[0] + Math.cos(angle) * 45 * (data.user.skills[names[i % 6]].percent / 100);
+			const y = origin[1] + Math.sin(angle) * 45 * (data.user.skills[names[i % 6]].percent / 100);
+			pathCommands.push({
+				marker: 'L',
+				values: { x, y }
+			});
+		}
+		pathCommands[0].marker = 'M';
+		const roundedPath = roundCommands(pathCommands, 1);
+
+		let path = `<path class="cls-48" d="${roundedPath.path}"/>`;
+
+		path += `<path class="cls-47" d="${libs.getHexagonPath(origin[0], origin[1], 11.25, 3)}" style="opacity: 0.25;"/>`;
+		path += `<path class="cls-47" d="${libs.getHexagonPath(origin[0], origin[1], 22.5, 3)}" style="opacity: 0.4;"/>`;
+		path += `<path class="cls-47" d="${libs.getHexagonPath(origin[0], origin[1], 33.75, 3)}" style="opacity: 0.25;"/>`;
+		path += `<path class="cls-47" d="${libs.getHexagonPath(origin[0], origin[1], 45, 3)}" style="opacity: 0.8;"/>`;
+
+		for (let i = 0; i <= 5; i++) {
+			const angle = (-120 + i * 60) / 180 * Math.PI;
+			const x = origin[0] + Math.cos(angle) * 43;
+			const y = origin[1] + Math.sin(angle) * 43;
+			path += `<path class="cls-49" d="M${origin[0]},${origin[1]}L${x},${y}" style="opacity: 0.8;"/>`
+		}
+			
+		templete = templete.replace('{{skills-plot}}', path);
+	} else {
+		templete = templete.replace('id="skills"', 'id="skills" style="display: none;"');
+	}
 
 	return minifySVG(templete);
 };

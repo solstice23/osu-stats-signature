@@ -17,18 +17,20 @@ app.get('/card', async function (req, res) {
 	});
 	const username = req.query.user ?? '';
 	const playmode = req.query.mode ?? 'std';
+	const includeSkills = req.query.skills != undefined && req.query.skills == 'true';
 
 	let userData, avatarBase64, userCoverImage;
-	let cacheKey = `${username}|${playmode}`;
+	let cacheKey = `${username}|${playmode}|${includeSkills}`;
 
 	if (req.headers['cache-control'] != 'no-cache' && cacheControl.has(cacheKey)) {
 		({ userData, avatarBase64, userCoverImage } = cacheControl.get(cacheKey));
 	} else {
-		userData = await api.getUser(username, playmode);
+		userData = await api.getUser(username, playmode, includeSkills);
 		if (userData.error) return res.send(render.getErrorSVG('Error: ' + userData.error));
 		avatarBase64 = await api.getImageBase64(userData.user.avatar_url);
 		userCoverImage = await api.getImage(userData.user.cover_url);
 		cacheControl.set(cacheKey, { userData, avatarBase64, userCoverImage });
+		console.log(userData.user.skills);
 	}
 
 	let blur = 0;
@@ -58,7 +60,8 @@ app.get('/card', async function (req, res) {
 		},
 		round_avatar: req.query.round_avatar != undefined && req.query.round_avatar != 'false',
 		color_hue: parseInt(req.query.hue ?? 333),
-		margin
+		margin,
+		includeSkills
 	};
 
 	const svg = isMini
