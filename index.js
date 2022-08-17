@@ -30,7 +30,6 @@ app.get('/card', async function (req, res) {
 		avatarBase64 = await api.getImageBase64(userData.user.avatar_url);
 		userCoverImage = await api.getImage(userData.user.cover_url);
 		cacheControl.set(cacheKey, { userData, avatarBase64, userCoverImage });
-		console.log(userData.user.skills);
 	}
 
 	let blur = 0;
@@ -50,6 +49,9 @@ app.get('/card', async function (req, res) {
 		[width, height] = [550, 320];
 	}
 	const margin = (req.query.margin ?? '0,0,0,0').split(',').map((x) => parseInt(x));
+	
+	const showMemory = req.query.memory != undefined;
+	const showFiguresForSkills = req.query.skillfigures != undefined;
 
 	userData.options = {
 		language: req.query.lang ?? 'cn',
@@ -61,7 +63,11 @@ app.get('/card', async function (req, res) {
 		round_avatar: req.query.round_avatar != undefined && req.query.round_avatar != 'false',
 		color_hue: parseInt(req.query.hue ?? 333),
 		margin,
-		includeSkills
+		includeSkills,
+		skillsPlot: {
+			showMemory,
+			showFiguresForSkills
+		}
 	};
 
 	const svg = isMini

@@ -274,36 +274,75 @@ export const getRenderedSVGFull = (data, avatarBase64, userCoverImageBase64) => 
 	//osu! skills
 	if (data.options.includeSkills) {
 		templete = templete.replace('id="count"', 'id="count" style="display: none;"');
-		const origin = [118, 268];
-		const names = ["stamina", "tenacity", "agility", "accuracy", "precision", "reaction", "memory"];
-		let pathCommands = [];
-		for (let i = 0; i <= 7; i++) {
-			const angle = (-120 + i * 60) / 180 * Math.PI;
-			const x = origin[0] + Math.cos(angle) * 45 * (data.user.skills[names[i % 6]].percent / 100);
-			const y = origin[1] + Math.sin(angle) * 45 * (data.user.skills[names[i % 6]].percent / 100);
-			pathCommands.push({
-				marker: 'L',
-				values: { x, y }
-			});
+
+		if (data.user.skills === null) {
+			templete = templete.replace('{{no-skill-data-text}}', 
+			`<g class="animated" style="animation-delay: 700ms;">
+				${getTextSVGPath(textToSVGRegular, "No skills data", 118, 265, 15, 'center middle')}
+			</g>`);
+			templete = templete.replace('id="skills"', 'id="skills" style="display: none;"');
 		}
-		pathCommands[0].marker = 'M';
-		const roundedPath = roundCommands(pathCommands, 1);
+		else {
+			templete = templete.replace('{{no-skill-data-text}}', '');
 
-		let path = `<path class="cls-48" d="${roundedPath.path}"/>`;
+			const origin = [118, 268];
+			const names = ["stamina", "accuracy", "precision", "reaction", "agility", "tenacity", "memory"];
+			if (data.options.skillsPlot.showMemory) {
+				names[3] = "memory";
+				templete = templete.replace('class="cls-46 skill-reaction"', 'class="cls-46 skill-reaction" style="display: none;"');
+			} else {
+				templete = templete.replace('class="cls-46 skill-memory"', 'class="cls-46 skill-memory" style="display: none;"');
+			}
+			let pathCommands = [];
+			for (let i = 0; i <= 6; i++) {
+				const angle = (-120 + i * 60) / 180 * Math.PI;
+				const x = origin[0] + Math.cos(angle) * 45 * (data.user.skills[names[i % 6]].percent / 100);
+				const y = origin[1] + Math.sin(angle) * 45 * (data.user.skills[names[i % 6]].percent / 100);
+				pathCommands.push({
+					marker: 'L',
+					values: { x, y }
+				});
+			}
+			pathCommands[0].marker = 'M';
+			const roundedPath = roundCommands(pathCommands, 1);
 
-		path += `<path class="cls-47" d="${libs.getHexagonPath(origin[0], origin[1], 11.25, 3)}" style="opacity: 0.25;"/>`;
-		path += `<path class="cls-47" d="${libs.getHexagonPath(origin[0], origin[1], 22.5, 3)}" style="opacity: 0.4;"/>`;
-		path += `<path class="cls-47" d="${libs.getHexagonPath(origin[0], origin[1], 33.75, 3)}" style="opacity: 0.25;"/>`;
-		path += `<path class="cls-47" d="${libs.getHexagonPath(origin[0], origin[1], 45, 3)}" style="opacity: 0.8;"/>`;
+			let path = `<path class="cls-48 animated-radar" d="${roundedPath.path}Z" style="animation-delay: 850ms;"/>`;
 
-		for (let i = 0; i <= 5; i++) {
-			const angle = (-120 + i * 60) / 180 * Math.PI;
-			const x = origin[0] + Math.cos(angle) * 43;
-			const y = origin[1] + Math.sin(angle) * 43;
-			path += `<path class="cls-49" d="M${origin[0]},${origin[1]}L${x},${y}" style="opacity: 0.8;"/>`
+			path += `<g class="animated-radar" style="animation-delay: 600ms;">`
+			path += `<path class="cls-47" d="${libs.getHexagonPath(origin[0], origin[1], 11.25, 3)}" style="opacity: 0.25;"/>`;
+			path += `<path class="cls-47" d="${libs.getHexagonPath(origin[0], origin[1], 22.5, 3)}" style="opacity: 0.4;"/>`;
+			path += `<path class="cls-47" d="${libs.getHexagonPath(origin[0], origin[1], 33.75, 3)}" style="opacity: 0.25;"/>`;
+			path += `<path class="cls-47" d="${libs.getHexagonPath(origin[0], origin[1], 45, 3)}" style="opacity: 0.8;"/>`;
+			path += `</g>`;
+
+			path += `<g class="animated-fade" style="animation-delay: 850ms;">`
+			for (let i = 0; i <= 5; i++) {
+				const angle = (-120 + i * 60) / 180 * Math.PI;
+				const x = origin[0] + Math.cos(angle) * 43;
+				const y = origin[1] + Math.sin(angle) * 43;
+				path += `<path class="cls-49" d="M${origin[0]},${origin[1]}L${x},${y}" style="opacity: 0.8;"/>`
+			}
+			path += `</g>`;
+
+			if (data.options.skillsPlot.showFiguresForSkills){
+				path += `<g class="animated-fade" style="animation-delay: 900ms;">`
+				for (let i = 0; i <= 5; i++) {
+					const angle = (-120 + i * 60) / 180 * Math.PI;
+					let percent = data.user.skills[names[i % 6]].percent;
+					if (percent > 70) percent -= 20; else percent += 15;
+					const x = origin[0] + Math.cos(angle) * 45 * (percent / 100);
+					const y = origin[1] + Math.sin(angle) * 45 * (percent / 100);
+					path += `
+						<g style="opacity: 0.7;">
+							${getTextSVGPath(textToSVGRegular, libs.formatNumber(data.user.skills[names[i]].value), x, y, 7, 'center middle')}
+						</g>
+					`;
+				}
+				path += `</g>`;
+			}
+
+			templete = templete.replace('{{skills-plot}}', path);
 		}
-			
-		templete = templete.replace('{{skills-plot}}', path);
 	} else {
 		templete = templete.replace('id="skills"', 'id="skills" style="display: none;"');
 	}
