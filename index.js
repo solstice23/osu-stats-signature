@@ -50,7 +50,7 @@ app.get('/card', async function (req, res) {
 	}
 	const margin = (req.query.margin ?? '0,0,0,0').split(',').map((x) => parseInt(x));
 	
-	const showMemory = req.query.memory != undefined;
+	const showMemory = req.query.skillmemory != undefined;
 	const showFiguresForSkills = req.query.skillfigures != undefined;
 
 	userData.options = {

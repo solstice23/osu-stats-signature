@@ -104,6 +104,23 @@
 						<input class="textfield small" v-model="size_mini.h" placeholder="120" style="width: 80px;" type="number" min="6" max="2999" maxlength="4" @input="size_mini.w = Math.round(size_mini.h / 120 * 400)" @change="size_mini.h = clamp(size_mini.h, 6, 2999), size_mini.w = Math.round(size_mini.h / 120 * 400)"/>
 						<label style="margin-left: 10px;">px</label>
 					</div>
+					<div id="fullmode-info-display" style="margin-bottom: 10px;" v-if="cardmode == 'full' && playmode == 'std'">
+						<label style="margin-right: 10px; font-size: 120%;">{{$n('显示')}}</label>
+						<div :class="{ active: info_display == 'stats' }" class="mode-btn" @click="info_display = 'stats'" style="margin-left: 10px;">
+							{{$n('数据统计')}}
+						</div>
+						<div :class="{ active: info_display == 'skills' }" class="mode-btn" @click="info_display = 'skills'">
+							osu!skills
+						</div>
+					</div>
+					<div class="option"  v-if="show_extra_settings && info_display == 'skills' && cardmode == 'full' && playmode == 'std'">
+						<input type="checkbox" v-model="show_figures_for_skills" id="show_figures_for_skills"/>
+						<label for="show_figures_for_skills">{{$n('显示 osu!skills 图表中的数字')}}</label>
+					</div>
+					<div class="option"  v-if="show_extra_settings && info_display == 'skills' && cardmode == 'full' && playmode == 'std'">
+						<input type="checkbox" v-model="show_memory_in_skills" id="show_memory_in_skills"/>
+						<label for="show_memory_in_skills" v-html="$n('在 osu!skills 用&quot;记忆&quot;代替&quot;反应&quot;')"></label>
+					</div>
 					<div class="option" v-if="show_extra_settings" style="white-space: nowrap;">
 						<label style="margin-right: 10px;">{{$n('外边距')}}</label>
 						<div>

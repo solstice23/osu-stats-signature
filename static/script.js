@@ -26,7 +26,11 @@ const i18n = {
 		'下': 'bottom',
 		'左': 'left',
 		'右': 'right',
-		'左右反转封面图': 'Flop cover image',
+		'左右反转封面图': 'Mirror cover image',
+		'显示': 'Show',
+		'数据统计': 'Statistics',
+		'显示 osu!skills 图表中的数字': 'Figures for skills chart',
+		'在 osu!skills 用"记忆"代替"反应"': 'Replace <i>Reaction</i> with <i>Memory</i> in skills',
 	}
 }
 const app = {
@@ -57,6 +61,9 @@ const app = {
 			},
 			flop: false,
 			show_extra_settings: false,
+			info_display: "stats",
+			show_figures_for_skills: false,
+			show_memory_in_skills: false
 		}
 	},
 	watch: {
@@ -100,6 +107,15 @@ const app = {
 			}
 			if (this.flop){
 				url += "&flop=true";
+			}
+			if (this.info_display == "skills" && this.playmode == "std" && this.cardmode == "full"){
+				url += "&skills=true";
+				if (this.show_figures_for_skills){
+					url += "&skillfigures=true";
+				}
+				if (this.show_memory_in_skills){
+					url += "&skillmemory=true";
+				}
 			}
 			document.getElementById("link").setAttribute("href", url);
 			document.getElementById("link").click();

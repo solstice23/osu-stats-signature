@@ -104,7 +104,8 @@ input[type="range"] {
 }
 #playmode,
 #cardmode,
-#language {
+#language,
+#fullmode-info-display {
     margin-top: 20px;
     display: flex;
     flex-direction: row;
@@ -142,6 +143,13 @@ input[type="range"] {
     line-height: 24px;
     height: 24px;
     background: hsl(var(--hsl-b5));
+}
+
+#fullmode-info-display > div {
+    white-space: nowrap;
+    line-height: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 #options {
