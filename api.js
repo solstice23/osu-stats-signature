@@ -75,7 +75,7 @@ export const getUserOsuSkills = async (username) => {
 		});	
 	} catch (error) {
 		return {
-			error: `Failed to get skills value`
+			error: `Failed to get skills data`
 		}
 	}
 	const body = response.body;
@@ -85,10 +85,16 @@ export const getUserOsuSkills = async (username) => {
 		const values = $('.skillsList .skillValue');
 		const ranks = $('#ranks .skillTop .world');
 		const names = ["stamina", "tenacity", "agility", "accuracy", "precision", "reaction", "memory"];
-		let result = {};
+		let result = {skills: {}, tags: []};
 		for (let i = 0; i <= 6; i++){
-			result[names[i]] = calcSingleSkill(values[i].children[0].data, ranks[i].children[0].data.substring(1));
+			result.skills[names[i]] = calcSingleSkill(values[i].children[0].data, ranks[i].children[0].data.substring(1));
 		}
+
+		const tags = $('.userRank .userRankTitle');
+		for (let i of tags){
+			result.tags.push(i.children[0].data.trim());
+		}
+
 		return result;
 	} catch (error) {
 		return null;

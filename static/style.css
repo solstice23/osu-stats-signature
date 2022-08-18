@@ -35,6 +35,9 @@ body {
     box-sizing: border-box;
     accent-color: hsl(var(--hsl-h1));
 }
+a {
+    color: hsl(var(--hsl-h1));
+}
 .container {
     max-width: 1000px;
     margin: auto;

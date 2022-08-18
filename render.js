@@ -174,9 +174,6 @@ export const getRenderedSVGFull = (data, avatarBase64, userCoverImageBase64) => 
 	//动画
 	templete = templete.replace('{{fg-extra-class}}', data.options.animation ? 'animation-enabled' : '');
 
-	//颜色
-	templete = replaceCalcedColors(data, templete);
-
 	//圆头像
 	templete = replaceRoundAvatarClipPath(data, false, templete);
 
@@ -296,8 +293,8 @@ export const getRenderedSVGFull = (data, avatarBase64, userCoverImageBase64) => 
 			let pathCommands = [];
 			for (let i = 0; i <= 6; i++) {
 				const angle = (-120 + i * 60) / 180 * Math.PI;
-				const x = origin[0] + Math.cos(angle) * 45 * (data.user.skills[names[i % 6]].percent / 100);
-				const y = origin[1] + Math.sin(angle) * 45 * (data.user.skills[names[i % 6]].percent / 100);
+				const x = origin[0] + Math.cos(angle) * 45 * (data.user.skills.skills[names[i % 6]].percent / 100);
+				const y = origin[1] + Math.sin(angle) * 45 * (data.user.skills.skills[names[i % 6]].percent / 100);
 				pathCommands.push({
 					marker: 'L',
 					values: { x, y }
@@ -328,17 +325,33 @@ export const getRenderedSVGFull = (data, avatarBase64, userCoverImageBase64) => 
 				path += `<g class="animated-fade" style="animation-delay: 900ms;">`
 				for (let i = 0; i <= 5; i++) {
 					const angle = (-120 + i * 60) / 180 * Math.PI;
-					let percent = data.user.skills[names[i % 6]].percent;
+					let percent = data.user.skills.skills[names[i % 6]].percent;
 					if (percent > 70) percent -= 20; else percent += 15;
 					const x = origin[0] + Math.cos(angle) * 45 * (percent / 100);
 					const y = origin[1] + Math.sin(angle) * 45 * (percent / 100);
 					path += `
 						<g style="opacity: 0.7;">
-							${getTextSVGPath(textToSVGRegular, libs.formatNumber(data.user.skills[names[i]].value), x, y, 7, 'center middle')}
+							${getTextSVGPath(textToSVGRegular, libs.formatNumber(data.user.skills.skills[names[i]].value), x, y, 7, 'center middle')}
 						</g>
 					`;
 				}
 				path += `</g>`;
+			}
+
+			//Skills rank (tags)
+			if (data.options.skillsPlot.showSkillTags){
+				let posX = 530, posY = 96, delay = 300 + data.user.skills.tags.length * 50;
+				for (let tag of data.user.skills.tags) {
+					path += `<g class="animated" style="animation-delay: ${delay}ms;">`
+					let color = libs.getColorBySkillRankName(tag);
+					let {width, height} = getTextSVGMetrics(textToSVGRegular, tag, posX, posY, 10, 'right middle');
+					path += `<rect x="${posX - width - 5}" y="${posY - height / 2 - 5}" width="${width + 10}" height="${height + 10}" style="fill: {{hsl-b5}}; opacity: 0.4;" rx="5" />`;
+					path += `<rect x="${posX - width - 3}" y="${posY - height / 2 - 3}" width="${width + 6}" height="${height + 6}" style="stroke: ${color}; fill: none;" rx="4" />` ;
+					path += getTextSVGPath(textToSVGRegular, tag, posX, posY, 10, 'right middle');
+					path += `</g>`;
+					posX -= width + 12;
+					delay -= 50;
+				}
 			}
 
 			templete = templete.replace('{{skills-plot}}', path);
@@ -346,6 +359,9 @@ export const getRenderedSVGFull = (data, avatarBase64, userCoverImageBase64) => 
 	} else {
 		templete = templete.replace('id="skills"', 'id="skills" style="display: none;"');
 	}
+
+	//颜色
+	templete = replaceCalcedColors(data, templete);
 
 	return minifySVG(templete);
 };

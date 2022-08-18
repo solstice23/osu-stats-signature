@@ -52,6 +52,7 @@ app.get('/card', async function (req, res) {
 	
 	const showMemory = req.query.skillmemory != undefined;
 	const showFiguresForSkills = req.query.skillfigures != undefined;
+	const showSkillTags = req.query.skilltags != undefined;
 
 	userData.options = {
 		language: req.query.lang ?? 'cn',
@@ -66,7 +67,8 @@ app.get('/card', async function (req, res) {
 		includeSkills,
 		skillsPlot: {
 			showMemory,
-			showFiguresForSkills
+			showFiguresForSkills,
+			showSkillTags
 		}
 	};
 

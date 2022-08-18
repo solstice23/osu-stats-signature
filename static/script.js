@@ -31,6 +31,7 @@ const i18n = {
 		'数据统计': 'Statistics',
 		'显示 osu!skills 图表中的数字': 'Figures for skills chart',
 		'在 osu!skills 用"记忆"代替"反应"': 'Replace <i>Reaction</i> with <i>Memory</i> in skills',
+		'显示 osu!skill <a href=\'https://osuskills.com/faq\' target=\'_blank\'>头衔标签<\/a>': 'Show osu!skill <a href=\'https://osuskills.com/faq\' target=\'_blank\'>tags<\/a>'
 	}
 }
 const app = {
@@ -63,7 +64,8 @@ const app = {
 			show_extra_settings: false,
 			info_display: "stats",
 			show_figures_for_skills: false,
-			show_memory_in_skills: false
+			show_memory_in_skills: false,
+			show_skill_tags: true
 		}
 	},
 	watch: {
@@ -115,6 +117,9 @@ const app = {
 				}
 				if (this.show_memory_in_skills){
 					url += "&skillmemory=true";
+				}
+				if (this.show_skill_tags){
+					url += "&skilltags=true";
 				}
 			}
 			document.getElementById("link").setAttribute("href", url);

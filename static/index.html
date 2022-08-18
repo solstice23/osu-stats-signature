@@ -121,6 +121,10 @@
 						<input type="checkbox" v-model="show_memory_in_skills" id="show_memory_in_skills"/>
 						<label for="show_memory_in_skills" v-html="$n('在 osu!skills 用&quot;记忆&quot;代替&quot;反应&quot;')"></label>
 					</div>
+					<div class="option"  v-if="show_extra_settings && info_display == 'skills' && cardmode == 'full' && playmode == 'std'">
+						<input type="checkbox" v-model="show_skill_tags" id="show_skill_tags"/>
+						<label for="show_skill_tags" v-html="$n('显示 osu!skill &lt;a href=\'https://osuskills.com/faq\' target=\'_blank\'&gt;头衔标签&lt;\/a&gt;')"></label>
+					</div>
 					<div class="option" v-if="show_extra_settings" style="white-space: nowrap;">
 						<label style="margin-right: 10px;">{{$n('外边距')}}</label>
 						<div>
