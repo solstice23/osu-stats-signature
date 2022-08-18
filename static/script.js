@@ -118,8 +118,8 @@ const app = {
 				if (this.show_memory_in_skills){
 					url += "&skillmemory=true";
 				}
-				if (this.show_skill_tags){
-					url += "&skilltags=true";
+				if (!this.show_skill_tags){
+					url += "&skilltags=false";
 				}
 			}
 			document.getElementById("link").setAttribute("href", url);

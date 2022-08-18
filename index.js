@@ -52,7 +52,7 @@ app.get('/card', async function (req, res) {
 	
 	const showMemory = req.query.skillmemory != undefined;
 	const showFiguresForSkills = req.query.skillfigures != undefined;
-	const showSkillTags = req.query.skilltags != undefined;
+	const showSkillTags = req.query.skilltags != 'false';
 
 	userData.options = {
 		language: req.query.lang ?? 'cn',
