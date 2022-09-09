@@ -102,7 +102,7 @@ export const getColorBySkillRankName = (skillRankName) => {
 		Ambitious: '#46d1a7',
 		Sage: '#1baec0',
 		Sharpshooter: '#9b1400',
-		Phychic: '#66d9b7',
+		Psychic: '#66d9b7',
 		Pirate: '#d90606',
 		Seer: '#1368bd',
 		Sniper: '#519216',
