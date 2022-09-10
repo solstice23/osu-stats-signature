@@ -33,22 +33,61 @@
 			<div class="card">
 				<input class="textfield" v-model="username" :placeholder="$n('用户名 / UID')" />
 				<div id="playmode">
-					<div :class="{ active: playmode == 'std' }" class="mode-btn" @click="playmode = 'std'">
+					<div :class="{ active: playmode == 'std' }" class="mode-btn" @click="playmode = 'std';">
 						<svg width="40px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 500 500" enable-background="new 0 0 500 500" xml:space="preserve"><g><circle fill="#FFFFFF" cx="250" cy="250" r="130"/><path fill="#FFFFFF" d="M250,140c29.4,0,57,11.4,77.8,32.2C348.6,193,360,220.6,360,250c0,29.4-11.4,57-32.2,77.8C307,348.6,279.4,360,250,360c-29.4,0-57-11.4-77.8-32.2C151.4,307,140,279.4,140,250c0-29.4,11.4-57,32.2-77.8C193,151.4,220.6,140,250,140 M250,100c-82.8,0-150,67.2-150,150s67.2,150,150,150s150-67.2,150-150S332.8,100,250,100L250,100z"/></g><g><path fill="#FFFFFF" d="M250,55c107.7,0,195,87.3,195,195s-87.3,195-195,195c-107.7,0-195-87.3-195-195S142.3,55,250,55 M250,15c-31.7,0-62.5,6.2-91.5,18.5c-28,11.8-53.1,28.8-74.7,50.3c-21.6,21.6-38.5,46.7-50.3,74.7C21.2,187.5,15,218.3,15,250s6.2,62.5,18.5,91.5c11.8,28,28.8,53.1,50.3,74.7c21.6,21.6,46.7,38.5,74.7,50.3c29,12.3,59.8,18.5,91.5,18.5s62.5-6.2,91.5-18.5c28-11.8,53.1-28.8,74.7-50.3c21.6-21.6,38.5-46.7,50.3-74.7c12.3-29,18.5-59.8,18.5-91.5s-6.2-62.5-18.5-91.5c-11.8-28-28.8-53.1-50.3-74.7c-21.6-21.6-46.7-38.5-74.7-50.3C312.5,21.2,281.7,15,250,15L250,15z"/></g></svg>
 						<div>std</div>
 					</div>
-					<div :class="{ active: playmode == 'taiko' }" class="mode-btn" @click="playmode = 'taiko'">
+					<div :class="{ active: playmode == 'taiko' }" class="mode-btn" @click="playmode = 'taiko'; if (cardmode.includes('skill')) { cardmode = 'full_stats'; }">
 						<svg width="40px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 500 500" enable-background="new 0 0 500 500" xml:space="preserve"><g><path fill="none" d="M225,153.2c-43.1,11.1-75,50.3-75,96.8c0,46.5,31.9,85.7,75,96.8V153.2z"/><path fill="none" d="M275,153.2v193.7c43.1-11.1,75-50.3,75-96.8C350,203.5,318.1,164.3,275,153.2z"/><path fill="#FFFFFF" d="M250,100c-82.8,0-150,67.2-150,150s67.2,150,150,150s150-67.2,150-150S332.8,100,250,100z M150,250c0-46.5,31.9-85.7,75-96.8v193.7C181.9,335.7,150,296.5,150,250z M275,346.8V153.2c43.1,11.1,75,50.3,75,96.8C350,296.5,318.1,335.7,275,346.8z"/></g><g><path fill="#FFFFFF" d="M250,55c107.7,0,195,87.3,195,195s-87.3,195-195,195c-107.7,0-195-87.3-195-195S142.3,55,250,55 M250,15c-31.7,0-62.5,6.2-91.5,18.5c-28,11.8-53.1,28.8-74.7,50.3c-21.6,21.6-38.5,46.7-50.3,74.7C21.2,187.5,15,218.3,15,250s6.2,62.5,18.5,91.5c11.8,28,28.8,53.1,50.3,74.7c21.6,21.6,46.7,38.5,74.7,50.3c29,12.3,59.8,18.5,91.5,18.5s62.5-6.2,91.5-18.5c28-11.8,53.1-28.8,74.7-50.3c21.6-21.6,38.5-46.7,50.3-74.7c12.3-29,18.5-59.8,18.5-91.5s-6.2-62.5-18.5-91.5c-11.8-28-28.8-53.1-50.3-74.7c-21.6-21.6-46.7-38.5-74.7-50.3C312.5,21.2,281.7,15,250,15L250,15z"/></g></svg>
 						<div>taiko</div>
 					</div>
-					<div :class="{ active: playmode == 'catch' }" class="mode-btn" @click="playmode = 'catch'">
+					<div :class="{ active: playmode == 'catch' }" class="mode-btn" @click="playmode = 'catch'; if (cardmode.includes('skill')) { cardmode = 'full_stats'; }">
 						<svg width="40px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 500 500" enable-background="new 0 0 500 500" xml:space="preserve"><g><path fill="#FFFFFF" d="M250,55c107.7,0,195,87.3,195,195s-87.3,195-195,195c-107.7,0-195-87.3-195-195S142.3,55,250,55 M250,15c-31.7,0-62.5,6.2-91.5,18.5c-28,11.8-53.1,28.8-74.7,50.3c-21.6,21.6-38.5,46.7-50.3,74.7C21.2,187.5,15,218.3,15,250s6.2,62.5,18.5,91.5c11.8,28,28.8,53.1,50.3,74.7c21.6,21.6,46.7,38.5,74.7,50.3c29,12.3,59.8,18.5,91.5,18.5s62.5-6.2,91.5-18.5c28-11.8,53.1-28.8,74.7-50.3c21.6-21.6,38.5-46.7,50.3-74.7c12.3-29,18.5-59.8,18.5-91.5s-6.2-62.5-18.5-91.5c-11.8-28-28.8-53.1-50.3-74.7c-21.6-21.6-46.7-38.5-74.7-50.3C312.5,21.2,281.7,15,250,15L250,15z"/></g><g><circle fill="#FFFFFF" cx="308.8" cy="250" r="37.5"/><circle fill="#FFFFFF" cx="221.2" cy="173.8" r="37.5"/><circle fill="#FFFFFF" cx="221.2" cy="326.2" r="37.5"/></g></svg>
 						<div>catch</div>
 					</div>
-					<div :class="{ active: playmode == 'mania' }" class="mode-btn" @click="playmode = 'mania'">
+					<div :class="{ active: playmode == 'mania' }" class="mode-btn" @click="playmode = 'mania'; if (cardmode.includes('skill')) { cardmode = 'full_stats'; }">
 						<svg width="40px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 500 500" enable-background="new 0 0 500 500" xml:space="preserve"><g><path fill="#FFFFFF" d="M250,401c-13.8,0-25-11.2-25-25V124c0-13.8,11.2-25,25-25c13.8,0,25,11.2,25,25v252C275,389.8,263.8,401,250,401z"/></g><g><path fill="#FFFFFF" d="M170,330c-13.8,0-25-11.2-25-25V195c0-13.8,11.2-25,25-25s25,11.2,25,25v110C195,318.8,183.8,330,170,330z"/></g><g><path fill="#FFFFFF" d="M330,330c-13.8,0-25-11.2-25-25V195c0-13.8,11.2-25,25-25c13.8,0,25,11.2,25,25v110C355,318.8,343.8,330,330,330z"/></g><g><path fill="#FFFFFF" d="M250,55c107.7,0,195,87.3,195,195s-87.3,195-195,195c-107.7,0-195-87.3-195-195S142.3,55,250,55 M250,15c-31.7,0-62.5,6.2-91.5,18.5c-28,11.8-53.1,28.8-74.7,50.3c-21.6,21.6-38.5,46.7-50.3,74.7C21.2,187.5,15,218.3,15,250s6.2,62.5,18.5,91.5c11.8,28,28.8,53.1,50.3,74.7c21.6,21.6,46.7,38.5,74.7,50.3c29,12.3,59.8,18.5,91.5,18.5s62.5-6.2,91.5-18.5c28-11.8,53.1-28.8,74.7-50.3c21.6-21.6,38.5-46.7,50.3-74.7c12.3-29,18.5-59.8,18.5-91.5s-6.2-62.5-18.5-91.5c-11.8-28-28.8-53.1-50.3-74.7c-21.6-21.6-46.7-38.5-74.7-50.3C312.5,21.2,281.7,15,250,15L250,15z"/></g></svg>
 						<div>mania</div>
 					</div>
+				</div>
+				<div id="cardmodes">
+					<div :class="{ active: cardmode == 'full_stats' }" class="cardmode" @click="cardmode = 'full_stats'">
+						<img :src="`/card?example=true&lang=${language}&animation=false`"/>
+						<div class="cardmode-label">Full<span style="opacity: .5;"> with Stats</span></div>
+					</div>
+					<div :class="{ active: cardmode == 'full_skills' }" class="cardmode" @click="cardmode = 'full_skills'" v-if="playmode == 'std'">
+						<img :src="`/card?example=true&lang=${language}&animation=false&skills=true`"/>
+						<div class="cardmode-label">Full<span style="opacity: .5;"> with Skills</span></div>
+					</div>
+					<div :class="{ active: cardmode == 'mini' }" class="cardmode" @click="cardmode = 'mini'">
+						<img :src="`/card?example=true&lang=${language}&animation=false&mini=true`"/>
+						<div class="cardmode-label">Mini</div>
+					</div>
+					<div :class="{ active: cardmode == 'skills' }" class="cardmode" @click="cardmode = 'skills'" v-if="playmode == 'std'">
+						<img :src="`/skills?example=true&lang=${language}&animation=false&ranking_display=global`"/>
+						<div class="cardmode-label">Skills</div>
+					</div>
+				</div>
+				<div class="option" v-if="cardmode.startsWith('full')">
+					<label style="margin-right: 10px;">{{$n('尺寸')}}</label>
+					<input class="textfield small" v-model="size.w" placeholder="550" style="width: 80px;" type="number" min="20" max="9999" maxlength="4" @input="size.h = Math.round(size.w / 550 * 320)" @change="size.w = clamp(size.w, 20, 9999), size.h = Math.round(size.w / 550 * 320)"/>
+					<label style="margin-left: 10px;margin-right: 10px;">px × </label>
+					<input class="textfield small" v-model="size.h" placeholder="320" style="width: 80px;" type="number" min="12" max="5817" maxlength="4" @input="size.w = Math.round(size.h / 320 * 550)" @change="size.h = clamp(size.h, 12, 5817), size.w = Math.round(size.h / 320 * 550)"/>
+					<label style="margin-left: 10px;">px</label>
+				</div>
+				<div class="option" v-if="cardmode == 'mini'">
+					<label style="margin-right: 10px;">{{$n('尺寸')}}</label>
+					<input class="textfield small" v-model="size_mini.w" placeholder="400" style="width: 80px;" type="number" min="20" max="9999" maxlength="4" @input="size_mini.h = Math.round(size_mini.w / 400 * 120)" @change="size_mini.w = clamp(size_mini.w, 20, 9999), size_mini.h = Math.round(size_mini.w / 400 * 120)"/>
+					<label style="margin-left: 10px;margin-right: 10px;">px × </label>
+					<input class="textfield small" v-model="size_mini.h" placeholder="120" style="width: 80px;" type="number" min="6" max="2999" maxlength="4" @input="size_mini.w = Math.round(size_mini.h / 120 * 400)" @change="size_mini.h = clamp(size_mini.h, 6, 2999), size_mini.w = Math.round(size_mini.h / 120 * 400)"/>
+					<label style="margin-left: 10px;">px</label>
+				</div>
+				<div class="option" v-if="cardmode == 'skills'">
+					<label style="margin-right: 10px;">{{$n('尺寸')}}</label>
+					<input class="textfield small" v-model="size_skills.w" placeholder="400" style="width: 80px;" type="number" min="20" max="9999" maxlength="4" @input="size_skills.h = Math.round(size_skills.w / 400 * 250)" @change="size_skills.w = clamp(size_skills.w, 20, 9999), size_skills.h = Math.round(size_skills.w / 400 * 250)"/>
+					<label style="margin-left: 10px;margin-right: 10px;">px × </label>
+					<input class="textfield small" v-model="size_skills.h" placeholder="250" style="width: 80px;" type="number" min="6" max="2999" maxlength="4" @input="size_skills.w = Math.round(size_skills.h / 250 * 400)" @change="size_skills.h = clamp(size_skills.h, 6, 2999), size_skills.w = Math.round(size_skills.h / 250 * 400)"/>
+					<label style="margin-left: 10px;">px</label>
 				</div>
 				<div id="options">
 					<div class="option">
@@ -82,46 +121,24 @@
 						<div class="preset-color" style="--base-hue: 20" @click="color_hue = 20">{{$n('橙色')}}</div>
 						<div class="preset-color" style="--base-hue: 360" @click="color_hue = 360">{{$n('红色')}}</div>
 					</div>
-					<div id="cardmode" style="margin-bottom: 10px;">
-						<div :class="{ active: cardmode == 'full' }" class="mode-btn" @click="cardmode = 'full'">
-							{{$n('完整')}}
-						</div>
-						<div :class="{ active: cardmode == 'mini' }" class="mode-btn" @click="cardmode = 'mini'">
-							{{$n('迷你')}}
-						</div>
+					
+					<div class="option" v-if="cardmode == 'skills'">
+						<label style="margin-right: 10px;">{{$n('Skills 排名显示')}}</label>
+						<select v-model="skills_ranking_display">
+							<option value="global">{{$n('全球排名')}}</option>
+							<option value="country">{{$n('国内/区内排名')}}</option>
+							<option value="cycle">{{$n('循环显示')}}</option>
+						</select>
 					</div>
-					<div class="option" v-if="cardmode == 'full'">
-						<label style="margin-right: 10px;">{{$n('尺寸')}}</label>
-						<input class="textfield small" v-model="size.w" placeholder="550" style="width: 80px;" type="number" min="20" max="9999" maxlength="4" @input="size.h = Math.round(size.w / 550 * 320)" @change="size.w = clamp(size.w, 20, 9999), size.h = Math.round(size.w / 550 * 320)"/>
-						<label style="margin-left: 10px;margin-right: 10px;">px × </label>
-						<input class="textfield small" v-model="size.h" placeholder="320" style="width: 80px;" type="number" min="12" max="5817" maxlength="4" @input="size.w = Math.round(size.h / 320 * 550)" @change="size.h = clamp(size.h, 12, 5817), size.w = Math.round(size.h / 320 * 550)"/>
-						<label style="margin-left: 10px;">px</label>
-					</div>
-					<div class="option" v-if="cardmode == 'mini'">
-						<label style="margin-right: 10px;">{{$n('尺寸')}}</label>
-						<input class="textfield small" v-model="size_mini.w" placeholder="400" style="width: 80px;" type="number" min="20" max="9999" maxlength="4" @input="size_mini.h = Math.round(size_mini.w / 400 * 120)" @change="size_mini.w = clamp(size_mini.w, 20, 9999), size_mini.h = Math.round(size_mini.w / 400 * 120)"/>
-						<label style="margin-left: 10px;margin-right: 10px;">px × </label>
-						<input class="textfield small" v-model="size_mini.h" placeholder="120" style="width: 80px;" type="number" min="6" max="2999" maxlength="4" @input="size_mini.w = Math.round(size_mini.h / 120 * 400)" @change="size_mini.h = clamp(size_mini.h, 6, 2999), size_mini.w = Math.round(size_mini.h / 120 * 400)"/>
-						<label style="margin-left: 10px;">px</label>
-					</div>
-					<div id="fullmode-info-display" style="margin-bottom: 10px;" v-if="cardmode == 'full' && playmode == 'std'">
-						<label style="margin-right: 10px; font-size: 120%;">{{$n('显示')}}</label>
-						<div :class="{ active: info_display == 'stats' }" class="mode-btn" @click="info_display = 'stats'" style="margin-left: 10px;">
-							{{$n('数据统计')}}
-						</div>
-						<div :class="{ active: info_display == 'skills' }" class="mode-btn" @click="info_display = 'skills'">
-							osu!skills
-						</div>
-					</div>
-					<div class="option"  v-if="show_extra_settings && info_display == 'skills' && cardmode == 'full' && playmode == 'std'">
+					<div class="option" v-if="show_extra_settings && cardmode == 'full_skills'">
 						<input type="checkbox" v-model="show_figures_for_skills" id="show_figures_for_skills"/>
 						<label for="show_figures_for_skills">{{$n('显示 osu!skills 图表中的数字')}}</label>
 					</div>
-					<div class="option"  v-if="show_extra_settings && info_display == 'skills' && cardmode == 'full' && playmode == 'std'">
+					<div class="option" v-if="show_extra_settings && cardmode.includes('skill')">
 						<input type="checkbox" v-model="show_memory_in_skills" id="show_memory_in_skills"/>
 						<label for="show_memory_in_skills" v-html="$n('在 osu!skills 用&quot;记忆&quot;代替&quot;反应&quot;')"></label>
 					</div>
-					<div class="option"  v-if="show_extra_settings && info_display == 'skills' && cardmode == 'full' && playmode == 'std'">
+					<div class="option" v-if="show_extra_settings && cardmode == 'full_skills'">
 						<input type="checkbox" v-model="show_skill_tags" id="show_skill_tags"/>
 						<label for="show_skill_tags" v-html="$n('显示 osu!skill &lt;a href=\'https://osuskills.com/faq\' target=\'_blank\'&gt;头衔标签&lt;\/a&gt;')"></label>
 					</div>

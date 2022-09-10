@@ -133,7 +133,7 @@ app.get('/skills', async function (req, res) {
 		round_avatar: req.query.round_avatar != undefined && req.query.round_avatar != 'false',
 		color_hue: parseInt(req.query.hue ?? 333),
 		margin,
-		rankingDisplay: req.query.ranking_display ?? 'cycle',
+		rankingDisplay: req.query.ranking_display ?? 'global',
 		skillsPlot: {
 			showMemory
 		}

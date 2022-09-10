@@ -31,7 +31,11 @@ const i18n = {
 		'数据统计': 'Statistics',
 		'显示 osu!skills 图表中的数字': 'Figures for skills chart',
 		'在 osu!skills 用"记忆"代替"反应"': 'Replace <i>Reaction</i> with <i>Memory</i> in skills',
-		'显示 osu!skill <a href=\'https://osuskills.com/faq\' target=\'_blank\'>头衔标签<\/a>': 'Show osu!skill <a href=\'https://osuskills.com/faq\' target=\'_blank\'>tags<\/a>'
+		'显示 osu!skill <a href=\'https://osuskills.com/faq\' target=\'_blank\'>头衔标签<\/a>': 'Show osu!skill <a href=\'https://osuskills.com/faq\' target=\'_blank\'>tags<\/a>',
+		'Skills 排名显示': 'Skills rank display',
+		'全球排名': 'Global rank',
+		'国内/区内排名': 'Country rank',
+		'循环显示': 'Cycle both'
 	}
 }
 const app = {
@@ -40,7 +44,7 @@ const app = {
 			username: "",
 			playmode: "std",
 			language: navigator.language.includes("zh") ? "cn" : "en",
-			cardmode: "full",
+			cardmode: "full_stats",
 			blur_checked: false,
 			blur_size: 6,
 			round_avatar: false,
@@ -54,6 +58,10 @@ const app = {
 				w: 400,
 				h: 120
 			},
+			size_skills: {
+				w: 400,
+				h: 250
+			},
 			margin: {
 				top: 0,
 				right: 0,
@@ -62,10 +70,10 @@ const app = {
 			},
 			flop: false,
 			show_extra_settings: false,
-			info_display: "stats",
 			show_figures_for_skills: false,
 			show_memory_in_skills: false,
-			show_skill_tags: true
+			show_skill_tags: true,
+			skills_ranking_display: "global"
 		}
 	},
 	watch: {
@@ -94,15 +102,25 @@ const app = {
 			if (this.color_hue != 333){
 				url += `&hue=${this.color_hue}`;
 			}
-			if (this.cardmode == "mini"){
-				url += "&mini=true";
-				if (this.size_mini.w != 400 || this.size_mini.h != 120){
-					url += `&w=${this.size_mini.w}&h=${this.size_mini.h}`;
-				}
-			}else{
-				if (this.size.w != 550 || this.size.h != 320){
-					url += `&w=${this.size.w}&h=${this.size.h}`;
-				}
+			switch (this.cardmode) {
+				case "full_stats":
+				case "full_skills":
+					if (this.size.w != 550 || this.size.h != 320){
+						url += `&w=${this.size.w}&h=${this.size.h}`;
+					}
+					break;
+				case "mini":
+					url += "&mini=true";
+					if (this.size_mini.w != 400 || this.size_mini.h != 120){
+						url += `&w=${this.size_mini.w}&h=${this.size_mini.h}`;
+					}
+					break;
+				case "skills":
+					url = url.replace("/card", "/skills");
+					if (this.size_skills.w != 400 || this.size_skills.h != 250){
+						url += `&w=${this.size_skills.w}&h=${this.size_skills.h}`;
+					}
+					break;
 			}
 			if (this.margin.left != 0 || this.margin.right != 0 || this.margin.top != 0 || this.margin.bottom != 0){
 				url += `&margin=${this.margin.top},${this.margin.right},${this.margin.bottom},${this.margin.left}`;
@@ -110,7 +128,7 @@ const app = {
 			if (this.flop){
 				url += "&flop=true";
 			}
-			if (this.info_display == "skills" && this.playmode == "std" && this.cardmode == "full"){
+			if (this.cardmode == "full_skills"){
 				url += "&skills=true";
 				if (this.show_figures_for_skills){
 					url += "&skillfigures=true";
@@ -120,6 +138,14 @@ const app = {
 				}
 				if (!this.show_skill_tags){
 					url += "&skilltags=false";
+				}
+			}
+			if (this.cardmode == "skills"){
+				if (this.show_memory_in_skills){
+					url += "&skillmemory=true";
+				}
+				if (this.skills_ranking_display != "global"){
+					url += `&ranking_display=${this.skills_ranking_display}`;
 				}
 			}
 			document.getElementById("link").setAttribute("href", url);

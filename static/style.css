@@ -235,3 +235,60 @@ button:active {
 .preset-color:last-child {
     margin-right: 0;
 }
+
+#cardmodes {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    max-width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.cardmode {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    background: hsl(var(--hsl-b4));
+    padding: 3px;
+    border-radius: 4px;
+    cursor: pointer;
+    align-items: center;
+    border: solid 1px transparent;
+}
+.cardmode.active {
+    border: solid 1px hsl(var(--hsl-h1));
+}
+.cardmode > img {
+    display: block;
+    user-select: none;
+    flex: 1;
+    max-width: min(200px, calc((100vw - 80px) * 0.2));
+    transform-origin: center bottom;
+    transition: all .25s ease;
+    pointer-events: none;
+}
+.cardmode:hover > img {
+    transform: scale(2);
+    transition-delay: 0.4s;
+}
+.cardmode-label {
+    font-size: 16px;
+    padding-top: 8px;
+    padding-bottom: 3px;
+}
+
+select {
+    color: #fff;
+    border: none;
+    padding: 8px;
+    background: hsl(var(--hsl-b4));
+    outline: none;
+    border-radius: 4px;
+    text-align: center;
+    width: max-content;
+    font-size: 16px;
+    font-family: "Comfortaa", "Noto Sans SC", -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimSun, sans-serif;
+}

@@ -169,7 +169,7 @@ export const getRenderedSVGFull = (data, avatarBase64, userCoverImageBase64) => 
 
 	//圆头像
 	if (data.options.round_avatar){
-		svg = svg.replace(/<path id="avatar_clip"(.*?)\/>/, '<circle id="avatar_clip" class="cls-4" cx="62.5" cy="60.5" r="42.2"/>');
+		templete = templete.replace(/<path id="avatar_clip"(.*?)\/>/, '<circle id="avatar_clip" class="cls-4" cx="62.5" cy="60.5" r="42.2"/>');
 	}
 
 	//名字
@@ -373,7 +373,7 @@ export const getRenderedSVGMini = (data, avatarBase64, userCoverImageBase64) => 
 
 	//圆头像
 	if (data.options.round_avatar){
-		svg = svg.replace(/<path id="avatar_clip"(.*?)\/>/, '<circle id="avatar_clip" class="cls-1" cx="61" cy="6" r="45"/>');
+		templete = templete.replace(/<path id="avatar_clip"(.*?)\/>/, '<circle id="avatar_clip" class="cls-1" cx="61" cy="6" r="45"/>');
 	}
 
 	//名字
@@ -443,7 +443,7 @@ export const getRenderedSVGSkillOnly = (data, avatarBase64, userCoverImageBase64
 
 	//圆头像
 	if (data.options.round_avatar){
-		svg = svg.replace(/<path id="avatar_clip"(.*?)\/>/, '<circle id="avatar_clip" cx="40" cy="35" r="20"/>');
+		templete = templete.replace(/<path id="avatar_clip"(.*?)\/>/, '<circle id="avatar_clip" cx="40" cy="35" r="20"/>');
 	}
 
 	//名字
@@ -502,7 +502,7 @@ export const getRenderedSVGSkillOnly = (data, avatarBase64, userCoverImageBase64
 		let posY = 87, barMaxWidth = 246, barHeight = 12, delay = 400;
 		const names = ["stamina", "tenacity", "agility", "accuracy", "precision", "reaction", "memory"];
 		if (data.options.skillsPlot.showMemory) {
-			names[3] = "memory";
+			names[5] = "memory";
 		}
 		let path = ``;
 		for (let i = 0; i <= 5; i++) {
@@ -528,7 +528,7 @@ export const getRenderedSVGSkillOnly = (data, avatarBase64, userCoverImageBase64
 			if (percent > 15) {
 				path += getTextSVGPath(textToSVGBold, number, 94 + barWidth - 4, posY + barHeight / 2 + 1, 10, 'right middle', color);
 			} else {
-				path += getTextSVGPath(textToSVGBold, number, 94 + barWidth + 4, posY + barHeight / 2 + 1, 10, 'left middle', color);
+				path += getTextSVGPath(textToSVGBold, number, 94 + barWidth + 4, posY + barHeight / 2 + 1, 10, 'left middle');
 			}
 			path += `</g>`;
 			//Rankings
