@@ -9,6 +9,7 @@ import * as libs from './libs.js';
 
 const textToSVGRegular = TextToSVG.loadSync(path.join(process.cwd(), '/assets/fonts/Comfortaa/Comfortaa-Regular.ttf'));
 const textToSVGBold = TextToSVG.loadSync(path.join(process.cwd(), '/assets/fonts/Comfortaa/Comfortaa-Bold.ttf'));
+const textToSVGCJK = TextToSVG.loadSync(path.join(process.cwd(), '/assets/fonts/SourceHanSansSC/SourceHanSansSC-Normal.otf'));
 
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
@@ -43,6 +44,7 @@ const getTransformedXMini = (x, w, anchor = 'center') => {
 			return x - 400 / 2;
 	}
 };
+const getTransformedXSkillsOnly = getTransformedXMini;
 
 export const getFlagSVG = (countryCode, x, y, h) => {
 	let svg = libs.getFlagSVGByCountryCode(countryCode);
@@ -60,6 +62,7 @@ export const getFlagSVGMini = (countryCode, x, y, h) => {
 	$('svg').attr('height', h);
 	return $.html('svg');
 };
+const getFlagSVGSkillsOnly = getFlagSVGMini;
 export const getPlaymodeSVG = (playmode, x, y, h) => {
 	let svg = libs.getPlaymodeSVG(playmode);
 	let $ = cheerio.load(svg);
@@ -76,19 +79,19 @@ export const getPlaymodeSVGMini = (playmode, x, y, h) => {
 	$('svg').attr('height', h);
 	return $.html('svg');
 };
-export const getSupporterSVG = (x, y, h, level = 1) => {
+export const getSupporterSVG = (x, y, h, level = 1, transformationMethod = getTransformedX) => {
 	let svg = fs.readFileSync(path.join(process.cwd(), `/assets/icons/supporter_${level}.svg`), 'utf8');
 	let $ = cheerio.load(svg);
 	let viewBoxW = parseFloat($(svg).attr('viewBox').split(' ')[2]);
 	let viewBoxH = parseFloat($(svg).attr('viewBox').split(' ')[3]);
 	let scale = h / viewBoxH;
-	$('svg').attr('x', getTransformedX(x, viewBoxW * scale, 'left'));
+	$('svg').attr('x', transformationMethod(x, viewBoxW * scale, 'left'));
 	$('svg').attr('y', y);
 	$('svg').attr('height', h);
 	return $.html('svg');
 };
 
-export const getTextSVGPath = (TextToSVGObj, text, x, y, size, anchor = 'left top') => {
+export const getTextSVGPath = (TextToSVGObj, text, x, y, size, anchor = 'left top', fill = '#fff') => {
 	let path = TextToSVGObj.getPath(text, {
 		x: x,
 		y: y,
@@ -96,12 +99,12 @@ export const getTextSVGPath = (TextToSVGObj, text, x, y, size, anchor = 'left to
 		anchor: anchor,
 		fontFamily: 'Comfortaa',
 		attributes: {
-			fill: '#fff'
+			fill: fill
 		}
 	});
 	return path;
 };
-export const getTextSVGMetrics = (TextToSVGObj, text, x, y, size, anchor = 'left top') => {
+export const getTextSVGMetrics = (TextToSVGObj, text, x, y, size, anchor = 'left top', fill = '#fff') => {
 	let metrics = TextToSVGObj.getMetrics(text, {
 		x: x,
 		y: y,
@@ -109,7 +112,7 @@ export const getTextSVGMetrics = (TextToSVGObj, text, x, y, size, anchor = 'left
 		anchor: anchor,
 		fontFamily: 'Comfortaa',
 		attributes: {
-			fill: '#fff'
+			fill: fill
 		}
 	});
 	return metrics;
@@ -118,22 +121,12 @@ export const getTextSVGMetrics = (TextToSVGObj, text, x, y, size, anchor = 'left
 const replaceCalcedColors = (data, svg) => {
 	let baseHue = data.options.color_hue;
 
+	svg = svg.replace(/\{\{hsl-b6\}\}/g, new Color(`hsl(${baseHue}, 10%, 10%)`).hex());
 	svg = svg.replace(/\{\{hsl-b5\}\}/g, new Color(`hsl(${baseHue}, 10%, 15%)`).hex());
 	svg = svg.replace(/\{\{hsl-b4\}\}/g, new Color(`hsl(${baseHue}, 10%, 20%)`).hex());
 	svg = svg.replace(/\{\{hsl-h1\}\}/g, new Color(`hsl(${baseHue}, 100%, 70%)`).hex());
 	svg = svg.replace(/\{\{hsl-f1\}\}/g, new Color(`hsl(${baseHue}, 10%, 60%)`).hex());
 
-	return svg;
-};
-const replaceRoundAvatarClipPath = (data, ismini, svg) => {
-	if (!data.options.round_avatar) {
-		return svg;
-	}
-	if (ismini) {
-		svg = svg.replace(/<path id="avatar_clip"(.*?)\/>/, '<circle id="avatar_clip" class="cls-1" cx="61" cy="6" r="45"/>');
-	} else {
-		svg = svg.replace(/<path id="avatar_clip"(.*?)\/>/, '<circle id="avatar_clip" class="cls-4" cx="62.5" cy="60.5" r="42.2"/>');
-	}
 	return svg;
 };
 const setMargin = (data, svg) => {
@@ -175,17 +168,13 @@ export const getRenderedSVGFull = (data, avatarBase64, userCoverImageBase64) => 
 	templete = templete.replace('{{fg-extra-class}}', data.options.animation ? 'animation-enabled' : '');
 
 	//圆头像
-	templete = replaceRoundAvatarClipPath(data, false, templete);
+	if (data.options.round_avatar){
+		svg = svg.replace(/<path id="avatar_clip"(.*?)\/>/, '<circle id="avatar_clip" class="cls-4" cx="62.5" cy="60.5" r="42.2"/>');
+	}
 
 	//名字
 	templete = templete.replace('{{name}}', getTextSVGPath(textToSVGBold, user.username, 130, 20, 28));
 	let nameWidth = getTextSVGMetrics(textToSVGBold, user.username, 130, 20, 28).width;
-	//Support Tag
-	if (user.is_supporter) {
-		templete = templete.replace('{{supporter-tag}}', getSupporterSVG(130 + nameWidth + 10, 24, 22, user.support_level));
-	} else {
-		templete = templete.replace('{{supporter-tag}}', '');
-	}
 
 	//头像和封面
 	templete = templete.replace('{{avatar-base64}}', avatarBase64);
@@ -383,7 +372,9 @@ export const getRenderedSVGMini = (data, avatarBase64, userCoverImageBase64) => 
 	templete = replaceCalcedColors(data, templete);
 
 	//圆头像
-	templete = replaceRoundAvatarClipPath(data, false, templete);
+	if (data.options.round_avatar){
+		svg = svg.replace(/<path id="avatar_clip"(.*?)\/>/, '<circle id="avatar_clip" class="cls-1" cx="61" cy="6" r="45"/>');
+	}
 
 	//名字
 	templete = templete.replace('{{name}}', getTextSVGPath(textToSVGBold, user.username, 118, 14, 25));
@@ -423,6 +414,143 @@ export const getRenderedSVGMini = (data, avatarBase64, userCoverImageBase64) => 
 
 	return minifySVG(templete);
 };
+
+export const getRenderedSVGSkillOnly = (data, avatarBase64, userCoverImageBase64) => {
+	let templete = getSVGTemplete('skill_only', data.options.language);
+	let user = data.user;
+
+	//尺寸
+	templete = templete.replace('{{width}}', data.options.size.width);
+	templete = templete.replace('{{height}}', data.options.size.height);
+	//外边距
+	templete = setMargin(data, templete);
+
+	//动画
+	let extraClasses = "";
+	if (data.options.animation) extraClasses += 'animation-enabled';
+	switch (data.options.rankingDisplay) {
+		case 'global':
+			extraClasses += ' ranking-display-global';
+			break;
+		case 'country':
+			extraClasses += ' ranking-display-country';
+			break;
+		case 'cycle':
+			extraClasses += ' ranking-display-cycle';
+			break;
+	}
+	templete = templete.replace('{{fg-extra-class}}', extraClasses);
+
+	//圆头像
+	if (data.options.round_avatar){
+		svg = svg.replace(/<path id="avatar_clip"(.*?)\/>/, '<circle id="avatar_clip" cx="40" cy="35" r="20"/>');
+	}
+
+	//名字
+	templete = templete.replace('{{name}}', getTextSVGPath(textToSVGBold, user.username, 69, 11, 25));
+	let nameWidth = getTextSVGMetrics(textToSVGBold, user.username, 69, 11, 15).width;
+	//Support Tag
+	if (user.is_supporter) {
+		templete = templete.replace('{{supporter-tag}}', getSupporterSVG(100 + nameWidth + 10, 14, 18, user.support_level, getTransformedXSkillsOnly));
+	} else {
+		templete = templete.replace('{{supporter-tag}}', '');
+	}
+
+	//头像和封面
+	templete = templete.replace('{{avatar-base64}}', avatarBase64);
+	templete = templete.replace('{{user-cover-base64}}', userCoverImageBase64);
+
+	//全球排名/区内排名
+	let globalRanking = libs.formatNumber(user.statistics.global_rank, '#');
+	let countryRanking = libs.formatNumber(user.statistics.country_rank, '#');
+	templete = templete.replace('{{global-ranking}}', getTextSVGPath(textToSVGRegular, globalRanking, 384, 34, globalRanking.length < 10 ? 18 : 17, 'right top'));
+	templete = templete.replace('{{country-ranking}}', getTextSVGPath(textToSVGRegular, countryRanking, 384, 34, countryRanking.length < 10 ? 18 : 17, 'right top'));
+	
+	let countryRankingWidth = getTextSVGMetrics(textToSVGRegular, countryRanking, 384, 34, countryRanking.length < 10 ? 18 : 17, 'right top').width;
+
+	//国旗
+	templete = templete.replace('{{flag}}', getFlagSVGSkillsOnly(user.country_code, 360 - countryRankingWidth, 33, 20));
+
+
+	//Skill Tags
+	let skillTags = "";
+	let posX = 71, posY = 47, delay = 300;
+	for (let tag of data.user.skills.tags) {
+		skillTags += `<g class="animated" style="animation-delay: ${delay}ms;">`
+		let color = libs.getColorBySkillRankName(tag);
+		let {width, height} = getTextSVGMetrics(textToSVGRegular, tag, posX, posY, 9, 'left middle');
+		skillTags += `<rect x="${posX - 4}" y="${posY - height / 2 - 4}" width="${width + 8}" height="${height + 8}" style="fill: {{hsl-b5}}; opacity: 0.5;" rx="5" />`;
+		skillTags += `<rect x="${posX - 2}" y="${posY - height / 2 - 2}" width="${width + 4}" height="${height + 4}" style="stroke: ${color}; fill: none;" rx="4" />` ;
+		skillTags += getTextSVGPath(textToSVGRegular, tag, posX, posY, 9, 'left middle');
+		skillTags += `</g>`;
+		posX += width + 12;
+		delay += 50;
+	}
+	templete = templete.replace('{{skill-tags}}', skillTags);
+
+
+	if (data.user.skills === null) {
+		templete = templete.replace('{{no-skill-data-text}}', 
+		`<g class="animated" style="animation-delay: 700ms;">
+			${getTextSVGPath(textToSVGRegular, "No skills data", 200, 145, 15, 'center middle')}
+		</g>`);
+		templete = templete.replace('id="skills"', 'id="skills" style="display: none;"');
+	}
+	else {
+		templete = templete.replace('{{no-skill-data-text}}', '');
+
+		let posY = 87, barMaxWidth = 246, barHeight = 12, delay = 400;
+		const names = ["stamina", "tenacity", "agility", "accuracy", "precision", "reaction", "memory"];
+		if (data.options.skillsPlot.showMemory) {
+			names[3] = "memory";
+		}
+		let path = ``;
+		for (let i = 0; i <= 5; i++) {
+			path += `<g class="animated" style="animation-delay: ${delay}ms;">`;
+			//Text
+			let name = libs.getSkillNameI18n(names[i], data.options.language);
+			if (data.options.language == 'en') {
+				path += getTextSVGPath(textToSVGRegular, name, 46, posY + barHeight / 2, 14, 'center middle');
+			} else {
+				path += getTextSVGPath(textToSVGCJK, name, 46, posY + barHeight / 2 - 1, 14, 'center middle');
+			}
+			//Bar slot
+			path += `<rect class="skill-bar-bg" x="94" y="${posY}" width="${barMaxWidth}" height="${barHeight}" rx="${barHeight / 2}"/>`;
+			//Bar
+			let percent = data.user.skills.skills[names[i]].percent;
+			let barWidth = barMaxWidth * percent / 100;
+			barWidth = Math.max(barWidth, barHeight);
+			path += `<rect class="skill-bar-fg" x="94" y="${posY}" width="${barWidth}" height="${barHeight}" rx="${barHeight / 2}" style="animation-delay: ${delay + 100}ms;"/>`;
+			//Figure
+			let number = libs.formatNumber(data.user.skills.skills[names[i]].value);
+			let color = libs.calcWCAGColorContrast(new Color(`hsl(${data.options.color_hue}, 100%, 70%)`), new Color("white")) >= 2 ? "#fff" : new Color(`hsl(${data.options.color_hue}, 10%, 15%)`).hex();
+			path += `<g class="animated-fade" style="animation-delay: ${delay + 800}ms;">`;
+			if (percent > 15) {
+				path += getTextSVGPath(textToSVGBold, number, 94 + barWidth - 4, posY + barHeight / 2 + 1, 10, 'right middle', color);
+			} else {
+				path += getTextSVGPath(textToSVGBold, number, 94 + barWidth + 4, posY + barHeight / 2 + 1, 10, 'left middle', color);
+			}
+			path += `</g>`;
+			//Rankings
+			let globalRank = data.user.skills.skills[names[i]].globalRank;
+			let countryRank = data.user.skills.skills[names[i]].countryRank;
+			path += '<g class="display-group-global-ranking">' + getTextSVGPath(textToSVGRegular, libs.formatNumber(globalRank, '#'), 368, posY + barHeight / 2, 12, 'center middle') + '</g>';
+			path += '<g class="display-group-country-ranking">' + getTextSVGPath(textToSVGRegular, libs.formatNumber(countryRank, '#'), 368, posY + barHeight / 2, 12, 'center middle') + '</g>';
+			
+			path += `</g>`;
+			posY += 26;
+			delay += 80;
+		}
+
+		templete = templete.replace('{{skills-bar-chart}}', path);
+	}
+
+	//颜色
+	templete = replaceCalcedColors(data, templete);
+
+	return minifySVG(templete);
+};
+
 
 export const getErrorSVG = (err) => {
 	return textToSVGRegular.getSVG(err, {

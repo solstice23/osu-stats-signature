@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import sharp from 'sharp';
+import Color from 'color';
 import svgRoundCorners from 'svg-round-corners';
 const { roundCommands } = svgRoundCorners;
 
@@ -53,9 +54,9 @@ export const formatPlaytime = (playtime) => {
 	return `${hours}h ${minutes}m`;
 };
 
-export const getResizdCoverBase64 = async (img, w, h, blur = 0, flop = false) => {
+export const getResizedCoverBase64 = async (img, w, h, blur = 0, flop = false) => {
 	blur = Math.min(blur, 100);
-	const image = sharp(img).resize(w * 1.5, h * 1.5);
+	const image = sharp(img).resize(parseInt(w * 1.5), parseInt(h * 1.5));
 	if (blur >= 0.5 && blur <= 100) image.blur(blur);
 	if (flop) image.flop();
 
@@ -109,4 +110,41 @@ export const getColorBySkillRankName = (skillRankName) => {
 		Daredevil: '#c01900'
 	}
 	return colors[skillRankName];
+}
+
+export const getSkillNameI18n = (skillName, lang = 'en') => {
+	skillName = skillName.toLowerCase();
+	if (lang == 'en') {
+		return skillName[0].toUpperCase() + skillName.substring(1);
+	}
+	const i18n = {
+		cn: {
+			"stamina": "耐力",
+			"tenacity": "韧性",
+			"agility": "敏捷",
+			"accuracy": "准度",
+			"precision": "瞄准",
+			"reaction": "反应",
+			"memory": "记忆"
+		}
+	}
+	if (!i18n[lang] || !i18n[lang][skillName]) {
+		return skillName;
+	}
+	return i18n[lang][skillName];
+}
+
+export const calcWCAGColorContrast = (color1, color2) => {
+	const calcLuminance = (color) => {
+		let [r, g, b] = color.rgb().color.map((c) => c / 255);
+		[r, g, b] = [r, g, b].map((c) => {
+			if (c <= 0.03928) {
+				return c / 12.92;
+			}
+			return Math.pow((c + 0.055) / 1.055, 2.4);
+		});
+		return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+	}
+	let contrast = (calcLuminance(color1) + 0.05) / (calcLuminance(color2) + 0.05);
+	return Math.max(contrast, 1 / contrast);
 }

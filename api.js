@@ -58,12 +58,14 @@ export const getImageBase64 = async (url) => {
 	return "data:image/png;base64," + Buffer.from(response.body).toString('base64');
 }
 export const getUserOsuSkills = async (username) => {
-	const calcSingleSkill = (value, globalRank) => {
+	const calcSingleSkill = (value, globalRank, countryRank) => {
 		value = parseInt(value);
 		globalRank = parseInt(globalRank);
+		countryRank = parseInt(countryRank);
 		return {
 			"value": value,
 			"globalRank": globalRank,
+			"countryRank": countryRank,
 			"percent": Math.min(value / 1000 * 100, 100)
 		}
 	}
@@ -83,11 +85,16 @@ export const getUserOsuSkills = async (username) => {
 	try {
 		let $ = cheerio.load(body);
 		const values = $('.skillsList .skillValue');
-		const ranks = $('#ranks .skillTop .world');
+		const globalRanks = $('#ranks .skillTop .world');
+		const countryRanks = $('#ranks .skillTop .country');
 		const names = ["stamina", "tenacity", "agility", "accuracy", "precision", "reaction", "memory"];
 		let result = {skills: {}, tags: []};
 		for (let i = 0; i <= 6; i++){
-			result.skills[names[i]] = calcSingleSkill(values[i].children[0].data, ranks[i].children[0].data.substring(1));
+			result.skills[names[i]] = calcSingleSkill(
+				values[i].children[0].data,
+				globalRanks[i].children[0].data.substring(1),
+				countryRanks[i].children[0].data.substring(1)
+			);
 		}
 
 		const tags = $('.userRank .userRankTitle');
