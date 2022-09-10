@@ -32,7 +32,7 @@ const i18n = {
 		'显示 osu!skills 图表中的数字': 'Figures for skills chart',
 		'在 osu!skills 用"记忆"代替"反应"': 'Replace <i>Reaction</i> with <i>Memory</i> in skills',
 		'显示 osu!skill <a href=\'https://osuskills.com/faq\' target=\'_blank\'>头衔标签<\/a>': 'Show osu!skill <a href=\'https://osuskills.com/faq\' target=\'_blank\'>tags<\/a>',
-		'Skills 排名显示': 'Skills rank display',
+		'Skills 排名显示': 'Skills Ranking Display',
 		'全球排名': 'Global rank',
 		'国内/区内排名': 'Country rank',
 		'循环显示': 'Cycle both'
