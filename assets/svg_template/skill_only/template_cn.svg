@@ -46,10 +46,10 @@
 					opacity: 0;
 				}
 			}
-			.display-group-global-ranking.ranking-display-cycle {
+			#fg.ranking-display-cycle .display-group-global-ranking {
 				animation: ranking-switch 10s ease-in-out infinite -0.5s;
 			}
-			.display-group-country-ranking.ranking-display-cycle {
+			#fg.ranking-display-cycle .display-group-country-ranking {
 				animation: ranking-switch 10s ease-in-out infinite -5.5s;
 			}
 			#fg.animation-enabled.ranking-display-cycle .display-group-global-ranking {

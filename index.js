@@ -15,9 +15,14 @@ app.get('/card', async function (req, res) {
 		'Content-Type': 'image/svg+xml',
 		'Cache-Control': 'public, max-age=3600'
 	});
-	const username = req.query.user ?? '';
+	let username = req.query.user ?? '';
 	const playmode = req.query.mode ?? 'std';
 	const includeSkills = req.query.skills != undefined && req.query.skills == 'true';
+
+	const exampleMode = req.query.example != undefined && req.query.example == 'true';
+	if (exampleMode) {
+		username = '@example';
+	}
 
 	let userData, avatarBase64, userCoverImage;
 	let cacheKey = `${username}|${playmode}|${includeSkills}`;
@@ -83,8 +88,13 @@ app.get('/skills', async function (req, res) {
 		'Content-Type': 'image/svg+xml',
 		'Cache-Control': 'public, max-age=3600'
 	});
-	const username = req.query.user ?? '';
+	let username = req.query.user ?? '';
 	const playmode = 'std';
+
+	const exampleMode = req.query.example != undefined && req.query.example == 'true';
+	if (exampleMode) {
+		username = '@example';
+	}
 
 	let userData, avatarBase64, userCoverImage;
 	let cacheKey = `${username}|${playmode}|${true}`;

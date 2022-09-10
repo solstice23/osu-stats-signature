@@ -1,0 +1,116 @@
+{
+	"current_mode": "std",
+	"extras": {
+		"scoresBest": [
+			{
+				"pp": 300
+			}
+		]
+	},
+	"scores_notice": null,
+	"user": {
+		"user_achievements": {
+			"length": 65
+		},
+		"avatar_url": "example_avatar.png",
+		"country_code": "XX",
+		"is_supporter": true,
+		"username": "solstice23",
+		"cover_url": "example_banner_c3.jpg",
+		"has_supported": true,
+		"occupation": null,
+		"playmode": "osu",
+		"playstyle": [
+			"keyboard",
+			"tablet"
+		],
+		"country": {
+			"code": "XX",
+			"name": "Unknown"
+		},
+		"cover": {
+			"custom_url": "example_banner_c3.jpg",
+			"url": "example_banner_c3.jpg",
+			"id": null
+		},
+		"scores_first_count": 35,
+		"statistics": {
+			"level": {
+				"current": 100,
+				"progress": 50
+			},
+			"global_rank": 99999,
+			"pp": 5000,
+			"ranked_score": 1234567890,
+			"hit_accuracy": 99.50,
+			"play_count": 50000,
+			"play_time": 1728000,
+			"total_score": 72727272727,
+			"total_hits": 1234567,
+			"maximum_combo": 2000,
+			"replays_watched_by_others": 0,
+			"is_ranked": true,
+			"grade_counts": {
+				"ss": 727,
+				"ssh": 727,
+				"s": 727,
+				"sh": 727,
+				"a": 727
+			},
+			"country_rank": 9999,
+			"rank": {
+				"country": 9999
+			}
+		},
+		"support_level": 1,
+		"skills": {
+			"skills": {
+				"stamina": {
+					"value": 380,
+					"globalRank": 9999,
+					"countryRank": 4438,
+					"percent": 38.0
+				},
+				"tenacity": {
+					"value": 450,
+					"globalRank": 9999,
+					"countryRank": 999,
+					"percent": 45.0
+				},
+				"agility": {
+					"value": 568,
+					"globalRank": 9999,
+					"countryRank": 999,
+					"percent": 56.8
+				},
+				"accuracy": {
+					"value": 395,
+					"globalRank": 9999,
+					"countryRank": 999,
+					"percent": 39.5
+				},
+				"precision": {
+					"value": 300,
+					"globalRank": 9999,
+					"countryRank": 999,
+					"percent": 30.0
+				},
+				"reaction": {
+					"value": 480,
+					"globalRank": 9999,
+					"countryRank": 999,
+					"percent": 48.0
+				},
+				"memory": {
+					"value": 20,
+					"globalRank": 9999,
+					"countryRank": 999,
+					"percent": 2.0
+				}
+			},
+			"tags": [
+				"Swift"
+			]
+		}
+	}
+}

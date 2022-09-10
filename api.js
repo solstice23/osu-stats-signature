@@ -1,7 +1,13 @@
+import fs from 'fs';
 import got from 'got';
+import path from 'path';
 import cheerio from 'cheerio';
 
 export const getUser = async (username, playmode = 'std', includeSkills = false) => {
+	if (username == '@example') {
+		const filePath = path.join(process.cwd(), `/assets/example/user.json`);	
+		return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+	}
 	const playmodes = {
 		std: 'osu',
 		taiko: 'taiko',
@@ -42,6 +48,10 @@ export const getUser = async (username, playmode = 'std', includeSkills = false)
 	return data;
 }
 export const getImage = async (url) => {
+	if (url.startsWith('example_')){
+		const filePath = path.join(process.cwd(), `/assets/example/${url}`);
+		return Buffer.from(fs.readFileSync(filePath));
+	}
 	const response = await got({
 		method: 'get',
 		responseType: 'buffer',
@@ -50,6 +60,10 @@ export const getImage = async (url) => {
 	return response.body;
 }
 export const getImageBase64 = async (url) => {
+	if (url.startsWith('example_')){
+		const filePath = path.join(process.cwd(), `/assets/example/${url}`);
+		return "data:image/png;base64," + Buffer.from(fs.readFileSync(filePath)).toString('base64');
+	}
 	const response = await got({
 		method: 'get',
 		responseType: 'buffer',
