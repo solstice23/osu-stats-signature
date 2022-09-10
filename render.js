@@ -373,7 +373,7 @@ export const getRenderedSVGMini = (data, avatarBase64, userCoverImageBase64) => 
 
 	//圆头像
 	if (data.options.round_avatar){
-		templete = templete.replace(/<path id="avatar_clip"(.*?)\/>/, '<circle id="avatar_clip" class="cls-1" cx="61" cy="6" r="45"/>');
+		templete = templete.replace(/<path id="avatar_clip"(.*?)\/>/, '<circle id="avatar_clip" class="cls-4" cx="62.5" cy="60.5" r="42.2"/>');
 	}
 
 	//名字
