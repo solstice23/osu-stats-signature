@@ -1,11 +1,16 @@
 {
 	"current_mode": "std",
-	"extras": {
-		"scoresBest": [
-			{
-				"pp": 300
-			}
-		]
+	"top_ranks": {
+		"best": {
+			"items": [
+				{
+					"pp": 300
+				}
+			]
+		},
+		"firsts": {
+			"count": 35
+		}
 	},
 	"scores_notice": null,
 	"user": {
@@ -33,7 +38,6 @@
 			"url": "example_banner_c3.jpg",
 			"id": null
 		},
-		"scores_first_count": 35,
 		"statistics": {
 			"level": {
 				"current": 100,

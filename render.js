@@ -252,10 +252,10 @@ export const getRenderedSVGFull = (data, avatarBase64, userCoverImageBase64) => 
 	//bp
 	templete = templete.replace(
 		'{{bp}}',
-		getTextSVGPath(textToSVGRegular, libs.formatNumber(Math.round(data.extras?.scoresBest[0]?.pp ?? 0)) + 'pp', 424, 249, 13)
+		getTextSVGPath(textToSVGRegular, libs.formatNumber(Math.round(data.top_ranks.best?.items[0]?.pp ?? 0)) + 'pp', 424, 249, 13)
 	);
 	//第一名
-	templete = templete.replace('{{first-place}}', getTextSVGPath(textToSVGRegular, libs.formatNumber(user.scores_first_count), 483, 249, 13));
+	templete = templete.replace('{{first-place}}', getTextSVGPath(textToSVGRegular, libs.formatNumber(data.top_ranks.firsts.count), 483, 249, 13));
 
 	//osu! skills
 	if (data.options.includeSkills) {
