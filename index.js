@@ -17,6 +17,7 @@ app.get('/card', async function (req, res) {
 	});
 	let username = req.query.user ?? '';
 	const playmode = req.query.mode ?? 'std';
+	const isMini = req.query.mini != undefined && req.query.mini == 'true';
 	const includeSkills = req.query.skills != undefined && req.query.skills == 'true';
 
 	const exampleMode = req.query.example != undefined && req.query.example == 'true';
@@ -30,7 +31,7 @@ app.get('/card', async function (req, res) {
 	if (req.headers['cache-control'] != 'no-cache' && cacheControl.has(cacheKey)) {
 		({ userData, avatarBase64, userCoverImage } = cacheControl.get(cacheKey));
 	} else {
-		userData = await api.getUser(username, playmode, includeSkills);
+		userData = await api.getUser(username, playmode, !isMini, includeSkills);
 		if (userData.error) return res.send(render.getErrorSVG('Error: ' + userData.error));
 		avatarBase64 = await api.getImageBase64(userData.user.avatar_url);
 		userCoverImage = await api.getImage(userData.user.cover_url);
@@ -44,7 +45,6 @@ app.get('/card', async function (req, res) {
 		blur = parseFloat(req.query.blur);
 	}
 	const flop = req.query.flop != undefined;
-	const isMini = req.query.mini != undefined && req.query.mini == 'true';
 	let userCoverImageBase64, width, height;
 	if (isMini) {
 		userCoverImageBase64 = await libs.getResizedCoverBase64(userCoverImage, 400, 120, blur, flop);
@@ -102,7 +102,7 @@ app.get('/skills', async function (req, res) {
 	if (req.headers['cache-control'] != 'no-cache' && cacheControl.has(cacheKey)) {
 		({ userData, avatarBase64, userCoverImage } = cacheControl.get(cacheKey));
 	} else {
-		userData = await api.getUser(username, playmode, true);
+		userData = await api.getUser(username, playmode, false, true);
 		if (userData.error) return res.send(render.getErrorSVG('Error: ' + userData.error));
 		avatarBase64 = await api.getImageBase64(userData.user.avatar_url);
 		userCoverImage = await api.getImage(userData.user.cover_url);

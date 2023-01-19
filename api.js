@@ -3,7 +3,7 @@ import got from 'got';
 import path from 'path';
 import cheerio from 'cheerio';
 
-export const getUser = async (username, playmode = 'std', includeSkills = false) => {
+export const getUser = async (username, playmode = 'std', includeTopPlays = false, includeSkills = false) => {
 	if (username == '@example') {
 		const filePath = path.join(process.cwd(), `/assets/example/user.json`);	
 		return JSON.parse(fs.readFileSync(filePath, 'utf8'));
@@ -38,8 +38,16 @@ export const getUser = async (username, playmode = 'std', includeSkills = false)
 	
     const body = response.body;
 	let $ = cheerio.load(body);
-	const data = JSON.parse($('.js-react--profile-page.osu-layout').attr('data-initial-data'));
+	let data = JSON.parse($('.js-react--profile-page.osu-layout').attr('data-initial-data'));
 	data.current_mode = playmode;
+
+	if (includeTopPlays) {
+		response = await got({
+			method: 'get',
+			url: `https://osu.ppy.sh/users/${data.user.id}/extra-pages/top_ranks?mode=${playmodes[playmode]}`,
+		});
+		data.top_ranks = JSON.parse(response.body);
+	}
 
 	if (includeSkills) {
 		data.user.skills = await getUserOsuSkills(username);
