@@ -56,7 +56,7 @@ export const formatPlaytime = (playtime) => {
 
 export const getResizedCoverBase64 = async (img, w, h, blur = 0, flop = false) => {
 	blur = Math.min(blur, 100);
-	const image = sharp(img).resize(parseInt(w * 1.5), parseInt(h * 1.5));
+	const image = sharp(img, {failOnError: false}).resize(parseInt(w * 1.5), parseInt(h * 1.5));	if (blur >= 0.5 && blur <= 100) image.blur(blur);
 	if (blur >= 0.5 && blur <= 100) image.blur(blur);
 	if (flop) image.flop();
 
