@@ -292,3 +292,42 @@ select {
     font-family: "Comfortaa", "Noto Sans SC", -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto,
         "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimSun, sans-serif;
 }
+
+#results {
+    width: 100%;
+    display: flex;
+    margin-bottom: 20px;
+    flex-direction: column;
+    align-items: center;
+}
+
+#generate-btns {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+#open-generated-svg {
+    height: 49px;
+}
+
+#open-generated-svg svg {
+    fill: #fff;
+    height: 80%;
+}
+
+#codes {
+    width: 100%;
+}
+.code-section {
+    margin-bottom: 15px;
+}
+
+#codes input.generated-code {
+    font-size: 14px;
+    width: 100%;
+    text-align: left;
+}

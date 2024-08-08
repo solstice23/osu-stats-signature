@@ -29,7 +29,7 @@ const i18n = {
 		'左右反转封面图': 'Mirror cover image',
 		'显示': 'Show',
 		'数据统计': 'Statistics',
-		'显示 osu!skills 图表中的数字': 'Figures for skills chart',
+		'显示 osu!skills 图表中的数字': 'Figures in skills chart',
 		'在 osu!skills 用"记忆"代替"反应"': 'Replace <i>Reaction</i> with <i>Memory</i> in skills',
 		'显示 osu!skill <a href=\'https://osuskills.com/faq\' target=\'_blank\'>头衔标签<\/a>': 'Show osu!skill <a href=\'https://osuskills.com/faq\' target=\'_blank\'>tags<\/a>',
 		'Skills 排名显示': 'Skills Ranking Display',
@@ -73,7 +73,10 @@ const app = {
 			show_figures_for_skills: false,
 			show_memory_in_skills: false,
 			show_skill_tags: true,
-			skills_ranking_display: "global"
+			skills_ranking_display: "global",
+
+			generated_url: null,
+			generated_osu_profile_url: null,
 		}
 	},
 	watch: {
@@ -148,7 +151,12 @@ const app = {
 					url += `&ranking_display=${this.skills_ranking_display}`;
 				}
 			}
-			document.getElementById("link").setAttribute("href", url);
+			this.generated_url = url;
+			this.generated_osu_profile_url = `https://osu.ppy.sh/u/${this.username}`;
+		},
+		open_generated_svg() {
+			this.generate();
+			document.getElementById("link").setAttribute("href", this.generated_url);
 			document.getElementById("link").click();
 		},
 		$n(text) {
@@ -157,9 +165,32 @@ const app = {
 			}
 			return i18n[this.language][text] || text;
 		},
+		select_all(e) {
+			e.target.select();			
+		}
 	},
 	computed: {
-		
+		generated_full_url() {
+			return window.location.origin + this.generated_url;
+		},
+		generated_markdown() {
+			return `![osu! signature card](${this.generated_url})`;
+		},
+		generated_markdown_with_link() {
+			return `[![osu! signature card](${this.generated_url})](${this.generated_osu_profile_url})`;
+		},
+		generated_bbcode() {
+			return `[img]${this.generated_url}[/img]`;
+		},
+		generated_bbcode_with_link() {
+			return `[url=${this.generated_osu_profile_url}][img]${this.generated_url}[/img][/url]`;
+		},
+		generated_html() {
+			return `<img src="${this.generated_url}" />`;
+		},
+		generated_html_with_link() {
+			return `<a href="${this.generated_osu_profile_url}"><img src="${this.generated_url}" /></a>`;
+		}
 	},
 }
 
