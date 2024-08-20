@@ -158,6 +158,10 @@ const app = {
 			}
 			this.generated_url = url;
 			this.generated_osu_profile_url = `https://osu.ppy.sh/u/${this.username}`;
+			this.$nextTick(() => {
+				const results = document.getElementById("results");
+				results.scrollIntoView({ behavior: "smooth" });
+			});
 		},
 		open_generated_svg() {
 			this.generate();
