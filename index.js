@@ -19,6 +19,7 @@ app.get('/card', async function (req, res) {
 	const playmode = req.query.mode ?? 'std';
 	const isMini = req.query.mini != undefined && req.query.mini == 'true';
 	const includeSkills = req.query.skills != undefined && req.query.skills == 'true';
+	const cycleSkillsStats = req.query.cycleskillsstats != undefined && req.query.cycleskillsstats == 'true' && includeSkills;
 
 	const exampleMode = req.query.example != undefined && req.query.example == 'true';
 	if (exampleMode) {
@@ -70,6 +71,7 @@ app.get('/card', async function (req, res) {
 		color_hue: parseInt(req.query.hue ?? 333),
 		margin,
 		includeSkills,
+		cycleSkillsStats,
 		skillsPlot: {
 			showMemory,
 			showFiguresForSkills,

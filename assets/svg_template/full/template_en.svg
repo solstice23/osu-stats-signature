@@ -129,6 +129,29 @@
 				animation: fade .3s ease-in-out forwards;
 			}
 
+			@keyframes skills-stats-switch {
+				0% {
+					opacity: 0;
+				}
+				5%, 45% {
+					opacity: 1;
+				}
+				50%, 100% {
+					opacity: 0;
+				}
+			}
+			#fg.cycle-skills-stats #count {
+				animation: skills-stats-switch 10s ease-in-out infinite -0.5s;
+			}
+			#fg.cycle-skills-stats #skills {
+				animation: skills-stats-switch 10s ease-in-out infinite -5.5s;
+			}
+			#fg.animation-enabled.cycle-skills-stats #count {
+				animation: skills-stats-switch 10s ease-in-out infinite;
+			}
+			#fg.animation-enabled.cycle-skills-stats #skills {
+				animation: skills-stats-switch 10s ease-in-out infinite -5s;
+			}
 		</style>
 	</defs>
 	<g id="bg">

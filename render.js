@@ -165,7 +165,11 @@ export const getRenderedSVGFull = (data, avatarBase64, userCoverImageBase64) => 
 	templete = setMargin(data, templete);
 
 	//动画
-	templete = templete.replace('{{fg-extra-class}}', data.options.animation ? 'animation-enabled' : '');
+	let extraClasses = data.options.animation ? 'animation-enabled' : '';
+	if (data.options.includeSkills && data.options.cycleSkillsStats) {
+		extraClasses += ' cycle-skills-stats';
+	}
+	templete = templete.replace('{{fg-extra-class}}', extraClasses);
 
 	//圆头像
 	if (data.options.round_avatar){
@@ -259,7 +263,7 @@ export const getRenderedSVGFull = (data, avatarBase64, userCoverImageBase64) => 
 
 	//osu! skills
 	if (data.options.includeSkills) {
-		templete = templete.replace('id="count"', 'id="count" style="display: none;"');
+		if (!data.options.cycleSkillsStats) templete = templete.replace('id="count"', 'id="count" style="display: none;"');
 
 		if (data.user.skills === null) {
 			templete = templete.replace('{{no-skill-data-text}}', 
@@ -346,7 +350,7 @@ export const getRenderedSVGFull = (data, avatarBase64, userCoverImageBase64) => 
 			templete = templete.replace('{{skills-plot}}', path);
 		}
 	} else {
-		templete = templete.replace('id="skills"', 'id="skills" style="display: none;"');
+		if (!data.options.cycleSkillsStats) templete = templete.replace('id="skills"', 'id="skills" style="display: none;"');
 	}
 
 	//颜色
