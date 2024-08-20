@@ -131,6 +131,10 @@
 						</select>
 					</div>
 					<div class="option" v-if="show_extra_settings && cardmode == 'full_skills'">
+						<input type="checkbox" v-model="cycle_skills_stats" id="cycle_skills_stats"/>
+						<label for="cycle_skills_stats">{{$n('循环显示 osu!skills 和统计数据')}}</label>
+					</div>
+					<div class="option" v-if="show_extra_settings && cardmode == 'full_skills'">
 						<input type="checkbox" v-model="show_figures_for_skills" id="show_figures_for_skills"/>
 						<label for="show_figures_for_skills">{{$n('显示 osu!skills 图表中的数字')}}</label>
 					</div>

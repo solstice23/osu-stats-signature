@@ -29,6 +29,7 @@ const i18n = {
 		'左右反转封面图': 'Mirror cover image',
 		'显示': 'Show',
 		'数据统计': 'Statistics',
+		'循环显示 osu!skills 和统计数据': 'Cycle between skills and stats',
 		'显示 osu!skills 图表中的数字': 'Figures in skills chart',
 		'在 osu!skills 用"记忆"代替"反应"': 'Replace <i>Reaction</i> with <i>Memory</i> in skills',
 		'显示 osu!skill <a href=\'https://osuskills.com/faq\' target=\'_blank\'>头衔标签<\/a>': 'Show osu!skill <a href=\'https://osuskills.com/faq\' target=\'_blank\'>tags<\/a>',
@@ -70,6 +71,7 @@ const app = {
 			},
 			flop: false,
 			show_extra_settings: false,
+			cycle_skills_stats: false,
 			show_figures_for_skills: false,
 			show_memory_in_skills: false,
 			show_skill_tags: true,
@@ -133,6 +135,9 @@ const app = {
 			}
 			if (this.cardmode == "full_skills"){
 				url += "&skills=true";
+				if (this.cycle_skills_stats) {
+					url += "&cycleskillsstats=true";
+				}
 				if (this.show_figures_for_skills){
 					url += "&skillfigures=true";
 				}
