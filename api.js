@@ -50,7 +50,7 @@ export const getUser = async (username, playmode = 'std', includeTopPlays = fals
 	}
 
 	if (includeSkills) {
-		data.user.skills = await getUserOsuSkills(username);
+		data.user.skills = await getUserOsuSkills(data.user.username);
 	}
 
 	return data;
