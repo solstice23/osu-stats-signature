@@ -1,26 +1,23 @@
-import fs from 'fs';
-import path from 'path';
-import sharp from 'sharp';
+import { platform } from './platform.js';
 import Color from 'color';
-import svgRoundCorners from 'svg-round-corners';
-const { roundCommands } = svgRoundCorners;
+import * as _svgRoundCorners from 'svg-round-corners';
+const { roundCommands } = _svgRoundCorners.default || _svgRoundCorners;
 
 export const getFlagSVGByCountryCode = (countryCode) => {
 	const chars = countryCode.split('');
 	const hexEmojiChars = chars.map((char) => (char.charCodeAt(0) + 127397).toString(16));
 	const fileName = hexEmojiChars.join('-');
-	const filePath = path.join(process.cwd(), `/assets/flags/${fileName}.svg`);
-	if (!fs.existsSync(filePath)) {
-		filePath = path.join(process.cwd(), `/assets/flags/1f1fd-1f1fd.svg`);
+	let assetPath = `/assets/flags/${fileName}.svg`;
+	if (!platform.fileExists(assetPath)) {
+		assetPath = `/assets/flags/1f1fd-1f1fd.svg`;
 	}
 
-	const flagSVG = fs.readFileSync(filePath, 'utf8');
+	const flagSVG = platform.readTextFile(assetPath);
 	return flagSVG;
 };
 
 export const getPlaymodeSVG = (playmode) => {
-	const filePath = path.join(process.cwd(), `/assets/modes/${playmode}.svg`);
-	const playmodeSVG = fs.readFileSync(filePath, 'utf8');
+	const playmodeSVG = platform.readTextFile(`/assets/modes/${playmode}.svg`);
 	return playmodeSVG;
 };
 
@@ -55,12 +52,7 @@ export const formatPlaytime = (playtime) => {
 };
 
 export const getResizedCoverBase64 = async (img, w, h, blur = 0, flop = false) => {
-	blur = Math.min(blur, 100);
-	const image = sharp(img, {failOnError: false}).resize(parseInt(w * 1.5), parseInt(h * 1.5));
-	if (blur >= 0.5 && blur <= 100) image.blur(blur);
-	if (flop) image.flop();
-
-	return image.toBuffer().then((data) => 'data:image/png;base64,' + data.toString('base64'));
+	return platform.resizeImage(img, w, h, blur, flop);
 };
 
 export const getHexagonPath = (origX, origY, radius, borderRadius = 2) => {

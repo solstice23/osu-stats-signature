@@ -1,27 +1,36 @@
-import fs from 'fs';
-import path from 'path';
+import { platform } from './platform.js';
 import cheerio from 'cheerio';
-import TextToSVG from 'text-to-svg';
 import Color from 'color';
-import svgRoundCorners from 'svg-round-corners';
-const { roundCommands } = svgRoundCorners;
+import * as _svgRoundCorners from 'svg-round-corners';
+const { roundCommands } = _svgRoundCorners.default || _svgRoundCorners;
 import * as libs from './libs.js';
 
-const textToSVGRegular = TextToSVG.loadSync(path.join(process.cwd(), '/assets/fonts/Comfortaa/Comfortaa-Regular.ttf'));
-const textToSVGBold = TextToSVG.loadSync(path.join(process.cwd(), '/assets/fonts/Comfortaa/Comfortaa-Bold.ttf'));
-const textToSVGCJK = TextToSVG.loadSync(path.join(process.cwd(), '/assets/fonts/SourceHanSansSC/SourceHanSansSC-Normal.otf'));
+// Lazy-initialized font instances (loaded on first use after platform is configured)
+let textToSVGRegular, textToSVGBold, textToSVGCJK;
+function ensureFontsLoaded() {
+	if (!textToSVGRegular) {
+		textToSVGRegular = platform.loadFont('/assets/fonts/Comfortaa/Comfortaa-Regular.ttf');
+		textToSVGBold = platform.loadFont('/assets/fonts/Comfortaa/Comfortaa-Bold.ttf');
+		try {
+			textToSVGCJK = platform.loadFont('/assets/fonts/SourceHanSansSC/SourceHanSansSC-Normal.otf');
+		} catch (e) {
+			// CJK font may not be available (e.g. on CF Workers without subset), fallback to regular
+			textToSVGCJK = textToSVGRegular;
+		}
+	}
+}
 
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
 export const getSVGTemplete = (type, language) => {
 	try {
-		return fs.readFileSync(path.join(process.cwd(), `/assets/svg_template/${type}/template_${language}.svg`), 'utf8');
+		return platform.readTextFile(`/assets/svg_template/${type}/template_${language}.svg`);
 	} catch (e) {
-		return fs.readFileSync(path.join(process.cwd(), `/assets/svg_template/${type}/template_cn.svg`), 'utf8');
+		return platform.readTextFile(`/assets/svg_template/${type}/template_cn.svg`);
 	}
 };
 export const getSVGContent = (x) => {
-	return fs.readFileSync(path.join(process.cwd(), x), 'utf8');
+	return platform.readTextFile(x);
 };
 
 const getTransformedX = (x, w, anchor = 'center') => {
@@ -80,7 +89,7 @@ export const getPlaymodeSVGMini = (playmode, x, y, h) => {
 	return $.html('svg');
 };
 export const getSupporterSVG = (x, y, h, level = 1, transformationMethod = getTransformedX) => {
-	let svg = fs.readFileSync(path.join(process.cwd(), `/assets/icons/supporter_${level}.svg`), 'utf8');
+	let svg = platform.readTextFile(`/assets/icons/supporter_${level}.svg`);
 	let $ = cheerio.load(svg);
 	let viewBoxW = parseFloat($(svg).attr('viewBox').split(' ')[2]);
 	let viewBoxH = parseFloat($(svg).attr('viewBox').split(' ')[3]);
@@ -155,6 +164,7 @@ const minifySVG = (svg) => {
 };
 
 export const getRenderedSVGFull = (data, avatarBase64, userCoverImageBase64) => {
+	ensureFontsLoaded();
 	let templete = getSVGTemplete('full', data.options.language);
 	let user = data.user;
 
@@ -360,6 +370,7 @@ export const getRenderedSVGFull = (data, avatarBase64, userCoverImageBase64) => 
 };
 
 export const getRenderedSVGMini = (data, avatarBase64, userCoverImageBase64) => {
+	ensureFontsLoaded();
 	let templete = getSVGTemplete('mini', data.options.language);
 	let user = data.user;
 
@@ -420,6 +431,7 @@ export const getRenderedSVGMini = (data, avatarBase64, userCoverImageBase64) => 
 };
 
 export const getRenderedSVGSkillOnly = (data, avatarBase64, userCoverImageBase64) => {
+	ensureFontsLoaded();
 	let templete = getSVGTemplete('skill_only', data.options.language);
 	let user = data.user;
 
@@ -557,6 +569,7 @@ export const getRenderedSVGSkillOnly = (data, avatarBase64, userCoverImageBase64
 
 
 export const getErrorSVG = (err) => {
+	ensureFontsLoaded();
 	return textToSVGRegular.getSVG(err, {
 		x: 0,
 		y: 0,

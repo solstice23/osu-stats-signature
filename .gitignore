@@ -105,3 +105,7 @@ dist
 
 # Original SVG Template Files
 /assets/orig_ai_files/
+
+# Cloudflare Workers build output
+cf-dist/
+.wrangler/

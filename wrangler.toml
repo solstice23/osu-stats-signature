@@ -1,0 +1,10 @@
+name = "osu-stats-signature"
+main = "worker.js"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+# Static assets — served directly by Cloudflare's edge.
+# The worker also reads these via env.ASSETS.fetch() for fonts, templates, etc.
+[assets]
+directory = "./cf-dist"
+binding = "ASSETS"

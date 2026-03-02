@@ -1,12 +1,9 @@
-import fs from 'fs';
-import got from 'got';
-import path from 'path';
+import { platform } from './platform.js';
 import cheerio from 'cheerio';
 
 export const getUser = async (username, playmode = 'std', includeTopPlays = false, includeSkills = false) => {
 	if (username == '@example') {
-		const filePath = path.join(process.cwd(), `/assets/example/user.json`);	
-		return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+		return JSON.parse(platform.readTextFile('/assets/example/user.json'));
 	}
 	const playmodes = {
 		std: 'osu',
@@ -21,12 +18,10 @@ export const getUser = async (username, playmode = 'std', includeTopPlays = fals
 	}
 	let response;
 	try {
-		response = await got({
-			method: 'get',
-			url: `https://osu.ppy.sh/users/${username}/${playmodes[playmode]}`,
-		});	
+		response = { body: await platform.httpGet(`https://osu.ppy.sh/users/${username}/${playmodes[playmode]}`) };
 	} catch (error) {
-		if (error.response.statusCode === 404){
+		const statusCode = error.response?.statusCode || error.statusCode;
+		if (statusCode === 404){
 			return {
 				error: `User ${username} not found`
 			}
@@ -42,11 +37,8 @@ export const getUser = async (username, playmode = 'std', includeTopPlays = fals
 	data.current_mode = playmode;
 
 	if (includeTopPlays) {
-		response = await got({
-			method: 'get',
-			url: `https://osu.ppy.sh/users/${data.user.id}/extra-pages/top_ranks?mode=${playmodes[playmode]}`,
-		});
-		data.top_ranks = JSON.parse(response.body);
+		const topRanksBody = await platform.httpGet(`https://osu.ppy.sh/users/${data.user.id}/extra-pages/top_ranks?mode=${playmodes[playmode]}`);
+		data.top_ranks = JSON.parse(topRanksBody);
 	}
 
 	if (includeSkills) {
@@ -57,27 +49,17 @@ export const getUser = async (username, playmode = 'std', includeTopPlays = fals
 }
 export const getImage = async (url) => {
 	if (url.startsWith('example_')){
-		const filePath = path.join(process.cwd(), `/assets/example/${url}`);
-		return Buffer.from(fs.readFileSync(filePath));
+		return platform.readBinaryFile(`/assets/example/${url}`);
 	}
-	const response = await got({
-		method: 'get',
-		responseType: 'buffer',
-		url,
-	});
-	return response.body;
+	return platform.httpGetBuffer(url);
 }
 export const getImageBase64 = async (url) => {
 	if (url.startsWith('example_')){
-		const filePath = path.join(process.cwd(), `/assets/example/${url}`);
-		return "data:image/png;base64," + Buffer.from(fs.readFileSync(filePath)).toString('base64');
+		const data = platform.readBinaryFile(`/assets/example/${url}`);
+		return "data:image/png;base64," + Buffer.from(data).toString('base64');
 	}
-	const response = await got({
-		method: 'get',
-		responseType: 'buffer',
-		url,
-	});
-	return "data:image/png;base64," + Buffer.from(response.body).toString('base64');
+	const data = await platform.httpGetBuffer(url);
+	return "data:image/png;base64," + Buffer.from(data).toString('base64');
 }
 export const getUserOsuSkills = async (username) => {
 	const calcSingleSkill = (value, globalRank, countryRank) => {
@@ -91,18 +73,14 @@ export const getUserOsuSkills = async (username) => {
 			"percent": Math.min(value / 1000 * 100, 100)
 		}
 	}
-	let response;
+	let body;
 	try {
-		response = await got({
-			method: 'get',
-			url: `https://osuskills.com/user/${username}`,
-		});	
+		body = await platform.httpGet(`https://osuskills.com/user/${username}`);
 	} catch (error) {
 		return {
 			error: `Failed to get skills data`
 		}
 	}
-	const body = response.body;
 
 	try {
 		let $ = cheerio.load(body);
