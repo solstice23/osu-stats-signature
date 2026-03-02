@@ -4,7 +4,8 @@
 
 
 > [!CAUTION]
-> The project has hit the Vercel rate limit and was paused by Vercel. It's recommended to fork this repo and deploy your own instance on Vercel for better uptime. I plan to migrate and host it to Cloudflare Workers.
+> The project has hit the Vercel rate limit and was paused by Vercel. It's recommended to fork this repo and deploy your own instance on Vercel for better uptime.
+> Update: Migrated to Cloudflare workers: https://osu-sig.s23.moe/ , please use this link instead.
 
 
 ## Languages
