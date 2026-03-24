@@ -183,22 +183,22 @@ const app = {
 			return window.location.origin + this.generated_url;
 		},
 		generated_markdown() {
-			return `![osu! signature card](${this.generated_url})`;
+			return `![osu! signature card](${this.generated_full_url})`;
 		},
 		generated_markdown_with_link() {
-			return `[![osu! signature card](${this.generated_url})](${this.generated_osu_profile_url})`;
+			return `[![osu! signature card](${this.generated_full_url})](${this.generated_osu_profile_url})`;
 		},
 		generated_bbcode() {
-			return `[img]${this.generated_url}[/img]`;
+			return `[img]${this.generated_full_url}[/img]`;
 		},
 		generated_bbcode_with_link() {
-			return `[url=${this.generated_osu_profile_url}][img]${this.generated_url}[/img][/url]`;
+			return `[url=${this.generated_osu_profile_url}][img]${this.generated_full_url}[/img][/url]`;
 		},
 		generated_html() {
-			return `<img src="${this.generated_url}" />`;
+			return `<img src="${this.generated_full_url}" />`;
 		},
 		generated_html_with_link() {
-			return `<a href="${this.generated_osu_profile_url}"><img src="${this.generated_url}" /></a>`;
+			return `<a href="${this.generated_osu_profile_url}"><img src="${this.generated_full_url}" /></a>`;
 		}
 	},
 }
