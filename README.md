@@ -25,6 +25,20 @@ The project is deployed on Vercel. Visit [osu-stats-signature.vercel.app](https:
 
 Insert the generated URL to SVG as an image on the desired place.
 
+## Self-hosting
+
+User data is fetched through the official osu! API (v2), which requires an OAuth application. Create one at [osu! account settings → OAuth](https://osu.ppy.sh/home/account/edit#oauth), then set these environment variables:
+
+| Variable            | Description                     |
+| ------------------- | ------------------------------- |
+| `OSU_CLIENT_ID`     | OAuth application client ID     |
+| `OSU_CLIENT_SECRET` | OAuth application client secret |
+
+- **Vercel / Node**: set them as environment variables (a local `.env` or the project settings).
+- **Cloudflare Workers**: `wrangler secret put OSU_CLIENT_ID` / `wrangler secret put OSU_CLIENT_SECRET` (for `wrangler dev`, put them in `.dev.vars`).
+
+If the credentials are not set, the app falls back to scraping the osu! website, which is prone to rate limiting (HTTP 429). Scraping can also be requested explicitly per card by adding `&source=web` to the URL.
+
 ## Features & TODO
 
 - [x] Fetch osu! account information and generate cards
@@ -69,6 +83,20 @@ osu-stats-signature 可以生成实时更新的 osu! 个人资料卡片/签名�
 该项目部署在 Vercel 上，前往 [osu-stats-signature.vercel.app](https://osu-stats-signature.vercel.app) 生成卡片。
 
 将得到的卡片 SVG 地址作为图片插入到个人主页中即可。
+
+## 自建部署
+
+用户数据通过 osu! 官方 API (v2) 获取，需要一个 OAuth 应用。在 [osu! 账号设置 → OAuth](https://osu.ppy.sh/home/account/edit#oauth) 中创建后，配置以下环境变量：
+
+| 变量                | 说明                    |
+| ------------------- | ----------------------- |
+| `OSU_CLIENT_ID`     | OAuth 应用的 client ID  |
+| `OSU_CLIENT_SECRET` | OAuth 应用的 client secret |
+
+- **Vercel / Node**：作为环境变量配置（本地 `.env` 或项目设置中）。
+- **Cloudflare Workers**：`wrangler secret put OSU_CLIENT_ID` / `wrangler secret put OSU_CLIENT_SECRET`（`wrangler dev` 时写入 `.dev.vars`）。
+
+若未配置，则会退回到抓取 osu! 网页的方式，该方式容易触发速率限制 (HTTP 429)。也可以在卡片 URL 后加上 `&source=web` 来单独指定使用网页抓取。
 
 ## 功能 & TODO
 

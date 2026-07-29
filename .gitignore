@@ -72,6 +72,9 @@ typings/
 .env
 .env.test
 
+# wrangler local secrets
+.dev.vars
+
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 

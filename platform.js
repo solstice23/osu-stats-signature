@@ -28,4 +28,7 @@ export const platform = {
 	// Load a font file and return a TextToSVG-compatible instance
 	// Must expose: getPath(text, options), getMetrics(text, options), getSVG(text, options)
 	loadFont: null,
+
+	// Read an environment variable / secret by name. Returns undefined when unset.
+	getEnv: null,
 };

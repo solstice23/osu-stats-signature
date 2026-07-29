@@ -49,6 +49,8 @@ platform.loadFont = (assetPath) => {
 	return TextToSVG.loadSync(path.join(PROJECT_ROOT, assetPath));
 };
 
+platform.getEnv = (name) => process.env[name];
+
 // ------ In-memory cache adapter ------
 
 const nodeCache = new NodeCache({ stdTTL: 600, checkperiod: 600, deleteOnExpire: true });

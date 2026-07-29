@@ -19,6 +19,8 @@ export async function handleCard(query, cacheControl, cache) {
 	const isMini = query.get('mini') === 'true';
 	const includeSkills = query.get('skills') === 'true';
 	const cycleSkillsStats = query.get('cycleskillsstats') === 'true' && includeSkills;
+	// Data source: the official osu! API (default) or scraping the website (?source=web)
+	const useOfficialApi = query.get('source') !== 'web';
 
 	const exampleMode = query.get('example') === 'true';
 	if (exampleMode) {
@@ -26,12 +28,12 @@ export async function handleCard(query, cacheControl, cache) {
 	}
 
 	let userData, avatarBase64, userCoverImage;
-	const cacheKey = `${username}|${playmode}|${includeSkills}`;
+	const cacheKey = `${username}|${playmode}|${includeSkills}|${useOfficialApi}`;
 
 	if (cacheControl !== 'no-cache' && cache.has(cacheKey)) {
 		({ userData, avatarBase64, userCoverImage } = cache.get(cacheKey));
 	} else {
-		userData = await api.getUser(username, playmode, !isMini, includeSkills);
+		userData = await api.getUser(username, playmode, !isMini, includeSkills, useOfficialApi);
 		if (userData.error) return { svg: render.getErrorSVG('Error: ' + userData.error) };
 		avatarBase64 = await api.getImageBase64(userData.user.avatar_url);
 		userCoverImage = await api.getImage(userData.user.cover_url);
@@ -94,6 +96,8 @@ export async function handleCard(query, cacheControl, cache) {
 export async function handleSkills(query, cacheControl, cache) {
 	let username = query.get('user') ?? '';
 	const playmode = 'std';
+	// Data source: the official osu! API (default) or scraping the website (?source=web)
+	const useOfficialApi = query.get('source') !== 'web';
 
 	const exampleMode = query.get('example') === 'true';
 	if (exampleMode) {
@@ -101,12 +105,12 @@ export async function handleSkills(query, cacheControl, cache) {
 	}
 
 	let userData, avatarBase64, userCoverImage;
-	const cacheKey = `${username}|${playmode}|${true}`;
+	const cacheKey = `${username}|${playmode}|${true}|${useOfficialApi}`;
 
 	if (cacheControl !== 'no-cache' && cache.has(cacheKey)) {
 		({ userData, avatarBase64, userCoverImage } = cache.get(cacheKey));
 	} else {
-		userData = await api.getUser(username, playmode, false, true);
+		userData = await api.getUser(username, playmode, false, true, useOfficialApi);
 		if (userData.error) return { svg: render.getErrorSVG('Error: ' + userData.error) };
 		avatarBase64 = await api.getImageBase64(userData.user.avatar_url);
 		userCoverImage = await api.getImage(userData.user.cover_url);

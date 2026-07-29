@@ -220,6 +220,8 @@ function configurePlatform(env) {
 		const font = opentype.parse(arrayBuf);
 		return createTextToSVG(font);
 	};
+
+	platform.getEnv = (name) => env[name];
 }
 
 // ---------------------------------------------------------------------------
