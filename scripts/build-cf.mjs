@@ -13,9 +13,19 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const DIST = path.join(ROOT, 'cf-dist');
 
+// Files/directories to exclude from the CF build (too large for Workers)
+const EXCLUDE = new Set([
+	'SourceHanSansSC', // 15.6 MB CJK font — too heavy for opentype.js parsing in Workers
+	'Torus',           // Unused font family
+]);
+
 function copyDirSync(src, dest) {
 	fs.mkdirSync(dest, { recursive: true });
 	for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
+		if (EXCLUDE.has(entry.name)) {
+			console.log(`  Skipping excluded: ${entry.name}`);
+			continue;
+		}
 		const srcPath = path.join(src, entry.name);
 		const destPath = path.join(dest, entry.name);
 		if (entry.isDirectory()) {

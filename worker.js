@@ -3,7 +3,7 @@
 //
 // Assets (fonts, flags, SVG templates, etc.) are served from the static assets binding.
 // The worker handles /card and /skills API routes; all other paths fall through to static assets.
-//
+
 import { platform } from './platform.js';
 import { handleCard, handleSkills } from './handler.js';
 import opentype from 'opentype.js';
@@ -12,9 +12,6 @@ import { PhotonImage, resize, gaussian_blur, fliph, SamplingFilter } from '@cf-w
 // ---------------------------------------------------------------------------
 // text-to-svg shim — provides getPath / getMetrics / getSVG from an opentype Font
 // ---------------------------------------------------------------------------
-// Reproduces the essential API surface of the `text-to-svg` npm package without
-// pulling in Node-only `fs.readFileSync`.  Works in any JS runtime that supports
-// opentype.js (CF Workers, Deno, Bun, browsers …).
 
 function createTextToSVG(font) {
 	const unitsPerEm = font.unitsPerEm;
@@ -56,15 +53,12 @@ function createTextToSVG(font) {
 		let x = options.x || 0;
 		let y = options.y || 0;
 
-		// Horizontal anchor
 		if (anchor.horizontal === 'center') x -= width / 2;
 		else if (anchor.horizontal === 'right') x -= width;
 
-		// Vertical anchor
 		if (anchor.vertical === 'top') y += ascender;
 		else if (anchor.vertical === 'middle') y += ascender - height / 2;
 		else if (anchor.vertical === 'bottom') y += descender;
-		// 'baseline' → y stays the same
 
 		return { x, y, baseline: y, width, height, ascender, descender };
 	}
@@ -111,7 +105,7 @@ function bufferToBase64(buffer) {
 }
 
 // ---------------------------------------------------------------------------
-// Simple in-memory cache (per-isolate, best-effort, no inter-request guarantees)
+// Simple in-memory cache (per-isolate, persists across requests on warm starts)
 // ---------------------------------------------------------------------------
 
 const MEM_CACHE = new Map();
@@ -146,7 +140,6 @@ function makeCache() {
 let ASSETS_BINDING = null;
 
 async function fetchAsset(assetPath) {
-	// assetPath is like "/assets/flags/xxx.svg"
 	const url = new URL(assetPath, 'http://assets.local');
 	const resp = await ASSETS_BINDING.fetch(new Request(url.toString()));
 	if (!resp.ok) throw new Error(`Asset not found: ${assetPath} (${resp.status})`);
@@ -157,31 +150,27 @@ async function fetchAsset(assetPath) {
 // Platform configuration (Cloudflare Workers)
 // ---------------------------------------------------------------------------
 
+const textCache = new Map();
+const binaryCache = new Map();
+
 function configurePlatform(env) {
 	ASSETS_BINDING = env.ASSETS;
 
-	// Synchronous text file read: we pre-cache assets in a Map for sync access.
-	// Since Workers are single-threaded and we await font loading before serving,
-	// we populate this cache on first request.
-	const textCache = new Map();
-	const binaryCache = new Map();
-
-	// For asset reads we need async, but the platform API is sync for text/binary reads.
-	// Strategy: pre-load required assets on first request, then serve from cache.
-	// For ad-hoc reads fallback to throwing with instructions to pre-load.
-
 	platform.readTextFile = (assetPath) => {
 		if (textCache.has(assetPath)) return textCache.get(assetPath);
-		throw new Error(`Asset not pre-loaded (text): ${assetPath}. Call preloadAsset() first.`);
+		throw new Error(`Asset not pre-loaded (text): ${assetPath}`);
 	};
 
 	platform.readBinaryFile = (assetPath) => {
 		if (binaryCache.has(assetPath)) return binaryCache.get(assetPath);
-		throw new Error(`Asset not pre-loaded (binary): ${assetPath}. Call preloadAsset() first.`);
+		throw new Error(`Asset not pre-loaded (binary): ${assetPath}`);
 	};
 
 	platform.fileExists = (assetPath) => {
-		return textCache.has(assetPath) || binaryCache.has(assetPath);
+		if (textCache.has(assetPath) || binaryCache.has(assetPath)) return true;
+		// Flags are lazy-loaded — assume they exist
+		if (assetPath.startsWith('/assets/flags/')) return true;
+		return false;
 	};
 
 	platform.httpGet = async (url) => {
@@ -231,41 +220,40 @@ function configurePlatform(env) {
 		const font = opentype.parse(arrayBuf);
 		return createTextToSVG(font);
 	};
-
-	// Return helpers for async preloading
-	return {
-		async preloadText(assetPath) {
-			if (textCache.has(assetPath)) return;
-			const resp = await fetchAsset(assetPath);
-			textCache.set(assetPath, await resp.text());
-		},
-		async preloadBinary(assetPath) {
-			if (binaryCache.has(assetPath)) return;
-			const resp = await fetchAsset(assetPath);
-			const buf = await resp.arrayBuffer();
-			binaryCache.set(assetPath, new Uint8Array(buf));
-		},
-		textCache,
-		binaryCache,
-	};
 }
 
 // ---------------------------------------------------------------------------
-// Asset preloading — load all text assets that are read synchronously
+// Async preload helpers
 // ---------------------------------------------------------------------------
 
-let preloadDone = false;
+async function preloadText(assetPath) {
+	if (textCache.has(assetPath)) return;
+	const resp = await fetchAsset(assetPath);
+	textCache.set(assetPath, await resp.text());
+}
 
-async function preloadAssets(helpers) {
-	if (preloadDone) return;
+async function preloadBinary(assetPath) {
+	if (binaryCache.has(assetPath)) return;
+	const resp = await fetchAsset(assetPath);
+	const buf = await resp.arrayBuffer();
+	binaryCache.set(assetPath, new Uint8Array(buf));
+}
 
-	// Fonts (binary)
+// ---------------------------------------------------------------------------
+// Core asset preloading — only the essentials for rendering
+// ---------------------------------------------------------------------------
+
+let coreAssetsReady = false;
+
+async function ensureCoreAssets() {
+	if (coreAssetsReady) return;
+
+	// Fonts (binary) — only Comfortaa (~137KB each, fast to parse)
+	// CJK font (SourceHanSansSC, 15.6MB) is excluded from the build entirely.
+	// render.js ensureFontsLoaded() catches the error and falls back to Comfortaa-Regular.
 	await Promise.all([
-		helpers.preloadBinary('/assets/fonts/Comfortaa/Comfortaa-Regular.ttf'),
-		helpers.preloadBinary('/assets/fonts/Comfortaa/Comfortaa-Bold.ttf'),
-		helpers.preloadBinary('/assets/fonts/SourceHanSansSC/SourceHanSansSC-Normal.otf').catch(() => {
-			// CJK font is optional; if missing the render layer falls back to Comfortaa
-		}),
+		preloadBinary('/assets/fonts/Comfortaa/Comfortaa-Regular.ttf'),
+		preloadBinary('/assets/fonts/Comfortaa/Comfortaa-Bold.ttf'),
 	]);
 
 	// SVG templates
@@ -274,174 +262,125 @@ async function preloadAssets(helpers) {
 	await Promise.all(
 		templateTypes.flatMap((type) =>
 			templateLangs.map((lang) =>
-				helpers.preloadText(`/assets/svg_template/${type}/template_${lang}.svg`).catch(() => {})
+				preloadText(`/assets/svg_template/${type}/template_${lang}.svg`).catch(() => {})
 			)
 		)
 	);
 
 	// Mode icons
-	const modes = ['std', 'taiko', 'catch', 'mania'];
-	await Promise.all(modes.map((m) => helpers.preloadText(`/assets/modes/${m}.svg`)));
+	await Promise.all(
+		['std', 'taiko', 'catch', 'mania'].map((m) => preloadText(`/assets/modes/${m}.svg`))
+	);
 
 	// Supporter icons
-	await Promise.all([1, 2, 3].map((l) => helpers.preloadText(`/assets/icons/supporter_${l}.svg`)));
+	await Promise.all([1, 2, 3].map((l) => preloadText(`/assets/icons/supporter_${l}.svg`)));
 
-	// Example data
-	await Promise.all([
-		helpers.preloadText('/assets/example/user.json'),
-		helpers.preloadBinary('/assets/example/example_avatar.png').catch(() => {}),
-		helpers.preloadBinary('/assets/example/example_banner_c3.jpg').catch(() => {}),
-		helpers.preloadBinary('/assets/example/example_banner_c4.jpg').catch(() => {}),
-	]);
+	// Fallback flag (always needed)
+	await preloadText('/assets/flags/1f1fd-1f1fd.svg').catch(() => {});
 
-	// Flag SVGs — enumerate from the assets binding via a known list is not possible
-	// (Workers assets don't support directory listing). Instead, we load flags on-demand.
-	// Override fileExists and readTextFile to support lazy loading for flags.
-	const originalReadText = platform.readTextFile;
-	const originalFileExists = platform.fileExists;
-
-	platform.fileExists = (assetPath) => {
-		if (helpers.textCache.has(assetPath) || helpers.binaryCache.has(assetPath)) return true;
-		// For flags, we can't know ahead of time — assume exists and let readTextFile handle failure
-		if (assetPath.startsWith('/assets/flags/')) return true;
-		return false;
-	};
-
-	platform.readTextFile = (assetPath) => {
-		if (helpers.textCache.has(assetPath)) return helpers.textCache.get(assetPath);
-		throw new Error(`Asset not pre-loaded: ${assetPath}`);
-	};
-
-	preloadDone = true;
+	coreAssetsReady = true;
 }
 
-// ---------------------------------------------------------------------------
-// Flag lazy-loading — wraps sync reads with an async pre-fetch step
-// ---------------------------------------------------------------------------
+// Example-mode assets (loaded only when ?example=true)
+let exampleAssetsReady = false;
 
-// The flag SVGs cannot be enumerated up-front. We load them on-demand and cache.
-// Because the platform API for readTextFile is sync, we must pre-fetch flags
-// before the synchronous render runs. We do this in the request handler.
-
-async function ensureFlagLoaded(helpers, countryCode) {
-	const chars = countryCode.split('');
-	const hexEmojiChars = chars.map((c) => (c.charCodeAt(0) + 127397).toString(16));
-	const fileName = hexEmojiChars.join('-');
-	const assetPath = `/assets/flags/${fileName}.svg`;
-	if (!helpers.textCache.has(assetPath)) {
-		try {
-			await helpers.preloadText(assetPath);
-		} catch {
-			// Fallback flag
-			if (!helpers.textCache.has('/assets/flags/1f1fd-1f1fd.svg')) {
-				await helpers.preloadText('/assets/flags/1f1fd-1f1fd.svg');
-			}
-		}
-	}
-	// Also ensure fallback is available
-	if (!helpers.textCache.has('/assets/flags/1f1fd-1f1fd.svg')) {
-		await helpers.preloadText('/assets/flags/1f1fd-1f1fd.svg').catch(() => {});
-	}
+async function ensureExampleAssets() {
+	if (exampleAssetsReady) return;
+	await Promise.all([
+		preloadText('/assets/example/user.json'),
+		preloadBinary('/assets/example/example_avatar.png').catch(() => {}),
+		preloadBinary('/assets/example/example_banner_c3.jpg').catch(() => {}),
+		preloadBinary('/assets/example/example_banner_c4.jpg').catch(() => {}),
+	]);
+	exampleAssetsReady = true;
 }
 
 // ---------------------------------------------------------------------------
 // Worker fetch handler
 // ---------------------------------------------------------------------------
 
-let platformHelpers = null;
+let platformReady = false;
 
 export default {
 	async fetch(request, env, ctx) {
-		// Configure platform on first invocation
-		if (!platformHelpers) {
-			platformHelpers = configurePlatform(env);
-		}
-
-		// Ensure core assets are loaded
-		await preloadAssets(platformHelpers);
-
 		const url = new URL(request.url);
 		const pathname = url.pathname;
 
-		// API routes
-		if (pathname === '/card' || pathname === '/skills') {
-			try {
-				const query = url.searchParams;
-				const cacheControlHeader = request.headers.get('cache-control');
-				const cache = makeCache();
-
-				// Pre-fetch the user data to know their country code for flag preloading
-				// We handle this by wrapping the handler — after getting user data,
-				// the handler calls render which calls getFlagSVGByCountryCode synchronously.
-				// We need to ensure the flag is loaded before that.
-				//
-				// Strategy: intercept the handler result? No — the handler is self-contained.
-				// Instead, we temporarily patch platform.readTextFile for flags to be more lenient.
-
-				const originalReadText = platform.readTextFile;
-				const flagMissQueue = [];
-
-				// Patch: collect missing flag reads instead of throwing
-				platform.readTextFile = (assetPath) => {
-					if (platformHelpers.textCache.has(assetPath)) {
-						return platformHelpers.textCache.get(assetPath);
-					}
-					if (assetPath.startsWith('/assets/flags/')) {
-						// Return fallback flag if available, and queue the real one
-						flagMissQueue.push(assetPath);
-						if (platformHelpers.textCache.has('/assets/flags/1f1fd-1f1fd.svg')) {
-							return platformHelpers.textCache.get('/assets/flags/1f1fd-1f1fd.svg');
-						}
-						return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36"></svg>';
-					}
-					throw new Error(`Asset not loaded: ${assetPath}`);
-				};
-
-				let result;
-				if (pathname === '/card') {
-					result = await handleCard(query, cacheControlHeader, cache);
-				} else {
-					result = await handleSkills(query, cacheControlHeader, cache);
-				}
-
-				// If we had flag cache misses, pre-load them and re-render
-				if (flagMissQueue.length > 0) {
-					await Promise.all(
-						flagMissQueue.map((p) => platformHelpers.preloadText(p).catch(() => {}))
-					);
-					platform.readTextFile = originalReadText;
-					// Re-run with flags now cached
-					const cache2 = makeCache();
-					if (pathname === '/card') {
-						result = await handleCard(query, cacheControlHeader, cache2);
-					} else {
-						result = await handleSkills(query, cacheControlHeader, cache2);
-					}
-				} else {
-					platform.readTextFile = originalReadText;
-				}
-
-				return new Response(result.svg, {
-					headers: {
-						'Content-Type': 'image/svg+xml',
-						'Cache-Control': 'public, max-age=3600',
-					},
-				});
-			} catch (err) {
-				return new Response(`Error: ${err.message}\n${err.stack}`, {
-					status: 500,
-					headers: { 'Content-Type': 'text/plain' },
-				});
+		// --- Static file requests: pass straight to ASSETS, zero preloading ---
+		if (pathname !== '/card' && pathname !== '/skills') {
+			if (pathname === '/' || pathname === '') {
+				return env.ASSETS.fetch(new Request(new URL('/index.html', request.url).toString()));
 			}
+			return env.ASSETS.fetch(request);
 		}
 
-		// Serve index.html for root
-		if (pathname === '/' || pathname === '') {
-			const resp = await env.ASSETS.fetch(new Request(new URL('/index.html', request.url).toString()));
-			return resp;
-		}
+		// --- API routes: /card and /skills ---
+		try {
+			// One-time platform + core asset init
+			if (!platformReady) {
+				configurePlatform(env);
+				platformReady = true;
+			}
+			await ensureCoreAssets();
 
-		// Fall through to static assets
-		return env.ASSETS.fetch(request);
+			const query = url.searchParams;
+			const cacheControlHeader = request.headers.get('cache-control');
+			const cache = makeCache();
+
+			// Pre-load example assets only when needed
+			if (query.get('example') === 'true') {
+				await ensureExampleAssets();
+			}
+
+			// First pass: render, collecting any flag cache misses
+			const flagMissQueue = [];
+			const savedReadTextFile = platform.readTextFile;
+
+			platform.readTextFile = (assetPath) => {
+				if (textCache.has(assetPath)) return textCache.get(assetPath);
+				if (assetPath.startsWith('/assets/flags/')) {
+					flagMissQueue.push(assetPath);
+					// Return fallback flag
+					if (textCache.has('/assets/flags/1f1fd-1f1fd.svg')) {
+						return textCache.get('/assets/flags/1f1fd-1f1fd.svg');
+					}
+					return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36"></svg>';
+				}
+				throw new Error(`Asset not loaded: ${assetPath}`);
+			};
+
+			let result;
+			if (pathname === '/card') {
+				result = await handleCard(query, cacheControlHeader, cache);
+			} else {
+				result = await handleSkills(query, cacheControlHeader, cache);
+			}
+
+			// If flags were missing, load them and re-render once
+			if (flagMissQueue.length > 0) {
+				await Promise.all(flagMissQueue.map((p) => preloadText(p).catch(() => {})));
+				platform.readTextFile = savedReadTextFile;
+				const cache2 = makeCache();
+				if (pathname === '/card') {
+					result = await handleCard(query, cacheControlHeader, cache2);
+				} else {
+					result = await handleSkills(query, cacheControlHeader, cache2);
+				}
+			} else {
+				platform.readTextFile = savedReadTextFile;
+			}
+
+			return new Response(result.svg, {
+				headers: {
+					'Content-Type': 'image/svg+xml',
+					'Cache-Control': 'public, max-age=3600',
+				},
+			});
+		} catch (err) {
+			return new Response(`Error: ${err.message}\n${err.stack}`, {
+				status: 500,
+				headers: { 'Content-Type': 'text/plain' },
+			});
+		}
 	},
 };
