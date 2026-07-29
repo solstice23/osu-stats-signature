@@ -11,7 +11,7 @@ import * as api from './api.js';
  * @param {URLSearchParams} query
  * @param {string|null} cacheControl - value of the cache-control request header
  * @param {{ get: (key: string) => any, set: (key: string, value: any) => void, has: (key: string) => boolean }} cache
- * @returns {Promise<{ svg: string, error?: undefined } | { error: string }>}
+ * @returns {Promise<{ svg: string, error?: boolean }>}
  */
 export async function handleCard(query, cacheControl, cache) {
 	let username = query.get('user') ?? '';
@@ -34,7 +34,7 @@ export async function handleCard(query, cacheControl, cache) {
 		({ userData, avatarBase64, userCoverImage } = cache.get(cacheKey));
 	} else {
 		userData = await api.getUser(username, playmode, !isMini, includeSkills, useOfficialApi);
-		if (userData.error) return { svg: render.getErrorSVG('Error: ' + userData.error) };
+		if (userData.error) return { svg: render.getErrorSVG('Error: ' + userData.error), error: true };
 		avatarBase64 = await api.getImageBase64(userData.user.avatar_url);
 		userCoverImage = await api.getImage(userData.user.cover_url);
 		cache.set(cacheKey, { userData, avatarBase64, userCoverImage });
@@ -91,7 +91,7 @@ export async function handleCard(query, cacheControl, cache) {
  * @param {URLSearchParams} query
  * @param {string|null} cacheControl
  * @param {{ get: (key: string) => any, set: (key: string, value: any) => void, has: (key: string) => boolean }} cache
- * @returns {Promise<{ svg: string }>}
+ * @returns {Promise<{ svg: string, error?: boolean }>}
  */
 export async function handleSkills(query, cacheControl, cache) {
 	let username = query.get('user') ?? '';
@@ -111,7 +111,7 @@ export async function handleSkills(query, cacheControl, cache) {
 		({ userData, avatarBase64, userCoverImage } = cache.get(cacheKey));
 	} else {
 		userData = await api.getUser(username, playmode, false, true, useOfficialApi);
-		if (userData.error) return { svg: render.getErrorSVG('Error: ' + userData.error) };
+		if (userData.error) return { svg: render.getErrorSVG('Error: ' + userData.error), error: true };
 		avatarBase64 = await api.getImageBase64(userData.user.avatar_url);
 		userCoverImage = await api.getImage(userData.user.cover_url);
 		cache.set(cacheKey, { userData, avatarBase64, userCoverImage });

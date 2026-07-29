@@ -375,7 +375,8 @@ export default {
 			return new Response(result.svg, {
 				headers: {
 					'Content-Type': 'image/svg+xml',
-					'Cache-Control': 'public, max-age=3600',
+					// Don't let a transient failure sit in the edge cache for an hour
+					'Cache-Control': result.error ? 'public, max-age=60' : 'public, max-age=3600',
 				},
 			});
 		} catch (err) {

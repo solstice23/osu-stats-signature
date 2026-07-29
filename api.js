@@ -10,6 +10,26 @@ import cheerio from 'cheerio';
 
 const OSU_API_BASE = 'https://osu.ppy.sh/api/v2';
 const OSU_API_VERSION = '20220705';
+const USER_AGENT = 'osu-stats-signature (+https://github.com/solstice23/osu-stats-signature)';
+
+// osu.ppy.sh rate limits per source IP, which on shared hosting (Cloudflare
+// Workers in particular) is shared with everyone else on the same egress
+// address — so a 429 is common and usually clears on the next try.
+const RETRY_DELAYS = [250, 750, 1500];
+
+const fetchOsu = async (url, init = {}) => {
+	let response;
+	for (let attempt = 0; ; attempt++) {
+		response = await fetch(url, {
+			...init,
+			headers: { 'User-Agent': USER_AGENT, ...init.headers },
+		});
+		if (response.status !== 429 || attempt >= RETRY_DELAYS.length) {
+			return response;
+		}
+		await new Promise((resolve) => setTimeout(resolve, RETRY_DELAYS[attempt]));
+	}
+}
 
 let tokenCache = { token: null, expiresAt: 0 };
 
@@ -22,7 +42,7 @@ const getAccessToken = async () => {
 	if (tokenCache.token && Date.now() < tokenCache.expiresAt) {
 		return tokenCache.token;
 	}
-	const response = await fetch('https://osu.ppy.sh/oauth/token', {
+	const response = await fetchOsu('https://osu.ppy.sh/oauth/token', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
 		body: JSON.stringify({
@@ -33,7 +53,9 @@ const getAccessToken = async () => {
 		}),
 	});
 	if (!response.ok) {
-		throw new Error(`Failed to get an osu! API token (HTTP ${response.status})`);
+		const error = new Error(`Failed to get an osu! API token (HTTP ${response.status})`);
+		error.statusCode = response.status;
+		throw error;
 	}
 	const json = await response.json();
 	// Renew a minute before the actual expiry
@@ -41,7 +63,7 @@ const getAccessToken = async () => {
 	return tokenCache.token;
 }
 const osuApiGet = async (token, path) => {
-	const response = await fetch(OSU_API_BASE + path, {
+	const response = await fetchOsu(OSU_API_BASE + path, {
 		headers: {
 			Authorization: `Bearer ${token}`,
 			Accept: 'application/json',

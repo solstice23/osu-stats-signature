@@ -66,17 +66,20 @@ const app = express();
 
 app.use('/', express.static(path.join(PROJECT_ROOT, '/static')));
 
+// Don't let a transient failure sit in caches for an hour
+const cacheControlFor = (result) => (result.error ? 'public, max-age=60' : 'public, max-age=3600');
+
 app.get('/card', async (req, res) => {
-	res.set({ 'Content-Type': 'image/svg+xml', 'Cache-Control': 'public, max-age=3600' });
 	const query = new URLSearchParams(req.originalUrl.split('?')[1] || '');
 	const result = await handleCard(query, req.headers['cache-control'] ?? null, cache);
+	res.set({ 'Content-Type': 'image/svg+xml', 'Cache-Control': cacheControlFor(result) });
 	res.send(result.svg);
 });
 
 app.get('/skills', async (req, res) => {
-	res.set({ 'Content-Type': 'image/svg+xml', 'Cache-Control': 'public, max-age=3600' });
 	const query = new URLSearchParams(req.originalUrl.split('?')[1] || '');
 	const result = await handleSkills(query, req.headers['cache-control'] ?? null, cache);
+	res.set({ 'Content-Type': 'image/svg+xml', 'Cache-Control': cacheControlFor(result) });
 	res.send(result.svg);
 });
 
